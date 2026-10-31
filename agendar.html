@@ -1,0 +1,353 @@
+<!doctype html>
+<html lang="es">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Agendar cita — Jaazi Barber</title>
+  <meta name="description" content="Reserva tu cita en Jaazi Barber: elige servicio, día y hora en tres pasos. Confirmación inmediata y código para gestionar tu cita.">
+  <meta name="theme-color" content="#171210">
+  <link rel="icon" href="assets/favicon.svg" type="image/svg+xml">
+  <link rel="preload" href="assets/fonts/fraunces-latin.woff2" as="font" type="font/woff2" crossorigin>
+  <link rel="preload" href="assets/fonts/fraunces-latin-italic.woff2" as="font" type="font/woff2" crossorigin>
+  <link rel="preload" href="assets/fonts/inter-latin.woff2" as="font" type="font/woff2" crossorigin>
+  <link rel="stylesheet" href="assets/fonts/fonts.css">
+  <link rel="stylesheet" href="assets/css/site.css">
+  <link rel="stylesheet" href="assets/css/booking.css">
+  <script src="assets/js/store.js" defer></script>
+  <script src="assets/js/site.js" defer></script>
+  <script src="assets/js/booking.js" defer></script>
+</head>
+<body data-page="agendar">
+  <a class="skip-link" href="#main">Saltar al contenido</a>
+
+  <header class="site-header">
+    <div class="container site-header__inner">
+      <a class="brand" href="index.html" aria-label="Jaazi Barber, inicio">
+        <span class="brand__mark" aria-hidden="true">J</span>
+        <span class="brand__text">Jaazi<span class="brand__sub">Barber</span></span>
+      </a>
+      <nav class="nav" aria-label="Navegación principal">
+        <a class="nav__link" href="index.html#servicios">Servicios</a>
+        <a class="nav__link" href="index.html#estudio">El estudio</a>
+        <a class="nav__link" href="index.html#resenas">Reseñas</a>
+        <a class="nav__link" href="index.html#preguntas">Preguntas</a>
+      </nav>
+      <div class="site-header__actions">
+        <a class="btn btn--sm btn--ghost" href="revisar.html">Revisar cita</a>
+        <button class="menu-toggle" type="button" aria-expanded="false" aria-controls="mobile-menu">
+          <span class="menu-toggle__label">Menú</span>
+          <span class="menu-toggle__bars" aria-hidden="true"><i></i><i></i></span>
+        </button>
+      </div>
+    </div>
+  </header>
+
+  <div class="mobile-menu" id="mobile-menu" hidden>
+    <nav class="mobile-menu__nav" aria-label="Navegación móvil">
+      <a class="mobile-menu__link" href="index.html#servicios"><span>01</span>Servicios</a>
+      <a class="mobile-menu__link" href="index.html#estudio"><span>02</span>El estudio</a>
+      <a class="mobile-menu__link" href="index.html#resenas"><span>03</span>Reseñas</a>
+      <a class="mobile-menu__link" href="index.html#preguntas"><span>04</span>Preguntas</a>
+      <a class="mobile-menu__link" href="revisar.html"><span>05</span>Revisar cita</a>
+    </nav>
+    <div>
+      <a class="btn btn--block" href="index.html">
+        Volver al inicio
+        <svg viewBox="0 0 24 24" fill="none" aria-hidden="true"><path d="M5 12h14M13 6l6 6-6 6" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"/></svg>
+      </a>
+      <div class="mobile-menu__meta" style="margin-top: 20px;">
+        <span>Mar – Sáb · 10:00–20:00</span>
+        <span>Calle Colima 168, Roma Norte</span>
+      </div>
+    </div>
+  </div>
+
+  <main id="main" tabindex="-1">
+    <div class="container">
+      <header class="page-head">
+        <p class="eyebrow">Reserva en línea</p>
+        <h1>Agenda tu cita</h1>
+        <p class="lede">Tres pasos: servicio, día y hora, datos. La agenda bloquea el tiempo real de cada servicio.</p>
+      </header>
+
+      <div class="booking__grid">
+        <form class="panel" id="booking-form" novalidate>
+          <noscript>
+            <p class="form-error" style="margin-bottom: 20px;">La agenda necesita JavaScript para mostrar los horarios disponibles. Escríbenos a <a href="mailto:hola@jaazibarber.mx">hola@jaazibarber.mx</a>.</p>
+          </noscript>
+
+          <ol class="stepper" aria-label="Progreso de la reserva">
+            <li data-step-indicator="1" aria-current="step">
+              <span class="stepper__num" aria-hidden="true">1</span>
+              <span class="stepper__label">Servicio</span>
+            </li>
+            <li data-step-indicator="2">
+              <span class="stepper__num" aria-hidden="true">2</span>
+              <span class="stepper__label">Horario</span>
+            </li>
+            <li data-step-indicator="3">
+              <span class="stepper__num" aria-hidden="true">3</span>
+              <span class="stepper__label">Datos</span>
+            </li>
+          </ol>
+
+          <!-- Paso 1 -->
+          <div class="step" data-step="1">
+            <div class="step__head">
+              <p class="step__count">Paso 01</p>
+              <h2 tabindex="-1">Elige tu servicio</h2>
+              <p>El precio y la duración se ajustan solos. Puedes cambiar de servicio antes de confirmar.</p>
+            </div>
+
+            <fieldset class="choices">
+              <legend class="sr-only">Servicio</legend>
+              <label class="choice">
+                <input type="radio" name="service" value="corte">
+                <span class="choice__mark" aria-hidden="true"></span>
+                <span class="choice__body">
+                  <span class="choice__name">Corte clásico</span>
+                  <span class="choice__meta">45 min · tijera y máquina</span>
+                </span>
+                <span class="choice__price">$28</span>
+              </label>
+              <label class="choice">
+                <input type="radio" name="service" value="corte-barba">
+                <span class="choice__mark" aria-hidden="true"></span>
+                <span class="choice__body">
+                  <span class="choice__name">Corte + barba</span>
+                  <span class="choice__meta">75 min · corte y perfilado</span>
+                </span>
+                <span class="choice__price">$40</span>
+              </label>
+              <label class="choice">
+                <input type="radio" name="service" value="barba">
+                <span class="choice__mark" aria-hidden="true"></span>
+                <span class="choice__body">
+                  <span class="choice__name">Afeitado a navaja</span>
+                  <span class="choice__meta">40 min · navaja y toalla caliente</span>
+                </span>
+                <span class="choice__price">$25</span>
+              </label>
+              <label class="choice">
+                <input type="radio" name="service" value="perfilado">
+                <span class="choice__mark" aria-hidden="true"></span>
+                <span class="choice__body">
+                  <span class="choice__name">Perfilado</span>
+                  <span class="choice__meta">25 min · contornos y nuca</span>
+                </span>
+                <span class="choice__price">$15</span>
+              </label>
+              <label class="choice">
+                <input type="radio" name="service" value="asesoria">
+                <span class="choice__mark" aria-hidden="true"></span>
+                <span class="choice__body">
+                  <span class="choice__name">Asesoría de imagen</span>
+                  <span class="choice__meta">60 min · diagnóstico y rutina</span>
+                </span>
+                <span class="choice__price">$35</span>
+              </label>
+            </fieldset>
+            <p class="field__error" data-error="service" role="alert" hidden></p>
+
+            <div class="step__actions">
+              <button class="btn btn--primary" type="button" data-next="2">
+                Siguiente: horario
+                <svg viewBox="0 0 24 24" fill="none" aria-hidden="true"><path d="M5 12h14M13 6l6 6-6 6" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"/></svg>
+              </button>
+            </div>
+          </div>
+
+          <!-- Paso 2 -->
+          <div class="step" data-step="2" hidden>
+            <div class="step__head">
+              <p class="step__count">Paso 02</p>
+              <h2 tabindex="-1">Elige día y hora</h2>
+              <p>Agenda abierta para los próximos 21 días. Los huecos ocupados aparecen desactivados.</p>
+            </div>
+
+            <fieldset class="field-group">
+              <legend>Fecha</legend>
+              <div class="dates" id="date-list"></div>
+            </fieldset>
+            <p class="field__error" data-error="date" role="alert" hidden></p>
+
+            <fieldset class="field-group times-wrap" id="times-wrap" hidden>
+              <legend>Hora</legend>
+              <div id="time-groups"></div>
+              <p class="availability-note" id="availability-note">Los horarios se calculan según la duración del servicio.</p>
+            </fieldset>
+            <p class="field__error" data-error="time" role="alert" hidden></p>
+
+            <div class="step__actions">
+              <button class="back-link" type="button" data-back="1">
+                <svg viewBox="0 0 24 24" fill="none" aria-hidden="true"><path d="M19 12H5M11 18l-6-6 6-6" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"/></svg>
+                Atrás
+              </button>
+              <button class="btn btn--primary" type="button" data-next="3">
+                Siguiente: datos
+                <svg viewBox="0 0 24 24" fill="none" aria-hidden="true"><path d="M5 12h14M13 6l6 6-6 6" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"/></svg>
+              </button>
+            </div>
+          </div>
+
+          <!-- Paso 3 -->
+          <div class="step" data-step="3" hidden>
+            <div class="step__head">
+              <p class="step__count">Paso 03</p>
+              <h2 tabindex="-1">Tus datos</h2>
+              <p>Solo el nombre y el teléfono son obligatorios. El correo sirve para enviarte el calendario.</p>
+            </div>
+
+            <div class="form-grid">
+              <div class="field">
+                <label for="name">Nombre completo</label>
+                <input class="input" id="name" name="name" type="text" autocomplete="name" required aria-describedby="name-error">
+                <p class="field__error" id="name-error" hidden></p>
+              </div>
+              <div class="field">
+                <label for="phone">Teléfono</label>
+                <input class="input" id="phone" name="phone" type="tel" inputmode="tel" autocomplete="tel" required placeholder="55 1234 5678" aria-describedby="phone-error">
+                <p class="field__error" id="phone-error" hidden></p>
+              </div>
+              <div class="field span-2">
+                <label for="email">Correo <span class="field__optional">(opcional)</span></label>
+                <input class="input" id="email" name="email" type="email" autocomplete="email" placeholder="tucorreo@ejemplo.com" aria-describedby="email-error">
+                <p class="field__error" id="email-error" hidden></p>
+              </div>
+              <div class="field span-2">
+                <label for="notes">Notas <span class="field__optional">(opcional)</span></label>
+                <textarea class="input" id="notes" name="notes" rows="3" placeholder="Referencias del corte, alergias, si vienes con alguien…" aria-describedby="notes-hint"></textarea>
+                <p class="field__hint" id="notes-hint">Se lo mostramos a Jaazi antes de tu cita.</p>
+              </div>
+            </div>
+
+            <label class="consent" for="consent">
+              <input type="checkbox" id="consent" name="consent" required aria-describedby="consent-error">
+              <span>Acepto la <a href="index.html#preguntas">política de cancelación</a> y que mis datos se guarden en este navegador. Cancelación sin costo hasta 24 h antes.</span>
+            </label>
+            <p class="field__error" id="consent-error" hidden></p>
+
+            <div class="form-error" id="form-error" role="alert" hidden></div>
+
+            <p class="form-note">
+              <svg viewBox="0 0 24 24" fill="none" aria-hidden="true"><rect x="5" y="10" width="14" height="10" rx="2" stroke="currentColor" stroke-width="1.5"/><path d="M8 10V7a4 4 0 0 1 8 0v3" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"/></svg>
+              Tus datos no se envían a ningún servidor: se guardan en este navegador.
+            </p>
+
+            <div class="step__actions">
+              <button class="back-link" type="button" data-back="2">
+                <svg viewBox="0 0 24 24" fill="none" aria-hidden="true"><path d="M19 12H5M11 18l-6-6 6-6" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"/></svg>
+                Atrás
+              </button>
+              <button class="btn btn--primary" type="submit" id="submit-btn">
+                <span data-submit-label>Confirmar cita</span>
+                <svg viewBox="0 0 24 24" fill="none" aria-hidden="true"><path d="M5 12h14M13 6l6 6-6 6" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"/></svg>
+              </button>
+            </div>
+          </div>
+
+          <!-- Confirmación -->
+          <div class="confirm" id="confirmation" hidden>
+            <svg class="confirm__icon" viewBox="0 0 52 52" aria-hidden="true">
+              <circle cx="26" cy="26" r="24"/>
+              <path d="M16 27l7 7 13-14"/>
+            </svg>
+            <p class="eyebrow">Reserva confirmada</p>
+            <h2 id="confirm-title" tabindex="-1">Nos vemos pronto.</h2>
+            <p class="lede" id="confirm-copy">Tu cita quedó guardada en este navegador. Llega cinco minutos antes.</p>
+
+            <div class="confirm__code">
+              <span>Código</span>
+              <strong id="confirm-code">JZ-0000</strong>
+              <button class="copy-btn" type="button" data-copy>
+                <svg viewBox="0 0 24 24" fill="none" aria-hidden="true"><rect x="9" y="9" width="11" height="11" rx="2" stroke="currentColor" stroke-width="1.5"/><path d="M15 9V6a2 2 0 0 0-2-2H6a2 2 0 0 0-2 2v7a2 2 0 0 0 2 2h3" stroke="currentColor" stroke-width="1.5"/></svg>
+                Copiar
+              </button>
+            </div>
+
+            <dl class="confirm__details" id="confirm-details"></dl>
+
+            <div class="confirm__actions">
+              <a class="btn" href="revisar.html">
+                Revisar mi cita
+                <svg viewBox="0 0 24 24" fill="none" aria-hidden="true"><path d="M5 12h14M13 6l6 6-6 6" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"/></svg>
+              </a>
+              <button class="btn btn--ghost" type="button" data-ics>
+                <svg viewBox="0 0 24 24" fill="none" aria-hidden="true"><rect x="4" y="6" width="16" height="14" rx="2" stroke="currentColor" stroke-width="1.5"/><path d="M8 3v5M16 3v5M4 11h16" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"/></svg>
+                Añadir al calendario
+              </button>
+            </div>
+            <p class="confirm__fine">Guarda el código <strong id="confirm-code-inline">JZ-0000</strong>: lo necesitas para revisar o cancelar la cita. También puedes buscarla con tu teléfono.</p>
+          </div>
+        </form>
+
+        <aside class="summary" aria-label="Resumen de tu cita">
+          <div class="summary__title">
+            <h2>Tu cita</h2>
+            <span>Paso <span data-summary-step>1</span> de 3</span>
+          </div>
+          <dl class="summary__rows">
+            <div class="summary__row"><dt>Servicio</dt><dd data-summary="service" class="is-empty">Por elegir</dd></div>
+            <div class="summary__row"><dt>Fecha</dt><dd data-summary="date" class="is-empty">Por elegir</dd></div>
+            <div class="summary__row"><dt>Hora</dt><dd data-summary="time" class="is-empty">Por elegir</dd></div>
+            <div class="summary__row"><dt>Duración</dt><dd data-summary="duration" class="is-empty">—</dd></div>
+          </dl>
+          <dl class="summary__total">
+            <dt>Total</dt>
+            <dd data-summary="price">—</dd>
+          </dl>
+          <p class="summary__foot">Pago en el estudio. Sin anticipo. Cancelación gratis hasta 24 h antes.</p>
+          <p class="summary__help">
+            <svg width="13" height="13" viewBox="0 0 24 24" fill="none" aria-hidden="true"><path d="M21 16.9v2.1a2 2 0 0 1-2.2 2 19.8 19.8 0 0 1-8.6-3.1 19.5 19.5 0 0 1-6-6A19.8 19.8 0 0 1 1.1 3.2 2 2 0 0 1 3.1 1h2.1a2 2 0 0 1 2 1.7c.1 1 .4 2 .7 2.9a2 2 0 0 1-.5 2.1L6.5 8.6a16 16 0 0 0 6 6l.9-.9a2 2 0 0 1 2.1-.5c.9.3 1.9.6 2.9.7a2 2 0 0 1 1.7 2Z" stroke="currentColor" stroke-width="1.4" stroke-linejoin="round"/></svg>
+            ¿Dudas? <a href="tel:+525512345678">+52 55 1234 5678</a>
+          </p>
+        </aside>
+      </div>
+    </div>
+  </main>
+
+  <footer class="site-footer">
+    <div class="container">
+      <div class="footer__grid">
+        <div class="footer__brand">
+          <a class="brand" href="index.html" aria-label="Jaazi Barber, inicio">
+            <span class="brand__mark" aria-hidden="true">J</span>
+            <span class="brand__text">Jaazi<span class="brand__sub">Barber</span></span>
+          </a>
+          <p class="footer__tagline">Barbería de una sola silla en Roma Norte. Corte, barba y navaja, con cita y sin filas.</p>
+        </div>
+        <div>
+          <h3>Navegación</h3>
+          <ul class="footer__list">
+            <li><a href="index.html#servicios">Servicios</a></li>
+            <li><a href="index.html#estudio">El estudio</a></li>
+            <li><a href="agendar.html">Agendar cita</a></li>
+            <li><a href="revisar.html">Revisar cita</a></li>
+          </ul>
+        </div>
+        <div>
+          <h3>Visita</h3>
+          <ul class="footer__list">
+            <li>Calle Colima 168<br>Roma Norte, CDMX</li>
+            <li>Mar – Sáb<br>10:00 – 20:00</li>
+            <li>Dom y lun: cerrado</li>
+          </ul>
+        </div>
+        <div>
+          <h3>Contacto</h3>
+          <ul class="footer__list">
+            <li><a href="tel:+525512345678">+52 55 1234 5678</a></li>
+            <li><a href="mailto:hola@jaazibarber.mx">hola@jaazibarber.mx</a></li>
+            <li><a href="revisar.html">Gestionar mi cita</a></li>
+          </ul>
+        </div>
+      </div>
+      <div class="footer__bottom">
+        <p>© <span data-year>2026</span> Jaazi Barber · Precios en MXN, IVA incluido.</p>
+        <p>Mar – Sáb · 10:00 – 20:00 · Roma Norte, CDMX</p>
+      </div>
+    </div>
+  </footer>
+</body>
+</html>
+
