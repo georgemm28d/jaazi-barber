@@ -1,5 +1,7 @@
 # Jaazi Barber
 
+**Vista previa:** https://georgemm28d.github.io/jaazi-barber/
+
 Sitio web estático de **Jaazi Barber**, barbería independiente en Roma Norte, CDMX.
 Tres páginas en español, sin build ni dependencias: HTML, CSS y JavaScript vanilla.
 
