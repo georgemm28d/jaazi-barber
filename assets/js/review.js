@@ -16,7 +16,7 @@
 
   var state = { query: "" };
   var reduceMotion = window.matchMedia("(prefers-reduced-motion: reduce)");
-  var mapsUrl = "https://www.google.com/maps/search/?api=1&query=Calle+Colima+168+Roma+Norte+CDMX";
+  var mapsUrl = "https://www.google.com/maps/search/?api=1&query=Calle+4+%231-39+Conjunto+Serralta+Chia+Cundinamarca+Colombia";
 
   function esc(value) {
     return String(value == null ? "" : value)
@@ -83,7 +83,7 @@
           '<span class="status' + (past ? " status--past" : "") + '">' + status + "</span>" +
         "</div>" +
         '<p class="appt__meta"><strong>' + cap(esc(Jaazi.formatLong(b.date))) + "</strong> · " + esc(Jaazi.timeLabel(b.time)) + "</p>" +
-        '<p class="appt__meta">' + esc(b.duration) + " min · $" + esc(b.price) + " MXN · A nombre de " + esc(b.name) + "</p>" +
+        '<p class="appt__meta">' + esc(Jaazi.durationLabel(b.duration)) + " · " + esc(b.priceLabel || "Consultar") + " · A nombre de " + esc(b.name) + "</p>" +
         (b.notes ? '<p class="appt__meta">Nota: ' + esc(b.notes) + "</p>" : "") +
         '<p class="appt__code">Código ' + esc(b.code) + "</p>" +
         '<div class="appt__actions">' + actions + "</div>" +
@@ -312,7 +312,7 @@
   });
 
   window.addEventListener("storage", function (event) {
-    if (event.key === "jaazi.bookings.v1") render();
+    if (event.key === "jaazi.bookings.v2") render();
   });
 
   render();

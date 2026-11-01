@@ -6,52 +6,60 @@
 window.Jaazi = (function () {
   "use strict";
 
-  var KEY = "jaazi.bookings.v1";
-  var OPEN = 10 * 60;        // 10:00
-  var CLOSE = 20 * 60;       // 20:00
+  var KEY = "jaazi.bookings.v2";
+  var OPEN = 9 * 60;         // 9:00
+  var CLOSE = 19 * 60;       // 19:00
   var STEP = 30;             // cada 30 min
   var LEAD = 120;            // 2 h de antelación para hoy
 
   var SERVICES = [
     {
-      id: "corte",
-      name: "Corte clásico",
-      price: 28,
+      id: "corte-personalizado",
+      name: "Corte personalizado",
+      price: 27000,
       duration: 45,
       meta: "45 min · tijera y máquina",
-      desc: "Tijera, máquina, lavado y peinado. El corte de siempre, bien hecho."
+      desc: "Tijera y máquina, adaptado a tu rostro y a tu rutina."
     },
     {
       id: "corte-barba",
       name: "Corte + barba",
-      price: 40,
-      duration: 75,
-      meta: "75 min · corte y perfilado",
-      desc: "El paquete completo: corte, perfilado de barba y toalla caliente."
+      price: 35000,
+      duration: 60,
+      meta: "60 min · corte y barba",
+      desc: "Corte completo más perfilado y arreglo de barba."
     },
     {
       id: "barba",
-      name: "Afeitado a navaja",
-      price: 25,
-      duration: 40,
-      meta: "40 min · navaja y toalla caliente",
-      desc: "Navaja, aceite pre-shave y bálsamo. El ritual de siempre."
+      name: "Barba",
+      price: 15000,
+      duration: 30,
+      meta: "30 min · perfilado y acabado",
+      desc: "Perfilado, arreglo y acabado de barba."
     },
     {
-      id: "perfilado",
-      name: "Perfilado",
-      price: 15,
-      duration: 25,
-      meta: "25 min · contornos y nuca",
-      desc: "Contornos, nuca y patillas entre cortes. Rápido y preciso."
+      id: "colores-fantasia",
+      name: "Colores fantasía",
+      price: 120000,
+      duration: 120,
+      meta: "2 h · color a elección",
+      desc: "Color a elección con preparación y acabado."
     },
     {
-      id: "asesoria",
-      name: "Asesoría de imagen",
-      price: 35,
-      duration: 60,
-      meta: "60 min · diagnóstico y rutina",
-      desc: "Forma de cara, rutina y producto. Te vas con un plan claro."
+      id: "mechas-platinadas",
+      name: "Mechas platinadas",
+      price: 250000,
+      duration: 240,
+      meta: "4 h · incluye corte",
+      desc: "Platinado por mechas, incluye corte."
+    },
+    {
+      id: "platinado-global",
+      name: "Platinado global",
+      price: 250000,
+      duration: 240,
+      meta: "4 h · incluye corte",
+      desc: "Platinado completo de raíz a puntas, incluye corte."
     }
   ];
 
@@ -106,9 +114,26 @@ window.Jaazi = (function () {
     return DAY_SHORT[d.getDay()] + " " + d.getDate() + " " + MONTHS_SHORT[d.getMonth()];
   }
 
+  function formatPrice(value) {
+    if (value === null || value === undefined || value === "") return "Consultar";
+    var digits = String(Math.round(Number(value)));
+    var out = "";
+    for (var i = 0; i < digits.length; i++) {
+      var left = digits.length - i;
+      out += digits.charAt(i);
+      if (left > 1 && left % 3 === 1) out += ".";
+    }
+    return "$ " + out;
+  }
+
+  function durationLabel(minutes) {
+    var m = Number(minutes) || 0;
+    if (m >= 120 && m % 60 === 0) return m / 60 + " h";
+    return m + " min";
+  }
+
   function isClosed(key) {
-    var day = parseKey(key).getDay();
-    return day === 0 || day === 1; // domingo y lunes
+    return false; // abre todos los días
   }
 
   function getService(id) {
@@ -146,6 +171,7 @@ window.Jaazi = (function () {
       serviceId: data.serviceId,
       serviceName: data.serviceName,
       price: data.price,
+      priceLabel: formatPrice(data.price),
       duration: data.duration,
       date: data.date,
       time: data.time,
@@ -291,15 +317,15 @@ window.Jaazi = (function () {
   function ics(booking) {
     var dates = icsDate(booking.date, booking.time, booking.duration);
     var summary = booking.serviceName + " — Jaazi Barber";
-    var description = "Cita " + booking.code + " con Jaazi. Cambios o cancelaciones: hola@jaazibarber.mx";
-    var location = "Calle Colima 168, Roma Norte, Ciudad de México";
+    var description = "Cita " + booking.code + " con Jaazi Barber. Cambios o cancelaciones: Jaazielbarber09@gmail.com";
+    var location = "Calle 4 # 1-39, Conjunto Serralta, Torre 12, Apto 205, Chía, Cundinamarca";
     var lines = [
       "BEGIN:VCALENDAR",
       "VERSION:2.0",
       "PRODID:-//Jaazi Barber//Citas//ES",
       "CALSCALE:GREGORIAN",
       "BEGIN:VEVENT",
-      "UID:" + booking.code + "@jaazibarber.mx",
+      "UID:" + booking.code + "@jaazi-barber",
       "DTSTAMP:" + new Date().toISOString().replace(/[-:]/g, "").split(".")[0] + "Z",
       "DTSTART:" + dates.start,
       "DTEND:" + dates.end,
@@ -334,6 +360,8 @@ window.Jaazi = (function () {
     addDays: addDays,
     todayKey: todayKey,
     timeLabel: timeLabel,
+    formatPrice: formatPrice,
+    durationLabel: durationLabel,
     formatLong: formatLong,
     formatMedium: formatMedium,
     dayName: function (key) { return DAY_SHORT[parseKey(key).getDay()]; },

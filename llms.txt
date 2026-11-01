@@ -1,22 +1,26 @@
 # Jaazi Barber
 
-> Barbería independiente de una sola silla en Roma Norte, Ciudad de México. Corte, barba y afeitado a navaja con cita previa en línea. Mar–Sáb 10:00–20:00. Calle Colima 168, Roma Norte, Ciudad de México.
+> Barbería de una sola silla en Chía, Cundinamarca, Colombia. Corte, barba y color con cita previa. Todos los días 9:00–19:00. Calle 4 # 1-39, conjunto Serralta, torre 12, apartamento 205, Chía.
 
-## Key Pages
+## Páginas
 
-- [Servicios y precios](https://jaazibarber.mx/index.html#servicios): corte $28 · corte+barba $40 · navaja $25 · perfilado $15 · asesoría $35 (MXN, IVA incluido)
-- [Preguntas frecuentes](https://jaazibarber.mx/index.html#preguntas): duración de la cita, cancelación (gratis hasta 24 h antes), pago en el estudio, walk-ins, cómo llegar
-- [Agendar cita](https://jaazibarber.mx/agendar.html): reserva en línea en 3 pasos, sin anticipo, confirmación con código JZ-XXXX
-- [Revisar o cancelar cita](https://jaazibarber.mx/revisar.html): con el código de confirmación o el teléfono con el que se reservó
+- [Servicios](index.html#servicios): corte personalizado $ 27.000 (45 min), corte + barba $ 35.000 (60 min), barba $ 15.000 (30 min), colores fantasía $ 120.000 (2 h), mechas platinadas $ 250.000 (4 h, incluye corte), platinado global $ 250.000 (4 h, incluye corte), en COP
+- [Trabajo reciente](index.html#trabajo): fotos reales del trabajo en el estudio
+- [Preguntas frecuentes](index.html#preguntas): duración, cancelación en cualquier momento, pago, atención con cita y ubicación
+- [Agendar cita](agendar.html): reserva en línea en 3 pasos, confirmación con código JZ-XXXX
+- [Revisar o cancelar cita](revisar.html): con el código o el teléfono con el que se reservó
 
 ## Datos
 
 - Nombre: Jaazi Barber
-- Dirección: Calle Colima 168, Roma Norte, Cuauhtémoc, 06700 Ciudad de México, MX
-- Horario: martes a sábado 10:00–20:00; domingo y lunes cerrado
-- Teléfono: +52 55 1234 5678
-- Email: hola@jaazibarber.mx
-- Pago: efectivo, transferencia o tarjeta (en el estudio; la reserva no requiere pago)
-- Idioma: español (México)
+- Dirección: Calle 4 # 1-39, conjunto Serralta, torre 12, apartamento 205, Chía, Cundinamarca, Colombia
+- Horario: todos los días, 9:00–19:00
+- Teléfono / WhatsApp: +57 313 538 1239
+- Email: Jaazielbarber09@gmail.com
+- Instagram: https://www.instagram.com/jaazii.barber
+- Precios: COP (corte personalizado $ 27.000, corte + barba $ 35.000, barba $ 15.000, colores fantasía $ 120.000, mechas platinadas $ 250.000, platinado global $ 250.000)
+- Pago: efectivo o transferencia en el estudio
+- Moneda: peso colombiano (COP)
+- Idioma: español (Colombia)
 
-Última actualización de precios y horario: octubre 2026.
+Última actualización: octubre 2026.

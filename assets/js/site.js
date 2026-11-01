@@ -21,6 +21,55 @@
   var year = document.querySelector("[data-year]");
   if (year) year.textContent = new Date().getFullYear();
 
+  /* ---------- Tema claro / oscuro ---------- */
+
+  var themeToggle = document.querySelector("[data-theme-toggle]");
+  var themeMeta = document.querySelector('meta[name="theme-color"]');
+  var themeMedia = window.matchMedia("(prefers-color-scheme: dark)");
+
+  function storedTheme() {
+    try { return localStorage.getItem("jaazi.theme"); } catch (err) { return null; }
+  }
+
+  function currentTheme() {
+    return document.documentElement.getAttribute("data-theme") === "dark" ? "dark" : "light";
+  }
+
+  function applyTheme(theme, persist) {
+    var dark = theme === "dark";
+    document.documentElement.setAttribute("data-theme", dark ? "dark" : "light");
+    document.documentElement.style.colorScheme = dark ? "dark" : "light";
+    if (themeMeta) themeMeta.setAttribute("content", dark ? "#12100e" : "#f4eee5");
+    if (themeToggle) {
+      var label = dark ? "Desactivar modo oscuro" : "Activar modo oscuro";
+      themeToggle.setAttribute("aria-pressed", dark ? "true" : "false");
+      themeToggle.setAttribute("aria-label", label);
+      themeToggle.setAttribute("title", label);
+    }
+    if (persist) {
+      try { localStorage.setItem("jaazi.theme", dark ? "dark" : "light"); } catch (err) { /* noop */ }
+    }
+  }
+
+  applyTheme(currentTheme(), false);
+
+  if (themeToggle) {
+    themeToggle.addEventListener("click", function () {
+      applyTheme(currentTheme() === "dark" ? "light" : "dark", true);
+    });
+  }
+
+  var onSchemeChange = function (event) {
+    if (!storedTheme()) applyTheme(event.matches ? "dark" : "light", false);
+  };
+  if (themeMedia.addEventListener) themeMedia.addEventListener("change", onSchemeChange);
+  else themeMedia.addListener(onSchemeChange);
+
+  window.addEventListener("storage", function (event) {
+    if (event.key !== "jaazi.theme" || !event.newValue) return;
+    applyTheme(event.newValue === "dark" ? "dark" : "light", false);
+  });
+
   /* ---------- Menú móvil ---------- */
 
   var toggle = document.querySelector(".menu-toggle");
@@ -142,7 +191,7 @@
       var today = Jaazi.todayKey();
       var tomorrow = Jaazi.keyOf(Jaazi.addDays(new Date(), 1));
       var prefix = found.date === today ? "hoy" : found.date === tomorrow ? "mañana" : "el " + Jaazi.formatMedium(found.date);
-      nextSlot.textContent = prefix + " a las " + Jaazi.timeLabel(found.time).replace(" a.m.", "").replace(" p.m.", "");
+      nextSlot.textContent = prefix + " · " + Jaazi.timeLabel(found.time);
     } else {
       nextSlot.textContent = "consulta la agenda";
     }

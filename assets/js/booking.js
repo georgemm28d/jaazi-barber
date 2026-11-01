@@ -8,7 +8,7 @@
   var form = document.getElementById("booking-form");
   if (!form || !window.Jaazi) return;
 
-  var DRAFT_KEY = "jaazi.draft.v1";
+  var DRAFT_KEY = "jaazi.draft.v2";
   var steps = Array.prototype.slice.call(form.querySelectorAll("[data-step]"));
   var indicators = Array.prototype.slice.call(form.querySelectorAll("[data-step-indicator]"));
   var panel = form;
@@ -122,8 +122,8 @@
       service: s ? s.name : "Por elegir",
       date: state.date ? Jaazi.formatMedium(state.date) : "Por elegir",
       time: state.time ? Jaazi.timeLabel(state.time) : "Por elegir",
-      duration: s ? s.duration + " min" : "—",
-      price: s ? "$" + s.price : "—"
+      duration: s ? Jaazi.durationLabel(s.duration) : "—",
+      price: s ? Jaazi.formatPrice(s.price) : "—"
     };
 
     Object.keys(map).forEach(function (key) {
@@ -272,7 +272,7 @@
 
     if (!total) {
       timeGroups.innerHTML = '<p class="slots-empty">No quedan huecos para este día con la duración de tu servicio. Prueba con otra fecha.</p>';
-      availabilityNote.textContent = "Día completo para " + s.duration + " min.";
+      availabilityNote.textContent = "Día completo para " + Jaazi.durationLabel(s.duration) + ".";
       timesWrap.hidden = false;
       return;
     }
@@ -285,8 +285,8 @@
     }
 
     var groups = [
-      { label: "Mañana", from: 0, to: 13 * 60 + 59 },
-      { label: "Tarde", from: 14 * 60, to: 24 * 60 }
+      { label: "Mañana", from: 0, to: 12 * 60 - 1 },
+      { label: "Tarde", from: 12 * 60, to: 24 * 60 }
     ];
 
     groups.forEach(function (group) {
@@ -324,7 +324,7 @@
       timeGroups.appendChild(wrap);
     });
 
-    availabilityNote.textContent = total + (total === 1 ? " hueco disponible" : " huecos disponibles") + " · duración " + s.duration + " min";
+    availabilityNote.textContent = total + (total === 1 ? " hueco disponible" : " huecos disponibles") + " · duración " + Jaazi.durationLabel(s.duration);
     timesWrap.hidden = false;
   }
 
@@ -408,7 +408,7 @@
     phoneInput.addEventListener("blur", function () {
       var digits = phoneInput.value.replace(/\D/g, "");
       if (digits.length === 10) {
-        phoneInput.value = digits.slice(0, 2) + " " + digits.slice(2, 6) + " " + digits.slice(6);
+        phoneInput.value = digits.slice(0, 3) + " " + digits.slice(3, 6) + " " + digits.slice(6);
       }
     });
   }
@@ -517,7 +517,7 @@
       state.submitting = false;
       submitBtn.disabled = false;
       if (label) label.textContent = "Confirmar cita";
-      formError.textContent = "No pudimos guardar la cita en este navegador. Revisa el almacenamiento o escríbenos a hola@jaazibarber.mx.";
+      formError.textContent = "No pudimos guardar la cita en este navegador. Revisa el almacenamiento o escríbenos a Jaazielbarber09@gmail.com.";
       formError.hidden = false;
       return;
     }
@@ -545,10 +545,10 @@
     var details = document.getElementById("confirm-details");
     details.innerHTML =
       "<div><dt>Fecha</dt><dd>" + Jaazi.formatLong(booking.date) + "</dd></div>" +
-      "<div><dt>Hora</dt><dd>" + Jaazi.timeLabel(booking.time) + " · " + booking.duration + " min</dd></div>" +
+      "<div><dt>Hora</dt><dd>" + Jaazi.timeLabel(booking.time) + " · " + Jaazi.durationLabel(booking.duration) + "</dd></div>" +
       "<div><dt>Servicio</dt><dd>" + booking.serviceName + "</dd></div>" +
-      "<div><dt>Estudio</dt><dd>Calle Colima 168, Roma Norte</dd></div>" +
-      "<div><dt>Total</dt><dd>$" + booking.price + " MXN</dd></div>";
+      "<div><dt>Estudio</dt><dd>Calle 4 # 1-39, Conjunto Serralta, Torre 12, Apto 205, Chía</dd></div>" +
+      "<div><dt>Precio</dt><dd>" + (booking.priceLabel || "Consultar") + "</dd></div>";
 
     var heading = document.getElementById("confirm-title");
     heading.focus({ preventScroll: true });
