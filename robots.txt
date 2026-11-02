@@ -2,3 +2,5 @@ User-agent: *
 Allow: /
 Disallow: /panel.html
 Disallow: /jaazi-barber/panel.html
+
+Sitemap: https://jaazibarber.netlify.app/sitemap.xml

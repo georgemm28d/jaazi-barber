@@ -3,7 +3,8 @@
 Sitio web de **Jaazi Barber**, barbería de una sola silla en **Chía, Cundinamarca (Colombia)**.
 Páginas en español, sin build: HTML, CSS y JavaScript vanilla. La agenda compartida vive en **Supabase** (Postgres + API REST + Auth); el sitio se publica como archivos estáticos en GitHub Pages.
 
-> Publicado en GitHub Pages: **https://georgemm28d.github.io/jaazi-barber/**. El **dominio** propio queda pendiente.
+> Publicado en **https://jaazibarber.netlify.app/** (Netlify, cuenta del cliente `jaazielbarber09@gmail.com`).
+> La copia en GitHub Pages sigue activa como respaldo: https://georgemm28d.github.io/jaazi-barber/.
 > Incluye tema claro/oscuro (preferencia del sistema + toggle persistente en el navegador).
 
 ## Páginas
@@ -98,6 +99,18 @@ Abrir `http://127.0.0.1:4173/`. El panel está en `http://127.0.0.1:4173/panel.h
 
 ## SEO / GEO
 
-Incluye JSON-LD (`BarberShop` + `FAQPage`), Open Graph/Twitter y `robots.txt`.
-El `canonical`, `og:url` y `sitemap.xml` se añadirán cuando exista el dominio definitivo;
-`llms.txt` ya contiene los datos reales del negocio.
+Incluye JSON-LD (`BarberShop` + `FAQPage`), Open Graph/Twitter, `canonical`, `og:url`, `sitemap.xml` y `robots.txt`.
+Todas las URLs absolutas apuntan a `https://jaazibarber.netlify.app/`; si algún día se compra un dominio propio,
+hay que cambiarlas en `index.html`, `agendar.html`, `revisar.html`, `sitemap.xml` y `robots.txt`.
+`llms.txt` contiene los datos reales del negocio.
+
+## Despliegue
+
+El sitio se publica en Netlify (cuenta del cliente). Para subir cambios:
+
+```bash
+netlify deploy --prod --dir . --site jaazibarber
+```
+
+O desde la API, subiendo un ZIP de la raíz (sin `qa/` ni `supabase/`). GitHub Pages sirve la misma copia
+desde `main`, pero la dirección oficial y el `canonical` son los de Netlify.
