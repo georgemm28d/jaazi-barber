@@ -7,8 +7,9 @@
 - [Servicios](index.html#servicios): corte personalizado $ 27.000 (45 min), corte + barba $ 35.000 (60 min), barba $ 15.000 (30 min), colores fantasía $ 120.000 (2 h), mechas platinadas $ 250.000 (4 h, incluye corte), platinado global $ 250.000 (4 h, incluye corte), en COP
 - [Trabajo reciente](index.html#trabajo): fotos reales del trabajo en el estudio
 - [Preguntas frecuentes](index.html#preguntas): duración, cancelación en cualquier momento, pago, atención con cita y ubicación
-- [Agendar cita](agendar.html): reserva en línea en 3 pasos, confirmación con código JZ-XXXX
+- [Agendar cita](agendar.html): reserva en línea en 3 pasos, confirmación con código JZ-XXXXXX
 - [Revisar o cancelar cita](revisar.html): con el código o el teléfono con el que se reservó
+- La agenda es compartida: los horarios ocupados se actualizan para todos los dispositivos
 
 ## Datos
 

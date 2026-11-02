@@ -186,14 +186,27 @@
 
   var nextSlot = document.querySelector("[data-next-slot]");
   if (nextSlot && window.Jaazi) {
-    var found = Jaazi.nextAvailable("corte", 14);
-    if (found) {
-      var today = Jaazi.todayKey();
-      var tomorrow = Jaazi.keyOf(Jaazi.addDays(new Date(), 1));
-      var prefix = found.date === today ? "hoy" : found.date === tomorrow ? "mañana" : "el " + Jaazi.formatMedium(found.date);
-      nextSlot.textContent = prefix + " · " + Jaazi.timeLabel(found.time);
+    var nextApi = window.JaaziApi && window.JaaziApi.enabled ? window.JaaziApi : null;
+
+    var paintNext = function (found) {
+      if (found) {
+        var today = Jaazi.todayKey();
+        var tomorrow = Jaazi.keyOf(Jaazi.addDays(new Date(), 1));
+        var prefix = found.date === today ? "hoy" : found.date === tomorrow ? "mañana" : "el " + Jaazi.formatMedium(found.date);
+        nextSlot.textContent = prefix + " · " + Jaazi.timeLabel(found.time);
+      } else {
+        nextSlot.textContent = "consulta la agenda";
+      }
+    };
+
+    if (nextApi) {
+      nextApi.busy(Jaazi.todayKey(), Jaazi.keyOf(Jaazi.addDays(new Date(), 20))).then(function (map) {
+        paintNext(Jaazi.nextAvailable("corte-personalizado", 14, map));
+      }, function () {
+        paintNext(null);
+      });
     } else {
-      nextSlot.textContent = "consulta la agenda";
+      paintNext(Jaazi.nextAvailable("corte-personalizado", 14));
     }
   }
 

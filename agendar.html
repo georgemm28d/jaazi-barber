@@ -19,6 +19,14 @@
       } catch (err) { /* sin preferencia guardada */ }
     })();
   </script>
+  <script src="assets/js/config.js"></script>
+  <script>
+    (function () {
+      var cfg = window.JAAZI_CONFIG || {};
+      var api = Boolean(cfg.supabaseUrl && cfg.supabaseAnonKey);
+      document.documentElement.setAttribute("data-mode", api ? "api" : "local");
+    })();
+  </script>
   <link rel="icon" href="assets/favicon.svg" type="image/svg+xml">
   <link rel="preload" href="assets/fonts/fraunces-latin.woff2" as="font" type="font/woff2" crossorigin>
   <link rel="preload" href="assets/fonts/fraunces-latin-italic.woff2" as="font" type="font/woff2" crossorigin>
@@ -26,6 +34,7 @@
   <link rel="stylesheet" href="assets/fonts/fonts.css">
   <link rel="stylesheet" href="assets/css/site.css">
   <link rel="stylesheet" href="assets/css/booking.css">
+  <script src="assets/js/api.js" defer></script>
   <script src="assets/js/store.js" defer></script>
   <script src="assets/js/site.js" defer></script>
   <script src="assets/js/booking.js" defer></script>
@@ -249,7 +258,7 @@
 
             <label class="consent" for="consent">
               <input type="checkbox" id="consent" name="consent" required aria-describedby="consent-error">
-              <span>Acepto la <a href="index.html#preguntas">política de cancelación</a> y que mis datos se guarden en este navegador. Puedes cancelar en cualquier momento, sin costo.</span>
+              <span>Acepto la <a href="index.html#preguntas">política de cancelación</a> y el uso de mis datos solo para gestionar esta cita. Puedes cancelar en cualquier momento, sin costo.</span>
             </label>
             <p class="field__error" id="consent-error" hidden></p>
 
@@ -257,7 +266,8 @@
 
             <p class="form-note">
               <svg viewBox="0 0 24 24" fill="none" aria-hidden="true"><rect x="5" y="10" width="14" height="10" rx="2" stroke="currentColor" stroke-width="1.5"/><path d="M8 10V7a4 4 0 0 1 8 0v3" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"/></svg>
-              Tus datos no se envían a ningún servidor: se guardan en este navegador.
+              <span data-when="api">Tus datos se guardan en la agenda privada de Jaazi y solo se usan para gestionar la cita.</span>
+              <span data-when="local">Tus datos se guardan solo en este navegador. Si cambias de dispositivo, la cita no aparecerá allí.</span>
             </p>
 
             <div class="step__actions">
@@ -280,7 +290,7 @@
             </svg>
             <p class="eyebrow">Reserva confirmada</p>
             <h2 id="confirm-title" tabindex="-1">Nos vemos pronto.</h2>
-            <p class="lede" id="confirm-copy">Tu cita quedó guardada en este navegador. Llega cinco minutos antes.</p>
+            <p class="lede" id="confirm-copy">Tu cita quedó registrada. Llega cinco minutos antes.</p>
 
             <div class="confirm__code">
               <span>Código</span>

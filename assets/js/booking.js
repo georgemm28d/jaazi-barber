@@ -26,14 +26,30 @@
     date: null,
     time: null,
     booking: null,
-    submitting: false
+    submitting: false,
+    busy: null
   };
   var reduceMotion = window.matchMedia("(prefers-reduced-motion: reduce)");
+  var api = window.JaaziApi && window.JaaziApi.enabled ? window.JaaziApi : null;
 
   /* ---------- Utilidades ---------- */
 
   function service() {
     return Jaazi.getService(state.serviceId);
+  }
+
+  function loadBusy() {
+    if (!api) {
+      state.busy = null;
+      return Promise.resolve();
+    }
+    var from = Jaazi.keyOf(new Date());
+    var to = Jaazi.keyOf(Jaazi.addDays(new Date(), 20));
+    return api.busy(from, to).then(function (map) {
+      state.busy = map;
+    }, function () {
+      state.busy = {};
+    });
   }
 
   function scrollToPanel() {
@@ -154,7 +170,15 @@
       else el.removeAttribute("aria-current");
     });
 
-    if (step === 2) renderDates();
+    if (step === 2) {
+      if (api) {
+        dateList.innerHTML = '<p class="slots-empty">Cargando disponibilidad…</p>';
+        timesWrap.hidden = true;
+        loadBusy().then(renderDates);
+      } else {
+        renderDates();
+      }
+    }
     updateSummary();
     saveDraft();
 
@@ -209,7 +233,7 @@
       var d = Jaazi.addDays(new Date(), i);
       var key = Jaazi.keyOf(d);
       var closed = Jaazi.isClosed(key);
-      var count = closed ? 0 : Jaazi.slotsFor(key, s.duration).filter(function (slot) {
+      var count = closed ? 0 : Jaazi.slotsFor(key, s.duration, state.busy).filter(function (slot) {
         return slot.available;
       }).length;
       var disabled = closed || count === 0;
@@ -266,7 +290,7 @@
       return;
     }
 
-    var slots = Jaazi.slotsFor(state.date, s.duration);
+    var slots = Jaazi.slotsFor(state.date, s.duration, state.busy);
     var total = slots.filter(function (slot) { return slot.available; }).length;
     timeGroups.innerHTML = "";
 
@@ -338,7 +362,7 @@
       state.time = null;
       setStepError("service", "");
       var s = service();
-      if (state.date && s && !Jaazi.isDayAvailable(state.date, s.duration)) {
+      if (state.date && s && !Jaazi.isDayAvailable(state.date, s.duration, state.busy)) {
         state.date = null;
       }
       updateSummary();
@@ -480,7 +504,7 @@
       return;
     }
 
-    var slot = Jaazi.slotsFor(state.date, s.duration).filter(function (item) {
+    var slot = Jaazi.slotsFor(state.date, s.duration, state.busy).filter(function (item) {
       return item.time === state.time;
     })[0];
 
@@ -498,7 +522,7 @@
     var label = submitBtn.querySelector("[data-submit-label]");
     if (label) label.textContent = "Confirmando…";
 
-    var booking = Jaazi.addBooking({
+    var payload = {
       serviceId: s.id,
       serviceName: s.name,
       price: s.price,
@@ -509,14 +533,41 @@
       phone: phone.value.trim(),
       email: email.value.trim(),
       notes: document.getElementById("notes").value.trim()
-    });
+    };
+
+    function resetSubmit() {
+      state.submitting = false;
+      submitBtn.disabled = false;
+      if (label) label.textContent = "Confirmar cita";
+    }
+
+    if (api) {
+      api.create(payload).then(function (booking) {
+        state.booking = booking;
+        clearDraft();
+        showConfirmation(booking);
+      }, function (error) {
+        resetSubmit();
+        var retry = error.code === "slot_taken" || error.code === "invalid_slot";
+        var message = api.friendly(error);
+        formError.textContent = message;
+        formError.hidden = false;
+        if (retry) {
+          if (window.UI) UI.toast(message);
+          loadBusy().then(function () {
+            goTo(2);
+          });
+        }
+      });
+      return;
+    }
+
+    var booking = Jaazi.addBooking(payload);
 
     var saved = Jaazi.read().some(function (item) { return item.code === booking.code; });
 
     if (!saved) {
-      state.submitting = false;
-      submitBtn.disabled = false;
-      if (label) label.textContent = "Confirmar cita";
+      resetSubmit();
       formError.textContent = "No pudimos guardar la cita en este navegador. Revisa el almacenamiento o escríbenos a Jaazielbarber09@gmail.com.";
       formError.hidden = false;
       return;
@@ -538,7 +589,8 @@
 
     document.getElementById("confirm-title").textContent = "Nos vemos el " + Jaazi.formatLong(booking.date) + ".";
     document.getElementById("confirm-copy").textContent =
-      "Tu cita de " + booking.serviceName + " quedó guardada. Llega cinco minutos antes; si necesitas cambiarla, usa tu código.";
+      "Tu cita de " + booking.serviceName + (api ? " quedó confirmada." : " quedó guardada.") +
+      " Llega cinco minutos antes; si necesitas cambiarla, usa tu código.";
     document.getElementById("confirm-code").textContent = booking.code;
     document.getElementById("confirm-code-inline").textContent = booking.code;
 
@@ -621,7 +673,7 @@
         state.date = preset.date;
         state.time = preset.time || null;
         var s = service();
-        if (s && !Jaazi.isDayAvailable(state.date, s.duration)) {
+        if (s && !api && !Jaazi.isDayAvailable(state.date, s.duration)) {
           state.date = null;
           state.time = null;
         }

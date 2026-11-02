@@ -1,2 +1,4 @@
 User-agent: *
 Allow: /
+Disallow: /panel.html
+Disallow: /jaazi-barber/panel.html

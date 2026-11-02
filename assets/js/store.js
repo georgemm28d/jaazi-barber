@@ -257,7 +257,16 @@ window.Jaazi = (function () {
     });
   }
 
-  function slotsFor(dateKey, duration) {
+  function busyOverlaps(busy, dateKey, start, duration) {
+    var ranges = busy && busy[dateKey];
+    if (!ranges || !ranges.length) return false;
+    var end = start + duration;
+    return ranges.some(function (range) {
+      return start < range[1] && range[0] < end;
+    });
+  }
+
+  function slotsFor(dateKey, duration, busy) {
     if (!dateKey || isClosed(dateKey)) return [];
     var now = new Date();
     var isToday = dateKey === todayKey();
@@ -266,23 +275,25 @@ window.Jaazi = (function () {
     for (var start = OPEN; start + duration <= CLOSE; start += STEP) {
       if (isToday && start < nowMinutes + LEAD) continue;
       var time = timeOf(start);
-      var available = !pseudoTaken(dateKey, time) && !overlaps(dateKey, start, duration);
+      var available = busy
+        ? !busyOverlaps(busy, dateKey, start, duration)
+        : !pseudoTaken(dateKey, time) && !overlaps(dateKey, start, duration);
       result.push({ time: time, available: available });
     }
     return result;
   }
 
-  function isDayAvailable(dateKey, duration) {
-    return slotsFor(dateKey, duration).some(function (s) { return s.available; });
+  function isDayAvailable(dateKey, duration, busy) {
+    return slotsFor(dateKey, duration, busy).some(function (s) { return s.available; });
   }
 
-  function nextAvailable(serviceId, maxDays) {
+  function nextAvailable(serviceId, maxDays, busy) {
     var service = getService(serviceId) || SERVICES[0];
     var limit = maxDays || 14;
     for (var i = 0; i < limit; i++) {
       var key = keyOf(addDays(new Date(), i));
       if (isClosed(key)) continue;
-      var slots = slotsFor(key, service.duration);
+      var slots = slotsFor(key, service.duration, busy);
       for (var j = 0; j < slots.length; j++) {
         if (slots[j].available) {
           return { date: key, time: slots[j].time, service: service };

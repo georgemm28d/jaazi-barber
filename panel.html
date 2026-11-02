@@ -1,0 +1,178 @@
+<!doctype html>
+<html lang="es">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Agenda privada — Jaazi Barber</title>
+  <meta name="robots" content="noindex, nofollow, noarchive">
+  <meta name="theme-color" content="#f4eee5">
+  <script>
+    (function () {
+      try {
+        var stored = localStorage.getItem("jaazi.theme");
+        var dark = stored ? stored === "dark" : window.matchMedia("(prefers-color-scheme: dark)").matches;
+        var theme = dark ? "dark" : "light";
+        document.documentElement.setAttribute("data-theme", theme);
+        document.documentElement.style.colorScheme = theme;
+        var meta = document.querySelector('meta[name="theme-color"]');
+        if (meta) meta.setAttribute("content", theme === "dark" ? "#12100e" : "#f4eee5");
+      } catch (err) { /* sin preferencia guardada */ }
+    })();
+  </script>
+  <link rel="icon" href="assets/favicon.svg" type="image/svg+xml">
+  <link rel="preload" href="assets/fonts/fraunces-latin.woff2" as="font" type="font/woff2" crossorigin>
+  <link rel="preload" href="assets/fonts/inter-latin.woff2" as="font" type="font/woff2" crossorigin>
+  <link rel="stylesheet" href="assets/fonts/fonts.css">
+  <link rel="stylesheet" href="assets/css/site.css">
+  <link rel="stylesheet" href="assets/css/panel.css">
+  <script src="assets/js/config.js"></script>
+  <script src="assets/js/api.js" defer></script>
+  <script src="assets/js/store.js" defer></script>
+  <script src="assets/js/site.js" defer></script>
+  <script src="assets/js/panel.js" defer></script>
+</head>
+<body data-page="panel">
+  <a class="skip-link" href="#panel-main">Saltar al contenido</a>
+
+  <header class="panel-bar">
+    <div class="panel-bar__inner">
+      <a class="brand" href="index.html" aria-label="Jaazi Barber, inicio">
+        <span class="brand__mark" aria-hidden="true">J</span>
+        <span class="brand__text">Jaazi<span class="brand__sub">Barber</span></span>
+      </a>
+      <div class="panel-bar__actions">
+        <span class="panel-bar__tag">Panel privado</span>
+        <button class="icon-btn" type="button" data-refresh title="Actualizar datos" aria-label="Actualizar datos" hidden>
+          <svg viewBox="0 0 24 24" fill="none" aria-hidden="true"><path d="M20 11a8 8 0 1 0-2.3 5.7M20 5v6h-6" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg>
+        </button>
+        <button class="theme-toggle" type="button" data-theme-toggle aria-pressed="false" aria-label="Activar modo oscuro" title="Activar modo oscuro">
+          <svg class="theme-toggle__sun" viewBox="0 0 24 24" fill="none" aria-hidden="true"><circle cx="12" cy="12" r="4" stroke="currentColor" stroke-width="1.5"/><path d="M12 2v2M12 20v2M2 12h2M20 12h2M4.9 4.9l1.4 1.4M17.7 17.7l1.4 1.4M19.1 4.9l-1.4 1.4M6.3 17.7l-1.4 1.4" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"/></svg>
+          <svg class="theme-toggle__moon" viewBox="0 0 24 24" fill="none" aria-hidden="true"><path d="M20 14.5A8.5 8.5 0 0 1 9.5 4a8.5 8.5 0 1 0 10.5 10.5Z" stroke="currentColor" stroke-width="1.5" stroke-linejoin="round"/></svg>
+        </button>
+        <button class="btn btn--sm btn--ghost" type="button" data-logout hidden>Salir</button>
+      </div>
+    </div>
+  </header>
+
+  <main id="panel-main" tabindex="-1">
+    <div class="container">
+      <p class="panel-alert" id="panel-alert" role="alert" hidden></p>
+
+      <!-- Acceso -->
+      <section class="auth" id="login-view" hidden>
+        <p class="eyebrow">Panel privado</p>
+        <h1>La agenda de Jaazi.</h1>
+        <p class="lede">Entra con tu correo y contraseña para ver las citas, cancelarlas o bloquear horas.</p>
+
+        <form class="auth__form" id="login-form" novalidate>
+          <div class="field">
+            <label for="login-email">Correo</label>
+            <input class="input" id="login-email" name="email" type="email" autocomplete="username" required placeholder="tucorreo@ejemplo.com" aria-describedby="login-error">
+          </div>
+          <div class="field">
+            <label for="login-password">Contraseña</label>
+            <input class="input" id="login-password" name="password" type="password" autocomplete="current-password" required aria-describedby="login-error">
+          </div>
+          <p class="field__error" id="login-error" role="alert" hidden></p>
+          <button class="btn btn--primary btn--block" type="submit" id="login-submit">
+            <span data-login-label>Entrar</span>
+            <svg viewBox="0 0 24 24" fill="none" aria-hidden="true"><path d="M5 12h14M13 6l6 6-6 6" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"/></svg>
+          </button>
+        </form>
+
+        <p class="fineprint auth__note">Este panel no está enlazado desde la web pública y no aparece en buscadores. Si olvidaste la contraseña, restablécela en Supabase → Authentication.</p>
+      </section>
+
+      <!-- Agenda -->
+      <section id="app-view" hidden>
+        <div class="panel-head">
+          <div>
+            <p class="eyebrow">Panel privado</p>
+            <h1>Agenda de Jaazi.</h1>
+            <p class="lede" id="today-label"></p>
+          </div>
+          <div class="metrics" aria-label="Resumen">
+            <div class="metric">
+              <span>Hoy</span>
+              <strong data-metric="today">—</strong>
+              <small data-metric-count="today"></small>
+            </div>
+            <div class="metric">
+              <span>Esta semana</span>
+              <strong data-metric="week">—</strong>
+              <small data-metric-count="week"></small>
+            </div>
+            <div class="metric">
+              <span>Próximas</span>
+              <strong data-metric="upcoming">—</strong>
+              <small data-metric-count="upcoming"></small>
+            </div>
+          </div>
+        </div>
+
+        <div class="tabs" role="tablist" aria-label="Filtrar citas">
+          <button class="tab" type="button" role="tab" id="tab-upcoming" aria-selected="true" aria-controls="booking-panel" data-tab="upcoming">Próximas</button>
+          <button class="tab" type="button" role="tab" id="tab-today" aria-selected="false" aria-controls="booking-panel" data-tab="today">Hoy</button>
+          <button class="tab" type="button" role="tab" id="tab-history" aria-selected="false" aria-controls="booking-panel" data-tab="history">Historial</button>
+        </div>
+
+        <div class="panel-grid">
+          <section class="panel-card" id="booking-panel" role="tabpanel" aria-labelledby="tab-upcoming">
+            <div class="panel-card__head">
+              <h2 id="list-title">Próximas citas</h2>
+              <span class="panel-card__count" id="list-count" aria-live="polite"></span>
+            </div>
+            <div class="booking-list" id="booking-list"></div>
+          </section>
+
+          <aside class="panel-card panel-card--side">
+            <div class="panel-card__head">
+              <h2>Bloquear horas</h2>
+            </div>
+            <p class="panel-hint">Almuerzo, diligencias o días completos. Un bloqueo oculta esos horarios en la web.</p>
+
+            <form id="block-form" class="block-form" novalidate>
+              <div class="field">
+                <label for="block-date">Día</label>
+                <input class="input" id="block-date" name="date" type="date" required>
+              </div>
+              <div class="block-form__row">
+                <div class="field">
+                  <label for="block-start">Desde</label>
+                  <select class="input" id="block-start" name="start"></select>
+                </div>
+                <div class="field">
+                  <label for="block-end">Hasta</label>
+                  <select class="input" id="block-end" name="end"></select>
+                </div>
+              </div>
+              <div class="field">
+                <label for="block-reason">Motivo <span class="field__optional">(opcional)</span></label>
+                <input class="input" id="block-reason" name="reason" type="text" maxlength="80" placeholder="Almuerzo, cita médica…">
+              </div>
+              <p class="field__error" id="block-error" role="alert" hidden></p>
+              <div class="block-form__actions">
+                <button class="btn btn--primary btn--block" type="submit">
+                  Bloquear
+                  <svg viewBox="0 0 24 24" fill="none" aria-hidden="true"><rect x="5" y="10" width="14" height="10" rx="2" stroke="currentColor" stroke-width="1.6"/><path d="M8 10V7a4 4 0 0 1 8 0v3" stroke="currentColor" stroke-width="1.6" stroke-linecap="round"/></svg>
+                </button>
+                <button class="link-btn" type="button" data-block-day>Rellenar 9:00–19:00</button>
+              </div>
+            </form>
+
+            <h3 class="block-list__title">Bloqueos próximos</h3>
+            <div class="block-list" id="block-list"></div>
+          </aside>
+        </div>
+      </section>
+    </div>
+  </main>
+
+  <footer class="panel-foot">
+    <div class="container">
+      <p>Jaazi Barber · Chía, Cundinamarca · <a href="index.html">Ver la web pública</a></p>
+      <p id="refresh-note" aria-live="polite"></p>
+    </div>
+  </footer>
+</body>
+</html>

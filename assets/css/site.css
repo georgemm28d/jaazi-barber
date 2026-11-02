@@ -73,6 +73,11 @@ button, input, select, textarea { font: inherit; color: inherit; }
 
 [hidden] { display: none !important; }
 
+/* Contenido según el modo de la agenda (compartida o local). */
+[data-when="api"] { display: none; }
+html[data-mode="api"] [data-when="api"] { display: inline; }
+html[data-mode="api"] [data-when="local"] { display: none; }
+
 main:focus { outline: none; }
 
 body.menu-open { overflow: hidden; }

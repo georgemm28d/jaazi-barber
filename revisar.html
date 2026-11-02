@@ -19,6 +19,14 @@
       } catch (err) { /* sin preferencia guardada */ }
     })();
   </script>
+  <script src="assets/js/config.js"></script>
+  <script>
+    (function () {
+      var cfg = window.JAAZI_CONFIG || {};
+      var api = Boolean(cfg.supabaseUrl && cfg.supabaseAnonKey);
+      document.documentElement.setAttribute("data-mode", api ? "api" : "local");
+    })();
+  </script>
   <link rel="icon" href="assets/favicon.svg" type="image/svg+xml">
   <link rel="preload" href="assets/fonts/fraunces-latin.woff2" as="font" type="font/woff2" crossorigin>
   <link rel="preload" href="assets/fonts/fraunces-latin-italic.woff2" as="font" type="font/woff2" crossorigin>
@@ -26,6 +34,7 @@
   <link rel="stylesheet" href="assets/fonts/fonts.css">
   <link rel="stylesheet" href="assets/css/site.css">
   <link rel="stylesheet" href="assets/css/booking.css">
+  <script src="assets/js/api.js" defer></script>
   <script src="assets/js/store.js" defer></script>
   <script src="assets/js/site.js" defer></script>
   <script src="assets/js/review.js" defer></script>
@@ -90,11 +99,11 @@
       <div class="review-grid">
         <aside class="lookup">
           <h2>Buscar cita</h2>
-          <p>Introduce el código <strong>JZ-XXXX</strong> o el teléfono con el que reservaste.</p>
+          <p>Introduce el código <strong>JZ-XXXXXX</strong> o el teléfono con el que reservaste.</p>
           <form id="lookup-form" novalidate>
             <div class="field">
               <label for="lookup">Código o teléfono</label>
-              <input class="input" id="lookup" name="lookup" type="text" autocomplete="off" placeholder="JZ-8K2M o 313 538 1239" aria-describedby="lookup-error">
+              <input class="input" id="lookup" name="lookup" type="text" autocomplete="off" placeholder="JZ-8K2M6Q o 313 538 1239" aria-describedby="lookup-error">
               <p class="field__error" id="lookup-error" hidden></p>
             </div>
             <button class="btn btn--block" type="submit">
@@ -104,7 +113,8 @@
           </form>
           <p class="lookup__note">
             <svg viewBox="0 0 24 24" fill="none" aria-hidden="true"><rect x="5" y="10" width="14" height="10" rx="2" stroke="currentColor" stroke-width="1.5"/><path d="M8 10V7a4 4 0 0 1 8 0v3" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"/></svg>
-            Las citas se guardan en este navegador. Si cambias de dispositivo, no aparecerán aquí.
+            <span data-when="api">Busca con el código o el teléfono de la reserva: solo con ese dato se muestran tus citas.</span>
+            <span data-when="local">Las citas de este navegador aparecen aquí. Si reservaste desde otro dispositivo, búscalas con tu código.</span>
           </p>
         </aside>
 

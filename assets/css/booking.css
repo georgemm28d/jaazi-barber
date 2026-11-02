@@ -829,6 +829,19 @@
   background: var(--copper);
 }
 .status--past::before { background: var(--muted); }
+.status--today::before {
+  background: var(--copper-deep);
+  box-shadow: 0 0 0 3px rgba(177, 120, 74, 0.18);
+}
+.status--completed::before { background: var(--copper-deep); }
+.status--cancelled { color: var(--danger); }
+.status--cancelled::before { background: var(--danger); }
+.appt--cancelled { opacity: 0.62; }
+.appt--cancelled .appt__service {
+  text-decoration: line-through;
+  text-decoration-thickness: 1px;
+  text-decoration-color: var(--line-strong);
+}
 .appt__meta {
   font-size: 12.5px;
   line-height: 1.5;
