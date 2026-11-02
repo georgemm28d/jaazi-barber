@@ -26,7 +26,19 @@ Los textos de privacidad y las notas de “revisar cita” se adaptan solos al m
 
 ## Backend (Supabase)
 
-### Puesta en marcha
+### Estado actual
+
+Ya está creado, configurado y conectado:
+
+- Proyecto **jaazi-barber** en Supabase, región `sa-east-1` (São Paulo), plan gratuito. Ref. `kavtsigejtugsyiisvsz`; URL `https://kavtsigejtugsyiisvsz.supabase.co`.
+- Esquema `supabase/schema.sql` aplicado: tablas, vista `public_busy`, funciones y RLS.
+- Panel: **https://georgemm28d.github.io/jaazi-barber/panel.html** con la cuenta **Jaazielbarber09@gmail.com**. El correo `jaazibarber09@gmail.com` también está autorizado en `admins`.
+- El registro público de cuentas está desactivado: nadie puede crearse un usuario nuevo.
+- `assets/js/config.js` apunta al proyecto con la clave publicable (`sb_publishable_…`), pública por diseño.
+
+Cambiar la contraseña del panel: en Supabase → **Authentication → Users** → menú del usuario → *Reset password* (o *Edit* para asignar una nueva).
+
+### Si hay que rehacerlo desde cero
 
 1. Crear un proyecto en [supabase.com](https://supabase.com).
 2. Abrir **SQL Editor** y ejecutar `supabase/schema.sql`. Crea:
@@ -34,10 +46,10 @@ Los textos de privacidad y las notas de “revisar cita” se adaptan solos al m
    - La vista `public_busy`, que expone solo fecha, hora y duración de lo ocupado.
    - Las funciones `create_booking`, `lookup_bookings` y `cancel_booking` (`SECURITY DEFINER`).
    - RLS: nadie anónimo puede leer `bookings`; solo se llega a los datos por las funciones, con código o teléfono.
-3. En **Authentication → Users**, crear el usuario del panel con el correo **jaazielbarber09@gmail.com** y una contraseña. No hace falta registro público.
-   - Si usas otro correo, actualízalo en la tabla `admins` (`update public.admins set email = 'nuevo@correo.com';`). El panel solo lee datos si el correo autenticado está en esa tabla.
+3. En **Authentication → Users**, crear el usuario del panel con el correo **jaazielbarber09@gmail.com** y una contraseña, y añadirlo a `admins` si no lo sembró el esquema.
+   - El panel solo lee datos si el correo autenticado está en esa tabla.
    - En **Authentication → Providers → Email**, desactiva *Enable signups* para que nadie pueda crearse una cuenta.
-4. Copiar **Project URL** y **anon public key** (Settings → API) en `assets/js/config.js`.
+4. Copiar **Project URL** y la clave publicable (Settings → API Keys) en `assets/js/config.js`.
 5. Publicar: `git push` a `main`. GitHub Pages sirve los archivos tal cual.
 
 ### Seguridad
@@ -45,7 +57,7 @@ Los textos de privacidad y las notas de “revisar cita” se adaptan solos al m
 - `bookings` y `blocks` tienen RLS y no se pueden leer con la `anon key`.
 - Los clientes solo llegan a sus citas por `create_booking`, `lookup_bookings` y `cancel_booking` (código o teléfono).
 - El panel exige sesión y que el correo esté en la tabla `admins`; el resto de cuentas autenticadas no ve nada.
-- La `anon key` es pública por diseño: las reglas de la base de datos son las que protegen los datos personales.
+- La clave publicable (`sb_publishable_…`) es pública por diseño: las reglas de la base de datos son las que protegen los datos personales. La `service_role` nunca se incluye en el sitio.
 - Cancelar exige código + teléfono; quien conozca ambos puede gestionar la cita.
 
 ### Reglas de negocio

@@ -251,7 +251,7 @@ returns table (
   price        integer,
   duration     integer,
   date         date,
-  time         time,
+  "time"       time,
   name         text,
   phone        text,
   email        text,

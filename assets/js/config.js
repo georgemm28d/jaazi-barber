@@ -7,6 +7,6 @@
    ========================================================= */
 
 window.JAAZI_CONFIG = {
-  supabaseUrl: "",
-  supabaseAnonKey: ""
+  supabaseUrl: "https://kavtsigejtugsyiisvsz.supabase.co",
+  supabaseAnonKey: "sb_publishable_Pq-DhWmKdSoD6auef1nzdA_Iv5Dq037"
 };
