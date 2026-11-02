@@ -24,4 +24,4 @@
 - Moneda: peso colombiano (COP)
 - Idioma: español (Colombia)
 
-Última actualización: octubre 2026.
+Última actualización: noviembre 2026.

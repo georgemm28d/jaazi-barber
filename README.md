@@ -106,11 +106,9 @@ hay que cambiarlas en `index.html`, `agendar.html`, `revisar.html`, `sitemap.xml
 
 ## Despliegue
 
-El sitio se publica en Netlify (cuenta del cliente). Para subir cambios:
+El sitio se publica en **Netlify** (cuenta del cliente) y se actualiza solo: cada `git push` a `main` dispara
+`.github/workflows/deploy.yml`, que empaqueta los archivos públicos y los sube por la API de Netlify.
 
-```bash
-netlify deploy --prod --dir . --site jaazibarber
-```
-
-O desde la API, subiendo un ZIP de la raíz (sin `qa/` ni `supabase/`). GitHub Pages sirve la misma copia
-desde `main`, pero la dirección oficial y el `canonical` son los de Netlify.
+- Cuenta Netlify: `jaazielbarber09@gmail.com`. Token de despliegue guardado como secreto del repo
+  (`NETLIFY_AUTH_TOKEN` y `NETLIFY_SITE_ID`). Se revoca desde *User settings → Applications → Personal access tokens*.
+- GitHub Pages sigue sirviendo la misma copia desde `main`, pero la dirección oficial y el `canonical` son los de Netlify.
