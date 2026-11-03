@@ -250,6 +250,19 @@ window.Jaazi = (function () {
     write(list);
   }
 
+  function updateBooking(code, patch) {
+    var list = read();
+    var updated = null;
+    for (var i = 0; i < list.length; i++) {
+      if (list[i].code !== code) continue;
+      updated = Object.assign({}, list[i], patch);
+      list[i] = updated;
+      break;
+    }
+    if (!updated) return null;
+    return write(list) ? updated : null;
+  }
+
   function findBooking(query) {
     var q = String(query || "").trim().toLowerCase();
     if (!q) return null;
@@ -281,10 +294,11 @@ window.Jaazi = (function () {
     return hash(dateKey + "|" + time) % 100 < 26;
   }
 
-  function overlaps(dateKey, start, duration) {
+  function overlaps(dateKey, start, duration, excludeCode) {
     var end = start + duration;
     var list = read();
     return list.some(function (b) {
+      if (excludeCode && b.code === excludeCode) return false;
       if (b.date !== dateKey) return false;
       var s = minutesOf(b.time);
       return start < s + (b.duration || 45) && s < end;
@@ -300,7 +314,7 @@ window.Jaazi = (function () {
     });
   }
 
-  function slotsFor(dateKey, duration, busy) {
+  function slotsFor(dateKey, duration, busy, excludeCode) {
     if (!dateKey || isClosed(dateKey)) return [];
     var now = shopNow();
     var isToday = dateKey === todayKey();
@@ -311,7 +325,7 @@ window.Jaazi = (function () {
       var time = timeOf(start);
       var available = busy
         ? !busyOverlaps(busy, dateKey, start, duration)
-        : !pseudoTaken(dateKey, time) && !overlaps(dateKey, start, duration);
+        : !pseudoTaken(dateKey, time) && !overlaps(dateKey, start, duration, excludeCode);
       result.push({ time: time, available: available });
     }
     return result;
@@ -420,6 +434,7 @@ window.Jaazi = (function () {
     addBooking: addBooking,
     removeBooking: removeBooking,
     restoreBooking: restoreBooking,
+    updateBooking: updateBooking,
     findBooking: findBooking,
     slotsFor: slotsFor,
     isDayAvailable: isDayAvailable,

@@ -11,7 +11,7 @@ Páginas en español, sin build: HTML, CSS y JavaScript vanilla. La agenda compa
 
 - `index.html` — home: hero, servicios, el estudio, trabajo reciente, FAQ y CTA.
 - `agendar.html` — reserva en 3 pasos (servicio → día/hora → datos) con confirmación, código y `.ics`.
-- `revisar.html` — consulta por código **y** teléfono, cancelación y añadir al calendario.
+- `revisar.html` — consulta por código **y** teléfono; cambiar fecha y hora, cancelación y añadir al calendario.
 - `privacidad.html` — política de tratamiento de datos personales (Ley 1581 de 2012): responsable, finalidades, derechos del titular, retención y proveedores.
 - `panel.html` — **panel privado** (login con correo y contraseña): citas próximas, del día e historial; confirmar, completar y cancelar; bloqueos de horas; ingresos estimados. No está enlazado desde la web pública, lleva `noindex` y `robots.txt` lo excluye.
 
@@ -47,6 +47,11 @@ pasó de aceptar código **o** teléfono a exigir **código + teléfono**, y se 
 antigua de un solo argumento. Si rehaces el proyecto desde cero con `schema.sql` no hace falta
 ejecutarla: el esquema ya trae la versión segura.
 
+También se añadió `supabase/migrations/2026-11-02-reschedule.sql`: la función
+`reschedule_booking` permite cambiar la fecha y la hora de una cita activa sin tocar el
+servicio ni los datos del cliente. Valida la jornada, los bloqueos y los solapamientos en la
+misma transacción. `schema.sql` ya la incluye.
+
 La contraseña del panel se entrega por un canal privado y **no se guarda en el repositorio**. Se cambia en Supabase → **Authentication → Users** → usuario → **Send password recovery** (llega al correo del cliente) o asignando un hash bcrypt nuevo en `auth.users.encrypted_password`. Es independiente de la contraseña de supabase.com, aunque las dos usen el mismo correo.
 
 ### Si hay que rehacerlo desde cero
@@ -55,8 +60,8 @@ La contraseña del panel se entrega por un canal privado y **no se guarda en el 
 2. Abrir **SQL Editor** y ejecutar `supabase/schema.sql`. Crea:
    - `services` (precio y duración autoritativos), `bookings`, `blocks` y `admins`.
    - La vista `public_busy`, que expone solo fecha, hora y duración de lo ocupado.
-   - Las funciones `create_booking`, `lookup_bookings` y `cancel_booking` (`SECURITY DEFINER`).
-   - RLS: nadie anónimo puede leer `bookings`; solo se llega a los datos por las funciones. Consultar y cancelar exigen **código + teléfono**.
+   - Las funciones `create_booking`, `lookup_bookings`, `cancel_booking` y `reschedule_booking` (`SECURITY DEFINER`).
+   - RLS: nadie anónimo puede leer `bookings`; solo se llega a los datos por las funciones. Consultar, cambiar y cancelar exigen **código + teléfono**.
 3. En **Authentication → Users**, crear el usuario del panel con el correo **jaazielbarber09@gmail.com** y una contraseña, y añadirlo a `admins` si no lo sembró el esquema. No crear cuentas extra: cada fila de `admins` puede ver todas las citas.
    - El panel solo lee datos si el correo autenticado está en esa tabla.
    - En **Authentication → Providers → Email**, desactiva *Enable signups* para que nadie pueda crearse una cuenta.
@@ -66,10 +71,10 @@ La contraseña del panel se entrega por un canal privado y **no se guarda en el 
 ### Seguridad
 
 - `bookings` y `blocks` tienen RLS y no se pueden leer con la `anon key`.
-- Los clientes solo llegan a sus citas por `create_booking`, `lookup_bookings` y `cancel_booking`. `lookup_bookings` exige **código + teléfono**: un dato suelto no revela nada.
+- Los clientes solo llegan a sus citas por `create_booking`, `lookup_bookings`, `cancel_booking` y `reschedule_booking`. Las tres últimas exigen **código + teléfono**: un dato suelto no revela nada.
 - El panel exige sesión y que el correo esté en la tabla `admins`; el resto de cuentas autenticadas no ve nada.
 - La clave publicable (`sb_publishable_…`) es pública por diseño: las reglas de la base de datos son las que protegen los datos personales. La `service_role` nunca se incluye en el sitio.
-- Consultar y cancelar exigen código + teléfono; quien conozca ambos puede gestionar la cita.
+- Consultar, cambiar y cancelar exigen código + teléfono; quien conozca ambos puede gestionar la cita.
 - `privacidad.html` documenta el tratamiento conforme a la Ley 1581 de 2012 y se enlaza desde el consentimiento de `agendar.html`, los pies de página y `llms.txt`.
 
 ### Entrega al cliente
@@ -87,7 +92,7 @@ La contraseña del panel se entrega por un canal privado y **no se guarda en el 
 - Jornada 9:00–19:00; el servicio debe terminar antes de las 19:00.
 - Sin solapamientos entre citas activas (`pending`/`confirmed`) ni con bloqueos.
 - Estados: `pending`, `confirmed`, `completed`, `cancelled`. Las reservas nuevas entran como `confirmed`.
-- Cancelación permitida en cualquier momento y sin costo.
+- Cancelación permitida en cualquier momento y sin costo. Cambio de fecha y hora permitido mientras la cita no haya empezado, sujeto a disponibilidad.
 
 ## Estructura
 
@@ -98,7 +103,7 @@ assets/
   fonts/    Fraunces + Inter (woff2, self-hosted)
   img/      jaazi-retrato.jpg, trabajo-01…06.jpg, trabajo-estudio.jpg
 supabase/
-  migrations/  2026-11-02-fix-timezone.sql, 2026-11-02-secure-lookup.sql
+  migrations/  2026-11-02-fix-timezone.sql, 2026-11-02-secure-lookup.sql, 2026-11-02-reschedule.sql
   schema.sql
 ```
 

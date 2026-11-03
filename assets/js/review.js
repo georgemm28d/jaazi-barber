@@ -18,6 +18,7 @@
 
   var api = window.JaaziApi && window.JaaziApi.enabled ? window.JaaziApi : null;
   var state = { code: "", phone: "", results: [], searched: false, loading: false };
+  var editor = null;
   var reduceMotion = window.matchMedia("(prefers-reduced-motion: reduce)");
   var mapsUrl = "https://www.google.com/maps/search/?api=1&query=Calle+4+%231-39+Conjunto+Serralta+Chia+Cundinamarca+Colombia";
 
@@ -36,6 +37,11 @@
 
   function normalizePhone(value) {
     return String(value || "").replace(/\D/g, "");
+  }
+
+  function minutesOf(time) {
+    var parts = String(time || "00:00").split(":").map(Number);
+    return (parts[0] || 0) * 60 + (parts[1] || 0);
   }
 
   function matches(booking, code, phone) {
@@ -87,7 +93,10 @@
         "Repetir cita" +
         '<svg viewBox="0 0 24 24" fill="none" aria-hidden="true"><path d="M5 12h14M13 6l6 6-6 6" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"/></svg></a>';
     } else {
-      actions = '<button class="appt__link appt__link--danger" type="button" data-cancel>Cancelar cita</button>' +
+      actions = '<button class="appt__link" type="button" data-reschedule>' +
+        '<svg viewBox="0 0 24 24" fill="none" aria-hidden="true"><path d="M4 20h4L19 9l-4-4L4 16v4Z" stroke="currentColor" stroke-width="1.5" stroke-linejoin="round"/><path d="m13.5 6.5 4 4" stroke="currentColor" stroke-width="1.5"/></svg>' +
+        "Cambiar cita</button>" +
+        '<button class="appt__link appt__link--danger" type="button" data-cancel>Cancelar cita</button>' +
         '<button class="appt__link" type="button" data-ics>' +
         '<svg viewBox="0 0 24 24" fill="none" aria-hidden="true"><rect x="4" y="6" width="16" height="14" rx="2" stroke="currentColor" stroke-width="1.5"/><path d="M8 3v5M16 3v5M4 11h16" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"/></svg>' +
         "Calendario</button>" +
@@ -233,6 +242,7 @@
   }
 
   function render() {
+    if (editor) editor = null;
     if (api) renderApi();
     else renderLocal();
   }
@@ -261,7 +271,7 @@
 
   /* ---------- Cancelación con confirmación en línea ---------- */
 
-  function closeAllConfirms(except) {
+  function closeAllPanels(except) {
     Array.prototype.forEach.call(listEl.querySelectorAll(".appt[data-confirming]"), function (card) {
       if (except && card === except) return;
       var confirmEl = card.querySelector(".cancel-confirm");
@@ -270,10 +280,14 @@
       if (actions) actions.hidden = false;
       card.removeAttribute("data-confirming");
     });
+    Array.prototype.forEach.call(listEl.querySelectorAll(".appt[data-rescheduling]"), function (card) {
+      if (except && card === except) return;
+      closeReschedule(card, false);
+    });
   }
 
   function openCancel(card) {
-    closeAllConfirms(card);
+    closeAllPanels(card);
     var actions = card.querySelector(".appt__actions");
     if (!actions) return;
     actions.hidden = true;
@@ -369,6 +383,360 @@
     }
   }
 
+  /* ---------- Cambio de fecha y hora ---------- */
+
+  function bookingOf(card) {
+    var code = card.dataset.code;
+    if (api) return findResult(code);
+    return Jaazi.read().filter(function (b) { return b.code === code; })[0] || null;
+  }
+
+  function closeReschedule(card, focus) {
+    var panel = card.querySelector(".reschedule");
+    var actions = card.querySelector(".appt__actions");
+    if (panel) panel.remove();
+    if (actions) actions.hidden = false;
+    card.removeAttribute("data-rescheduling");
+    if (editor && editor.card === card) editor = null;
+    if (focus && actions) {
+      var trigger = actions.querySelector("[data-reschedule]");
+      if (trigger) trigger.focus();
+    }
+  }
+
+  function removeOwnSlot(busy, booking) {
+    var map = busy || {};
+    var ranges = map[booking.date];
+    if (!ranges || !ranges.length) return map;
+    var start = minutesOf(booking.time);
+    var end = start + (Number(booking.duration) || 45);
+    map[booking.date] = ranges.filter(function (range) {
+      return !(range[0] === start && range[1] === end);
+    });
+    return map;
+  }
+
+  function rescheduleBusy(booking) {
+    if (!api) return Promise.resolve(null);
+    var from = Jaazi.todayKey();
+    var to = Jaazi.keyOf(Jaazi.addDays(Jaazi.shopNow(), 20));
+    return api.busy(from, to).then(function (map) {
+      return removeOwnSlot(map, booking);
+    });
+  }
+
+  function rescheduleSlots(booking, date) {
+    return Jaazi.slotsFor(date, booking.duration, editor ? editor.busy : null, booking.code);
+  }
+
+  function openReschedule(card) {
+    var booking = bookingOf(card);
+    if (!booking) return;
+    closeAllPanels(card);
+    var actions = card.querySelector(".appt__actions");
+    if (!actions) return;
+    actions.hidden = true;
+
+    var panel = document.createElement("div");
+    panel.className = "reschedule";
+    panel.setAttribute("role", "group");
+    panel.setAttribute("aria-label", "Cambiar fecha y hora de la cita");
+    panel.innerHTML =
+      '<div class="reschedule__head">' +
+        '<p class="reschedule__title">Cambiar fecha y hora</p>' +
+        '<button class="reschedule__back" type="button" data-reschedule-close>Volver</button>' +
+      '</div>' +
+      '<p class="reschedule__hint">Mantienes ' + esc(booking.serviceName) + " · " + esc(Jaazi.durationLabel(booking.duration)) + ".</p>" +
+      '<p class="reschedule__loading" data-reschedule-loading>Buscando horarios…</p>' +
+      '<div class="reschedule__body" data-reschedule-body hidden>' +
+        '<div class="dates" data-reschedule-dates role="radiogroup" aria-label="Nuevo día"></div>' +
+        '<div class="times-wrap" data-reschedule-times hidden><div data-reschedule-groups></div></div>' +
+        '<p class="reschedule__error" data-reschedule-error role="alert" hidden></p>' +
+        '<div class="reschedule__actions">' +
+          '<button class="btn btn--sm" type="button" data-reschedule-save disabled>Guardar cambio</button>' +
+        '</div>' +
+      '</div>';
+    actions.parentNode.insertBefore(panel, actions.nextSibling);
+    card.setAttribute("data-rescheduling", "");
+
+    editor = {
+      card: card,
+      booking: booking,
+      busy: null,
+      date: booking.date,
+      time: null
+    };
+    loadRescheduleAvailability();
+  }
+
+  function loadRescheduleAvailability() {
+    if (!editor) return;
+    var current = editor;
+    var panel = current.card.querySelector(".reschedule");
+    if (!panel) return;
+    var loading = panel.querySelector("[data-reschedule-loading]");
+    var body = panel.querySelector("[data-reschedule-body]");
+    if (loading) {
+      loading.classList.remove("reschedule__error");
+      loading.innerHTML = "Buscando horarios…";
+      loading.hidden = false;
+    }
+    if (body) body.hidden = true;
+
+    rescheduleBusy(current.booking).then(function (map) {
+      if (editor !== current) return;
+      current.busy = map;
+      if (loading) loading.hidden = true;
+      if (body) body.hidden = false;
+      renderRescheduleDates();
+    }, function (err) {
+      if (editor !== current) return;
+      if (loading) {
+        loading.classList.add("reschedule__error");
+        loading.innerHTML = "No pudimos cargar los horarios. " + esc(api ? api.friendly(err) : "") +
+          ' <button type="button" class="link-btn" data-reschedule-retry>Reintentar</button>';
+        loading.hidden = false;
+      }
+      if (body) body.hidden = true;
+    });
+  }
+
+  function renderRescheduleDates() {
+    if (!editor) return;
+    var panel = editor.card.querySelector(".reschedule");
+    if (!panel) return;
+    var wrap = panel.querySelector("[data-reschedule-dates]");
+    if (!wrap) return;
+    wrap.innerHTML = "";
+    var today = Jaazi.todayKey();
+    var firstAvailable = null;
+
+    for (var i = 0; i < 21; i++) {
+      var key = Jaazi.keyOf(Jaazi.addDays(Jaazi.shopNow(), i));
+      var slots = rescheduleSlots(editor.booking, key);
+      var count = slots.filter(function (slot) { return slot.available; }).length;
+      if (count && !firstAvailable) firstAvailable = key;
+      var disabled = count === 0;
+      var note = count === 0 ? "Lleno" : key === today ? "Hoy" : count + (count === 1 ? " hueco" : " huecos");
+      var fullLabel = Jaazi.formatLong(key) + (count === 0 ? ", sin disponibilidad" : ", " + count + " horarios disponibles");
+
+      var label = document.createElement("label");
+      label.className = "date" + (key === today ? " date--today" : "");
+      label.innerHTML =
+        '<input type="radio" name="reschedule-date" value="' + key + '" data-rs-date' +
+        (editor.date === key ? " checked" : "") +
+        (disabled ? " disabled" : "") +
+        ' aria-label="' + esc(fullLabel) + '">' +
+        '<span class="date__dow">' + Jaazi.dayName(key) + "</span>" +
+        '<span class="date__num">' + Jaazi.dayNumber(key) + "</span>" +
+        '<span class="date__mon">' + Jaazi.monthShort(key) + "</span>" +
+        '<span class="date__note">' + note + "</span>";
+      wrap.appendChild(label);
+    }
+
+    if (!editor.date || !wrap.querySelector('input[value="' + editor.date + '"]:not(:disabled)')) {
+      editor.date = firstAvailable;
+      editor.time = null;
+    }
+    var selected = editor.date ? wrap.querySelector('input[value="' + editor.date + '"]') : null;
+    if (selected) {
+      selected.checked = true;
+      var chosen = selected.closest(".date");
+      if (chosen) {
+        requestAnimationFrame(function () {
+          wrap.scrollTo({
+            left: Math.max(0, chosen.offsetLeft - 12),
+            behavior: reduceMotion.matches ? "auto" : "smooth"
+          });
+        });
+      }
+    }
+    renderRescheduleTimes();
+  }
+
+  function renderRescheduleTimes() {
+    if (!editor) return;
+    var panel = editor.card.querySelector(".reschedule");
+    if (!panel) return;
+    var wrap = panel.querySelector("[data-reschedule-times]");
+    var groupsEl = panel.querySelector("[data-reschedule-groups]");
+    if (!wrap || !groupsEl) return;
+    groupsEl.innerHTML = "";
+
+    if (!editor.date) {
+      groupsEl.innerHTML = '<p class="slots-empty">No hay huecos en las próximas tres semanas. Escríbenos por WhatsApp.</p>';
+      wrap.hidden = false;
+      updateRescheduleSave();
+      return;
+    }
+
+    var slots = rescheduleSlots(editor.booking, editor.date);
+    var total = slots.filter(function (slot) { return slot.available; }).length;
+    if (!total) {
+      groupsEl.innerHTML = '<p class="slots-empty">No quedan huecos este día. Prueba con otra fecha.</p>';
+      wrap.hidden = false;
+      editor.time = null;
+      updateRescheduleSave();
+      return;
+    }
+
+    if (editor.time && !slots.some(function (slot) {
+      return slot.time === editor.time && slot.available;
+    })) {
+      editor.time = null;
+    }
+
+    var groups = [
+      { label: "Mañana", from: 0, to: 12 * 60 - 1 },
+      { label: "Tarde", from: 12 * 60, to: 24 * 60 }
+    ];
+
+    groups.forEach(function (group) {
+      var groupSlots = slots.filter(function (slot) {
+        var mins = minutesOf(slot.time);
+        return mins >= group.from && mins <= group.to;
+      });
+      if (!groupSlots.length) return;
+
+      var groupWrap = document.createElement("div");
+      groupWrap.className = "time-group";
+      var title = document.createElement("p");
+      title.className = "time-group__label";
+      title.textContent = group.label;
+      groupWrap.appendChild(title);
+
+      var grid = document.createElement("div");
+      grid.className = "times";
+      groupSlots.forEach(function (slot) {
+        var label = document.createElement("label");
+        label.className = "time";
+        var hours = parseInt(slot.time.slice(0, 2), 10);
+        label.innerHTML =
+          '<input type="radio" name="reschedule-time" value="' + slot.time + '" data-rs-time' +
+          (editor.time === slot.time ? " checked" : "") +
+          (slot.available ? "" : " disabled") +
+          ' aria-label="' + Jaazi.timeLabel(slot.time) + (slot.available ? "" : ", no disponible") + '">' +
+          "<span>" + Jaazi.timeLabel(slot.time).replace(" a.m.", "").replace(" p.m.", "") + "</span>" +
+          '<span class="time__tag">' + (hours >= 12 ? "pm" : "am") + "</span>";
+        grid.appendChild(label);
+      });
+      groupWrap.appendChild(grid);
+      groupsEl.appendChild(groupWrap);
+    });
+
+    wrap.hidden = false;
+    updateRescheduleSave();
+  }
+
+  function updateRescheduleSave() {
+    if (!editor) return;
+    var panel = editor.card.querySelector(".reschedule");
+    if (!panel) return;
+    var save = panel.querySelector("[data-reschedule-save]");
+    if (save) save.disabled = !editor.time;
+  }
+
+  function showRescheduleError(message) {
+    if (!editor) return;
+    var panel = editor.card.querySelector(".reschedule");
+    if (!panel) return;
+    var errorEl = panel.querySelector("[data-reschedule-error]");
+    if (!errorEl) return;
+    errorEl.textContent = message;
+    errorEl.hidden = false;
+  }
+
+  function hideRescheduleError() {
+    if (!editor) return;
+    var panel = editor.card.querySelector(".reschedule");
+    if (!panel) return;
+    var errorEl = panel.querySelector("[data-reschedule-error]");
+    if (errorEl) errorEl.hidden = true;
+  }
+
+  function refreshRescheduleBusy() {
+    if (!editor || !api) return;
+    var current = editor;
+    rescheduleBusy(current.booking).then(function (map) {
+      if (editor !== current) return;
+      current.busy = map;
+      renderRescheduleDates();
+    });
+  }
+
+  function saveReschedule(card) {
+    if (!editor || editor.card !== card || !editor.date || !editor.time) return;
+    var current = editor;
+    var booking = current.booking;
+    var panel = card.querySelector(".reschedule");
+    var save = panel ? panel.querySelector("[data-reschedule-save]") : null;
+
+    if (current.date === booking.date && current.time === booking.time) {
+      closeReschedule(card, true);
+      if (window.UI) UI.toast("La cita sigue en el mismo horario.");
+      return;
+    }
+
+    if (save) {
+      save.disabled = true;
+      save.textContent = "Guardando…";
+    }
+
+    function done(updated) {
+      if (!updated) {
+        if (save) {
+          save.disabled = false;
+          save.textContent = "Guardar cambio";
+        }
+        showRescheduleError("No pudimos cambiar la cita. Inténtalo de nuevo.");
+        return;
+      }
+      if (api) {
+        state.results = state.results.map(function (item) {
+          return item.code === updated.code ? updated : item;
+        });
+      }
+      closeReschedule(card, false);
+      render();
+      if (window.UI) {
+        UI.toast("Cita cambiada al " + Jaazi.formatLong(updated.date) + " · " + Jaazi.timeLabel(updated.time) + ".");
+      }
+      if (titleEl) {
+        titleEl.setAttribute("tabindex", "-1");
+        titleEl.focus({ preventScroll: true });
+      }
+    }
+
+    function failed(err) {
+      if (editor !== current) return;
+      if (save) {
+        save.disabled = false;
+        save.textContent = "Guardar cambio";
+      }
+      showRescheduleError(api ? api.friendly(err) : "No pudimos cambiar la cita. Inténtalo de nuevo.");
+      if (err && (err.code === "slot_taken" || err.code === "invalid_slot")) {
+        current.time = null;
+        updateRescheduleSave();
+        refreshRescheduleBusy();
+      }
+    }
+
+    if (api) {
+      api.reschedule(booking.code, booking.phone, current.date, current.time).then(done, failed);
+      return;
+    }
+
+    var slots = Jaazi.slotsFor(current.date, booking.duration, null, booking.code);
+    var free = slots.filter(function (slot) {
+      return slot.time === current.time && slot.available;
+    }).length;
+    if (!free) {
+      failed({ code: "slot_taken" });
+      return;
+    }
+    done(Jaazi.updateBooking(booking.code, { date: current.date, time: current.time }));
+  }
+
   /* ---------- Eventos ---------- */
 
   function showLookupError(message, field) {
@@ -453,6 +821,22 @@
       closeCancel(card);
       return;
     }
+    if (event.target.closest("[data-reschedule-close]") && card) {
+      closeReschedule(card, true);
+      return;
+    }
+    if (event.target.closest("[data-reschedule-retry]")) {
+      loadRescheduleAvailability();
+      return;
+    }
+    if (event.target.closest("[data-reschedule-save]") && card) {
+      saveReschedule(card);
+      return;
+    }
+    if (event.target.closest("[data-reschedule]") && card) {
+      openReschedule(card);
+      return;
+    }
     if (event.target.closest("[data-confirm-cancel]") && card) {
       cancelBooking(card, card.dataset.code);
       return;
@@ -472,8 +856,31 @@
     }
   });
 
+  listEl.addEventListener("change", function (event) {
+    if (!editor) return;
+    var date = event.target.closest("[data-rs-date]");
+    if (date) {
+      editor.date = date.value;
+      editor.time = null;
+      hideRescheduleError();
+      renderRescheduleTimes();
+      return;
+    }
+    var time = event.target.closest("[data-rs-time]");
+    if (time) {
+      editor.time = time.value;
+      hideRescheduleError();
+      updateRescheduleSave();
+    }
+  });
+
   document.addEventListener("keydown", function (event) {
     if (event.key !== "Escape") return;
+    var rescheduling = listEl.querySelector(".appt[data-rescheduling]");
+    if (rescheduling) {
+      closeReschedule(rescheduling, true);
+      return;
+    }
     var open = listEl.querySelector(".appt[data-confirming]");
     if (open) closeCancel(open);
   });

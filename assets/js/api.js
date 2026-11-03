@@ -102,6 +102,7 @@ window.JaaziApi = (function () {
     invalid_name: "Revisa tu nombre.",
     invalid_phone: "Revisa tu teléfono.",
     service_not_found: "Ese servicio ya no está disponible.",
+    booking_not_found: "No encontramos una cita activa con ese código y teléfono.",
     duplicate: "Ya existe una cita en ese horario. Elige otro."
   };
 
@@ -194,6 +195,19 @@ window.JaaziApi = (function () {
       method: "POST",
       body: { p_code: code, p_phone: phone }
     });
+  }
+
+  function reschedule(code, phone, date, time) {
+    if (!enabled) return Promise.resolve(null);
+    return request("/rest/v1/rpc/reschedule_booking", {
+      method: "POST",
+      body: {
+        p_code: code,
+        p_phone: phone,
+        p_date: date,
+        p_time: time
+      }
+    }).then(mapBooking);
   }
 
   /* ---------- Panel: sesión ---------- */
@@ -318,6 +332,7 @@ window.JaaziApi = (function () {
     create: create,
     lookup: lookup,
     cancel: cancel,
+    reschedule: reschedule,
     friendly: friendly,
     login: login,
     refresh: refresh,

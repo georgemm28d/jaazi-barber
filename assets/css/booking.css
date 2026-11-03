@@ -921,6 +921,76 @@
   .cancel-confirm .danger:hover { background: #8a2f21; border-color: #8a2f21; }
 }
 
+.reschedule {
+  margin-top: 12px;
+  padding: 14px;
+  border: 1px solid var(--line);
+  border-radius: var(--r-md);
+  background: var(--paper);
+  animation: stepIn 200ms var(--ease) both;
+}
+.reschedule__head {
+  display: flex;
+  align-items: baseline;
+  justify-content: space-between;
+  gap: 12px;
+}
+.reschedule__title {
+  font-family: var(--font-display);
+  font-size: 1.05rem;
+  line-height: 1.2;
+  letter-spacing: -0.01em;
+}
+.reschedule__back {
+  min-height: 36px;
+  padding: 4px 0;
+  border: 0;
+  background: none;
+  font-size: 10px;
+  font-weight: 500;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  color: var(--muted);
+  cursor: pointer;
+}
+.reschedule__back:hover { color: var(--ink); }
+.reschedule__hint {
+  margin-top: 4px;
+  margin-bottom: 12px;
+  font-size: 11.5px;
+  line-height: 1.5;
+  color: var(--muted);
+}
+.reschedule__loading {
+  padding: 8px 0;
+  font-size: 12px;
+  color: var(--muted);
+}
+.reschedule__loading.reschedule__error { color: var(--danger); }
+.reschedule__body .dates { margin-bottom: 0; }
+.reschedule__body .times-wrap { margin-top: 14px; }
+.reschedule__body .times { grid-template-columns: repeat(auto-fill, minmax(62px, 1fr)); }
+.reschedule__body .slots-empty { margin: 0; font-size: 12px; }
+.reschedule__error {
+  margin-top: 10px;
+  font-size: 12px;
+  line-height: 1.45;
+  color: var(--danger);
+}
+.reschedule__actions {
+  display: flex;
+  justify-content: flex-end;
+  margin-top: 12px;
+}
+.reschedule__actions .btn {
+  min-height: 40px;
+  padding: 10px 16px;
+}
+.reschedule__actions .btn[disabled] {
+  opacity: 0.45;
+  cursor: not-allowed;
+}
+
 .empty {
   padding: clamp(28px, 4vw, 44px);
   border: 1px dashed var(--line-strong);
