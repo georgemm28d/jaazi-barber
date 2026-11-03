@@ -37,6 +37,10 @@ Ya está creado, configurado y conectado:
 - El registro público de cuentas está desactivado: nadie puede crearse un usuario nuevo.
 - `assets/js/config.js` apunta al proyecto con la clave publicable (`sb_publishable_…`), pública por diseño.
 
+Si el proyecto ya estaba creado antes del **2 de noviembre de 2026**, ejecuta una vez
+`supabase/migrations/2026-11-02-fix-timezone.sql` en el SQL Editor. Corrige el cálculo de
+fechas para que las citas del mismo día se validen en hora de Colombia y no en UTC.
+
 Cambiar la contraseña del panel: en Supabase → **Authentication → Users** → menú del usuario → *Reset password* (o *Edit* para asignar una nueva).
 
 ### Si hay que rehacerlo desde cero
@@ -63,6 +67,7 @@ Cambiar la contraseña del panel: en Supabase → **Authentication → Users** �
 
 ### Reglas de negocio
 
+- Toda la agenda trabaja en **hora de Colombia** (`America/Bogota`, UTC-5), no en la hora del servidor (UTC) ni en la del visitante. Las funciones de Supabase calculan `v_today`/`v_now` con `now() at time zone 'America/Bogota'`.
 - Jornada 9:00–19:00; el servicio debe terminar antes de las 19:00.
 - Sin solapamientos entre citas activas (`pending`/`confirmed`) ni con bloqueos.
 - Estados: `pending`, `confirmed`, `completed`, `cancelled`. Las reservas nuevas entran como `confirmed`.

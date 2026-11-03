@@ -164,6 +164,11 @@ declare
   v_name   text := btrim(coalesce(p_name, ''));
   v_code   text;
   v_id     uuid;
+  -- La agenda trabaja en hora de Colombia. Postgres/Supabase corre en UTC,
+  -- así que comparar contra current_date/localtime rechazaba citas del
+  -- mismo día durante la mañana (UTC va 5 horas adelante).
+  v_today  date := (now() at time zone 'America/Bogota')::date;
+  v_now    time := (now() at time zone 'America/Bogota')::time;
 begin
   select * into s from public.services where id = p_service_id and active;
   if not found then
@@ -176,10 +181,10 @@ begin
   if length(v_phone) < 7 or length(v_phone) > 15 then
     raise exception 'invalid_phone';
   end if;
-  if p_date is null or p_time is null or p_date < current_date then
+  if p_date is null or p_time is null or p_date < v_today then
     raise exception 'invalid_slot';
   end if;
-  if p_date = current_date and p_time <= localtime then
+  if p_date = v_today and p_time <= v_now then
     raise exception 'invalid_slot';
   end if;
 
@@ -311,7 +316,7 @@ begin
    where upper(b.code) = upper(btrim(coalesce(p_code, '')))
      and (b.phone = digits or right(b.phone, 10) = right(digits, 10))
      and b.status in ('pending', 'confirmed')
-     and b.date >= current_date;
+     and b.date >= (now() at time zone 'America/Bogota')::date;
 
   return found;
 end;

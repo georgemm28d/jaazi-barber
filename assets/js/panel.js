@@ -74,7 +74,7 @@
   }
 
   function tomorrowKey() {
-    return Jaazi.keyOf(Jaazi.addDays(new Date(), 1));
+    return Jaazi.keyOf(Jaazi.addDays(Jaazi.shopNow(), 1));
   }
 
   function waNumber(phone) {
@@ -212,7 +212,7 @@
         setAlert("");
       }
       render();
-      var stamp = new Date().toLocaleTimeString("es-CO", { hour: "2-digit", minute: "2-digit" });
+      var stamp = Jaazi.shopNow().toLocaleTimeString("es-CO", { hour: "2-digit", minute: "2-digit" });
       refreshNote.textContent = "Actualizado " + stamp;
     }, function (err) {
       if (err && err.status === 401) return;
@@ -226,7 +226,7 @@
   /* ---------- Filtros y métricas ---------- */
 
   function weekRange() {
-    var now = new Date();
+    var now = Jaazi.shopNow();
     var today = new Date(now.getFullYear(), now.getMonth(), now.getDate());
     var offset = (today.getDay() + 6) % 7;
     var start = Jaazi.addDays(today, -offset);

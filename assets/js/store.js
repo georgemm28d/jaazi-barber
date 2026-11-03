@@ -7,6 +7,7 @@ window.Jaazi = (function () {
   "use strict";
 
   var KEY = "jaazi.bookings.v2";
+  var SHOP_TZ = "America/Bogota";
   var OPEN = 9 * 60;         // 9:00
   var CLOSE = 19 * 60;       // 19:00
   var STEP = 30;             // cada 30 min
@@ -70,6 +71,39 @@ window.Jaazi = (function () {
 
   function pad(n) { return String(n).padStart(2, "0"); }
 
+  /* La agenda trabaja en hora de Colombia, no en la del visitante.
+     Devuelve un Date cuyos componentes locales son la hora de Bogotá. */
+  var shopFormatter = null;
+  function shopNow() {
+    var now = new Date();
+    if (!shopFormatter) {
+      try {
+        shopFormatter = new Intl.DateTimeFormat("en-CA", {
+          timeZone: SHOP_TZ,
+          year: "numeric", month: "2-digit", day: "2-digit",
+          hour: "2-digit", minute: "2-digit", second: "2-digit",
+          hour12: false
+        });
+      } catch (err) {
+        shopFormatter = null;
+      }
+    }
+    if (!shopFormatter || !shopFormatter.formatToParts) return now;
+
+    var parts = {};
+    shopFormatter.formatToParts(now).forEach(function (part) {
+      parts[part.type] = part.value;
+    });
+    return new Date(
+      parseInt(parts.year, 10),
+      parseInt(parts.month, 10) - 1,
+      parseInt(parts.day, 10),
+      parseInt(parts.hour, 10) % 24,
+      parseInt(parts.minute, 10),
+      parseInt(parts.second, 10)
+    );
+  }
+
   function keyOf(date) {
     return date.getFullYear() + "-" + pad(date.getMonth() + 1) + "-" + pad(date.getDate());
   }
@@ -85,7 +119,7 @@ window.Jaazi = (function () {
     return d;
   }
 
-  function todayKey() { return keyOf(new Date()); }
+  function todayKey() { return keyOf(shopNow()); }
 
   function minutesOf(time) {
     var p = String(time).split(":").map(Number);
@@ -268,7 +302,7 @@ window.Jaazi = (function () {
 
   function slotsFor(dateKey, duration, busy) {
     if (!dateKey || isClosed(dateKey)) return [];
-    var now = new Date();
+    var now = shopNow();
     var isToday = dateKey === todayKey();
     var nowMinutes = now.getHours() * 60 + now.getMinutes();
     var result = [];
@@ -290,8 +324,9 @@ window.Jaazi = (function () {
   function nextAvailable(serviceId, maxDays, busy) {
     var service = getService(serviceId) || SERVICES[0];
     var limit = maxDays || 14;
+    var base = shopNow();
     for (var i = 0; i < limit; i++) {
-      var key = keyOf(addDays(new Date(), i));
+      var key = keyOf(addDays(base, i));
       if (isClosed(key)) continue;
       var slots = slotsFor(key, service.duration, busy);
       for (var j = 0; j < slots.length; j++) {
@@ -306,7 +341,7 @@ window.Jaazi = (function () {
   function isPast(booking) {
     var d = parseKey(booking.date);
     var start = new Date(d.getFullYear(), d.getMonth(), d.getDate(), Math.floor(minutesOf(booking.time) / 60), minutesOf(booking.time) % 60);
-    return start.getTime() + (booking.duration || 45) * 60000 < Date.now();
+    return start.getTime() + (booking.duration || 45) * 60000 < shopNow().getTime();
   }
 
   /* ---------- Calendario (.ics) ---------- */
@@ -369,6 +404,7 @@ window.Jaazi = (function () {
     keyOf: keyOf,
     parseKey: parseKey,
     addDays: addDays,
+    shopNow: shopNow,
     todayKey: todayKey,
     timeLabel: timeLabel,
     formatPrice: formatPrice,

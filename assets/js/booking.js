@@ -43,8 +43,8 @@
       state.busy = null;
       return Promise.resolve();
     }
-    var from = Jaazi.keyOf(new Date());
-    var to = Jaazi.keyOf(Jaazi.addDays(new Date(), 20));
+    var from = Jaazi.todayKey();
+    var to = Jaazi.keyOf(Jaazi.addDays(Jaazi.shopNow(), 20));
     return api.busy(from, to).then(function (map) {
       state.busy = map;
     }, function () {
@@ -230,7 +230,7 @@
     var selectedStillValid = false;
 
     for (var i = 0; i < 21; i++) {
-      var d = Jaazi.addDays(new Date(), i);
+      var d = Jaazi.addDays(Jaazi.shopNow(), i);
       var key = Jaazi.keyOf(d);
       var closed = Jaazi.isClosed(key);
       var count = closed ? 0 : Jaazi.slotsFor(key, s.duration, state.busy).filter(function (slot) {

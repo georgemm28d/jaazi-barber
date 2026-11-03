@@ -191,7 +191,7 @@
     var paintNext = function (found) {
       if (found) {
         var today = Jaazi.todayKey();
-        var tomorrow = Jaazi.keyOf(Jaazi.addDays(new Date(), 1));
+        var tomorrow = Jaazi.keyOf(Jaazi.addDays(Jaazi.shopNow(), 1));
         var prefix = found.date === today ? "hoy" : found.date === tomorrow ? "mañana" : "el " + Jaazi.formatMedium(found.date);
         nextSlot.textContent = prefix + " · " + Jaazi.timeLabel(found.time);
       } else {
@@ -200,7 +200,7 @@
     };
 
     if (nextApi) {
-      nextApi.busy(Jaazi.todayKey(), Jaazi.keyOf(Jaazi.addDays(new Date(), 20))).then(function (map) {
+      nextApi.busy(Jaazi.todayKey(), Jaazi.keyOf(Jaazi.addDays(Jaazi.shopNow(), 20))).then(function (map) {
         paintNext(Jaazi.nextAvailable("corte-personalizado", 14, map));
       }, function () {
         paintNext(null);
