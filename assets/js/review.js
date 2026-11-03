@@ -8,15 +8,16 @@
 
   var form = document.getElementById("lookup-form");
   var input = document.getElementById("lookup");
+  var phoneInput = document.getElementById("lookup-phone");
   var error = document.getElementById("lookup-error");
   var listEl = document.getElementById("appointments");
   var countEl = document.getElementById("appt-count");
   var statusEl = document.getElementById("lookup-status");
   var titleEl = document.getElementById("appts-title");
-  if (!form || !listEl || !window.Jaazi) return;
+  if (!form || !input || !phoneInput || !listEl || !window.Jaazi) return;
 
   var api = window.JaaziApi && window.JaaziApi.enabled ? window.JaaziApi : null;
-  var state = { query: "", results: [], searched: false, loading: false };
+  var state = { code: "", phone: "", results: [], searched: false, loading: false };
   var reduceMotion = window.matchMedia("(prefers-reduced-motion: reduce)");
   var mapsUrl = "https://www.google.com/maps/search/?api=1&query=Calle+4+%231-39+Conjunto+Serralta+Chia+Cundinamarca+Colombia";
 
@@ -37,16 +38,15 @@
     return String(value || "").replace(/\D/g, "");
   }
 
-  function matches(booking, query) {
-    var q = query.trim().toLowerCase();
-    if (!q) return true;
-    if (booking.code.toLowerCase() === q) return true;
-    var digits = normalizePhone(q);
-    var phone = normalizePhone(booking.phone);
-    if (digits.length >= 7 && phone) {
-      return phone === digits || (phone.length >= 10 && phone.slice(-10) === digits.slice(-10));
-    }
-    return false;
+  function matches(booking, code, phone) {
+    var wantedCode = String(code || "").trim().toUpperCase();
+    var digits = normalizePhone(phone);
+    var storedCode = String(booking.code || "").trim().toUpperCase();
+    var storedPhone = normalizePhone(booking.phone);
+    if (!wantedCode || !digits || !storedCode || !storedPhone) return false;
+    if (storedCode !== wantedCode) return false;
+    return storedPhone === digits ||
+      (storedPhone.length >= 10 && storedPhone.slice(-10) === digits.slice(-10));
   }
 
   function sortList(list) {
@@ -118,19 +118,19 @@
     "</article>";
   }
 
-  function emptyMarkup(kind, query) {
+  function emptyMarkup(kind) {
     if (kind === "intro") {
       return '<div class="empty">' +
         '<svg viewBox="0 0 24 24" fill="none" aria-hidden="true"><circle cx="11" cy="11" r="7" stroke="currentColor" stroke-width="1.4"/><path d="m16.5 16.5 4 4" stroke="currentColor" stroke-width="1.4" stroke-linecap="round"/></svg>' +
         "<h3>Busca tu cita.</h3>" +
-        "<p>Escribe el código que te dimos al reservar o el teléfono con el que agendaste.</p>" +
+        "<p>Escribe el código que te dimos al reservar y el teléfono con el que agendaste.</p>" +
       "</div>";
     }
     if (kind === "search") {
       return '<div class="empty">' +
         '<svg viewBox="0 0 24 24" fill="none" aria-hidden="true"><circle cx="11" cy="11" r="7" stroke="currentColor" stroke-width="1.4"/><path d="m16.5 16.5 4 4" stroke="currentColor" stroke-width="1.4" stroke-linecap="round"/></svg>' +
         "<h3>No encontramos esa cita.</h3>" +
-        "<p>Revisa el código (JZ-XXXXXX) o prueba con el teléfono completo con el que reservaste “" + esc(query) + "”.</p>" +
+        "<p>Revisa el código (JZ-XXXXXX) y el teléfono con el que reservaste. Los dos datos deben coincidir.</p>" +
         '<button class="btn btn--ghost" type="button" data-clear>Limpiar búsqueda</button>' +
       "</div>";
     }
@@ -179,9 +179,9 @@
     }
 
     if (!ordered.length) {
-      listEl.innerHTML = emptyMarkup("search", state.query);
+      listEl.innerHTML = emptyMarkup("search");
       countEl.textContent = "0 citas";
-      setStatus("Sin resultados para “" + state.query + "”. ");
+      setStatus("Sin resultados para ese código y teléfono. ");
       addClearButton();
       return;
     }
@@ -193,8 +193,7 @@
     if (rest) parts.push(rest + (rest === 1 ? " pasada" : " pasadas"));
     countEl.textContent = parts.join(" · ");
 
-    setStatus(ordered.length + (ordered.length === 1 ? " cita encontrada" : " citas encontradas") +
-      " para “" + state.query + "”. ");
+    setStatus(ordered.length + (ordered.length === 1 ? " cita encontrada" : " citas encontradas") + ". ");
     addClearButton();
   }
 
@@ -202,13 +201,14 @@
 
   function renderLocal() {
     var all = Jaazi.read();
-    var visible = state.query ? all.filter(function (b) { return matches(b, state.query); }) : all;
+    var hasQuery = Boolean(state.code.trim() || state.phone.trim());
+    var visible = hasQuery ? all.filter(function (b) { return matches(b, state.code, state.phone); }) : all;
     var ordered = sortList(visible);
     var upcoming = ordered.filter(function (b) { return canCancel(b); }).length;
     var past = ordered.length - upcoming;
 
     if (!ordered.length) {
-      listEl.innerHTML = all.length && state.query ? emptyMarkup("search", state.query) : emptyMarkup("all");
+      listEl.innerHTML = all.length && hasQuery ? emptyMarkup("search") : emptyMarkup("all");
     } else {
       listEl.innerHTML = ordered.map(cardMarkup).join("");
     }
@@ -218,16 +218,16 @@
     if (past) parts.push(past + (past === 1 ? " pasada" : " pasadas"));
     countEl.textContent = parts.join(" · ");
 
-    if (!state.query) {
+    if (!hasQuery) {
       setStatus("");
       return;
     }
 
     if (ordered.length) {
       var label = ordered.length === 1 ? " cita encontrada" : " citas encontradas";
-      setStatus(ordered.length + label + " para “" + state.query + "”. ");
+      setStatus(ordered.length + label + ". ");
     } else {
-      setStatus("Sin resultados para “" + state.query + "”. ");
+      setStatus("Sin resultados para ese código y teléfono. ");
     }
     addClearButton();
   }
@@ -238,12 +238,15 @@
   }
 
   function clearSearch() {
-    state.query = "";
+    state.code = "";
+    state.phone = "";
     state.results = [];
     state.searched = false;
     input.value = "";
+    phoneInput.value = "";
     error.hidden = true;
     input.removeAttribute("aria-invalid");
+    phoneInput.removeAttribute("aria-invalid");
     render();
     input.focus();
   }
@@ -355,8 +358,10 @@
         duration: 9000,
         onAction: function () {
           Jaazi.restoreBooking(removed);
-          state.query = "";
+          state.code = "";
+          state.phone = "";
           input.value = "";
+          phoneInput.value = "";
           render();
           UI.toast("Cita restaurada.");
         }
@@ -366,19 +371,32 @@
 
   /* ---------- Eventos ---------- */
 
+  function showLookupError(message, field) {
+    error.textContent = message;
+    error.hidden = false;
+    field.setAttribute("aria-invalid", "true");
+    field.focus();
+  }
+
   form.addEventListener("submit", function (event) {
     event.preventDefault();
-    var query = input.value.trim();
-    if (!query) {
-      error.textContent = "Escribe tu código o teléfono para buscar.";
-      error.hidden = false;
-      input.setAttribute("aria-invalid", "true");
-      input.focus();
+    var code = input.value.trim();
+    var phone = phoneInput.value.trim();
+
+    if (!code) {
+      showLookupError("Escribe el código de tu cita (JZ-XXXXXX).", input);
       return;
     }
+    if (!phone) {
+      showLookupError("Escribe el teléfono con el que reservaste.", phoneInput);
+      return;
+    }
+
     error.hidden = true;
     input.removeAttribute("aria-invalid");
-    state.query = query;
+    phoneInput.removeAttribute("aria-invalid");
+    state.code = code;
+    state.phone = phone;
 
     if (!api) {
       render();
@@ -389,7 +407,7 @@
     state.loading = true;
     state.searched = true;
     render();
-    api.lookup(query).then(function (rows) {
+    api.lookup(code, phone).then(function (rows) {
       state.loading = false;
       state.results = rows;
       render();
@@ -404,17 +422,24 @@
     });
   });
 
-  input.addEventListener("input", function () {
-    if (input.getAttribute("aria-invalid") === "true") {
-      error.hidden = true;
-      input.removeAttribute("aria-invalid");
-    }
-    if (!input.value.trim() && state.query) {
-      state.query = "";
+  function resetLookupIfEmpty() {
+    if (!input.value.trim() && !phoneInput.value.trim() && state.searched) {
+      state.code = "";
+      state.phone = "";
       state.results = [];
       state.searched = false;
       render();
     }
+  }
+
+  [input, phoneInput].forEach(function (field) {
+    field.addEventListener("input", function () {
+      if (field.getAttribute("aria-invalid") === "true") {
+        error.hidden = true;
+        field.removeAttribute("aria-invalid");
+      }
+      resetLookupIfEmpty();
+    });
   });
 
   listEl.addEventListener("click", function (event) {

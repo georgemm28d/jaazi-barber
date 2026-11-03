@@ -178,11 +178,11 @@ window.JaaziApi = (function () {
     }).then(mapBooking);
   }
 
-  function lookup(query) {
+  function lookup(code, phone) {
     if (!enabled) return Promise.resolve([]);
     return request("/rest/v1/rpc/lookup_bookings", {
       method: "POST",
-      body: { p_query: query }
+      body: { p_code: code, p_phone: phone }
     }).then(function (rows) {
       return (rows || []).map(mapBooking);
     });

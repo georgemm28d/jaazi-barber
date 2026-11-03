@@ -4,12 +4,12 @@
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <title>Revisar cita — Jaazi Barber · Chía</title>
-  <meta name="description" content="Consulta y gestiona tu cita de Jaazi Barber con tu código o teléfono. Añádela a tu calendario o cancela sin llamadas.">
+  <meta name="description" content="Consulta y gestiona tu cita de Jaazi Barber con tu código y el teléfono con el que reservaste. Añádela a tu calendario o cancela sin llamadas.">
   <link rel="canonical" href="https://jaazibarber.netlify.app/revisar.html">
   <meta property="og:type" content="website">
   <meta property="og:site_name" content="Jaazi Barber">
   <meta property="og:title" content="Revisar cita — Jaazi Barber · Chía">
-  <meta property="og:description" content="Consulta y gestiona tu cita con tu código o teléfono. Añádela a tu calendario o cancela sin llamadas.">
+  <meta property="og:description" content="Consulta y gestiona tu cita con tu código y el teléfono con el que reservaste. Añádela a tu calendario o cancela sin llamadas.">
   <meta property="og:url" content="https://jaazibarber.netlify.app/revisar.html">
   <meta property="og:image" content="https://jaazibarber.netlify.app/assets/img/jaazi-retrato.jpg">
   <meta property="og:image:width" content="1200">
@@ -108,17 +108,21 @@
       <header class="page-head">
         <p class="eyebrow">Tu cita</p>
         <h1>Revisa tu cita.</h1>
-        <p class="lede">Consulta, añade al calendario o cancela con tu código. Sin llamadas y sin esperas.</p>
+        <p class="lede">Consulta, añade al calendario o cancela con tu código y tu teléfono. Sin llamadas y sin esperas.</p>
       </header>
 
       <div class="review-grid">
         <aside class="lookup">
           <h2>Buscar cita</h2>
-          <p>Introduce el código <strong>JZ-XXXXXX</strong> o el teléfono con el que reservaste.</p>
+          <p>Introduce el código <strong>JZ-XXXXXX</strong> y el teléfono con el que reservaste. Los dos datos deben coincidir.</p>
           <form id="lookup-form" novalidate>
             <div class="field">
-              <label for="lookup">Código o teléfono</label>
-              <input class="input" id="lookup" name="lookup" type="text" autocomplete="off" placeholder="JZ-8K2M6Q o 313 538 1239" aria-describedby="lookup-error">
+              <label for="lookup">Código de la cita</label>
+              <input class="input" id="lookup" name="lookup" type="text" autocomplete="off" placeholder="JZ-8K2M6Q" aria-describedby="lookup-error">
+            </div>
+            <div class="field">
+              <label for="lookup-phone">Teléfono</label>
+              <input class="input" id="lookup-phone" name="phone" type="tel" inputmode="tel" autocomplete="tel" placeholder="313 538 1239" aria-describedby="lookup-error">
               <p class="field__error" id="lookup-error" hidden></p>
             </div>
             <button class="btn btn--block" type="submit">
@@ -128,8 +132,8 @@
           </form>
           <p class="lookup__note">
             <svg viewBox="0 0 24 24" fill="none" aria-hidden="true"><rect x="5" y="10" width="14" height="10" rx="2" stroke="currentColor" stroke-width="1.5"/><path d="M8 10V7a4 4 0 0 1 8 0v3" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"/></svg>
-            <span data-when="api">Busca con el código o el teléfono de la reserva: solo con ese dato se muestran tus citas.</span>
-            <span data-when="local">Las citas de este navegador aparecen aquí. Si reservaste desde otro dispositivo, búscalas con tu código.</span>
+            <span data-when="api">Pedimos los dos datos para que nadie más pueda ver tus citas con solo tu teléfono.</span>
+            <span data-when="local">Las citas de este navegador aparecen aquí. Para las de otro dispositivo, usa el código y el teléfono.</span>
           </p>
         </aside>
 
@@ -163,6 +167,7 @@
             <li><a href="index.html#trabajo">Trabajo</a></li>
             <li><a href="agendar.html">Agendar cita</a></li>
             <li><a href="revisar.html">Revisar cita</a></li>
+            <li><a href="privacidad.html">Privacidad</a></li>
           </ul>
         </div>
         <div>
@@ -186,7 +191,7 @@
       <div class="footer__bottom">
         <p>© <span data-year>2026</span> Jaazi Barber · Precios en COP.</p>
         <p>Todos los días · 9:00 – 19:00 · Chía, Cundinamarca</p>
-        <p>Información actualizada: octubre 2026.</p>
+        <p>Información actualizada: noviembre 2026.</p>
       </div>
     </div>
   </footer>

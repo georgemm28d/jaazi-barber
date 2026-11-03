@@ -722,6 +722,7 @@
   color: var(--muted);
   margin-bottom: 20px;
 }
+.lookup .field + .field { margin-top: 12px; }
 .lookup .field + .btn { margin-top: 14px; }
 .lookup__note {
   display: flex;

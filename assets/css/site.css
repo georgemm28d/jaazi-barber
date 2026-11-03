@@ -1119,6 +1119,49 @@ textarea.input { resize: vertical; min-height: 92px; }
 }
 .field__hint { font-size: 12px; line-height: 1.5; color: var(--muted); }
 
+/* ---------- Legal ---------- */
+
+.legal {
+  max-width: 72ch;
+  padding-bottom: clamp(48px, 7vw, 96px);
+  font-size: 0.975rem;
+  line-height: 1.7;
+  color: var(--ink-soft);
+}
+.legal__meta {
+  margin-bottom: 26px;
+  padding-bottom: 16px;
+  border-bottom: 1px solid var(--line);
+  font-size: 11px;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  color: var(--muted);
+}
+.legal h2 {
+  margin-top: 34px;
+  margin-bottom: 10px;
+  font-size: clamp(1.35rem, 2.2vw, 1.65rem);
+  line-height: 1.2;
+  letter-spacing: -0.015em;
+}
+.legal p + p { margin-top: 12px; }
+.legal ul {
+  display: grid;
+  gap: 7px;
+  margin: 10px 0 0;
+  padding-left: 20px;
+}
+.legal li::marker { color: var(--copper-deep); }
+.legal a {
+  color: var(--ink);
+  text-decoration: underline;
+  text-decoration-color: var(--copper);
+  text-decoration-thickness: 1px;
+  text-underline-offset: 3px;
+}
+.legal a:hover { color: var(--copper-deep); }
+.legal strong { font-weight: 600; }
+
 /* ---------- Responsive ---------- */
 
 @media (max-width: 1080px) {

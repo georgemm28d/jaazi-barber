@@ -590,7 +590,7 @@
     document.getElementById("confirm-title").textContent = "Nos vemos el " + Jaazi.formatLong(booking.date) + ".";
     document.getElementById("confirm-copy").textContent =
       "Tu cita de " + booking.serviceName + (api ? " quedó confirmada." : " quedó guardada.") +
-      " Llega cinco minutos antes; si necesitas cambiarla, usa tu código.";
+      " Llega cinco minutos antes; si necesitas revisarla o cancelarla, usa tu código y tu teléfono.";
     document.getElementById("confirm-code").textContent = booking.code;
     document.getElementById("confirm-code-inline").textContent = booking.code;
 
