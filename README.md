@@ -33,7 +33,7 @@ Ya está creado, configurado y conectado:
 
 - Proyecto **jaazi-barber** en Supabase, región `sa-east-1` (São Paulo), plan gratuito. Ref. `kavtsigejtugsyiisvsz`; URL `https://kavtsigejtugsyiisvsz.supabase.co`.
 - Esquema `supabase/schema.sql` aplicado: tablas, vista `public_busy`, funciones y RLS.
-- Panel: **https://georgemm28d.github.io/jaazi-barber/panel.html** con la cuenta **Jaazielbarber09@gmail.com**. El correo `jaazibarber09@gmail.com` también está autorizado en `admins`.
+- Panel: **https://jaazibarber.netlify.app/panel.html** con la cuenta **jaazielbarber09@gmail.com**. Es la única cuenta autorizada en `admins` y la única propietaria de la organización de Supabase.
 - El registro público de cuentas está desactivado: nadie puede crearse un usuario nuevo.
 - `assets/js/config.js` apunta al proyecto con la clave publicable (`sb_publishable_…`), pública por diseño.
 
@@ -41,7 +41,7 @@ Si el proyecto ya estaba creado antes del **2 de noviembre de 2026**, ejecuta un
 `supabase/migrations/2026-11-02-fix-timezone.sql` en el SQL Editor. Corrige el cálculo de
 fechas para que las citas del mismo día se validen en hora de Colombia y no en UTC.
 
-Cambiar la contraseña del panel: en Supabase → **Authentication → Users** → menú del usuario → *Reset password* (o *Edit* para asignar una nueva).
+La contraseña del panel se entrega por un canal privado y **no se guarda en el repositorio**. Se cambia en Supabase → **Authentication → Users** → usuario → **Send password recovery** (llega al correo del cliente) o asignando un hash bcrypt nuevo en `auth.users.encrypted_password`. Es independiente de la contraseña de supabase.com, aunque las dos usen el mismo correo.
 
 ### Si hay que rehacerlo desde cero
 
@@ -51,7 +51,7 @@ Cambiar la contraseña del panel: en Supabase → **Authentication → Users** �
    - La vista `public_busy`, que expone solo fecha, hora y duración de lo ocupado.
    - Las funciones `create_booking`, `lookup_bookings` y `cancel_booking` (`SECURITY DEFINER`).
    - RLS: nadie anónimo puede leer `bookings`; solo se llega a los datos por las funciones, con código o teléfono.
-3. En **Authentication → Users**, crear el usuario del panel con el correo **jaazielbarber09@gmail.com** y una contraseña, y añadirlo a `admins` si no lo sembró el esquema.
+3. En **Authentication → Users**, crear el usuario del panel con el correo **jaazielbarber09@gmail.com** y una contraseña, y añadirlo a `admins` si no lo sembró el esquema. No crear cuentas extra: cada fila de `admins` puede ver todas las citas.
    - El panel solo lee datos si el correo autenticado está en esa tabla.
    - En **Authentication → Providers → Email**, desactiva *Enable signups* para que nadie pueda crearse una cuenta.
 4. Copiar **Project URL** y la clave publicable (Settings → API Keys) en `assets/js/config.js`.
@@ -64,6 +64,15 @@ Cambiar la contraseña del panel: en Supabase → **Authentication → Users** �
 - El panel exige sesión y que el correo esté en la tabla `admins`; el resto de cuentas autenticadas no ve nada.
 - La clave publicable (`sb_publishable_…`) es pública por diseño: las reglas de la base de datos son las que protegen los datos personales. La `service_role` nunca se incluye en el sitio.
 - Cancelar exige código + teléfono; quien conozca ambos puede gestionar la cita.
+
+### Entrega al cliente
+
+- **Supabase:** organización «Jaazi Barber», con un solo propietario: `jaazielbarber09@gmail.com`. Proyecto `jaazi-barber` (`kavtsigejtugsyiisvsz`), plan gratuito.
+- **Panel:** `https://jaazibarber.netlify.app/panel.html`, cuenta `jaazielbarber09@gmail.com`, única fila de `admins`. La contraseña se entrega aparte.
+- **Netlify:** cuenta `jaazielbarber09@gmail.com`, sitio `jaazibarber.netlify.app`.
+- **Recuperación del panel:** Supabase → Authentication → Users → usuario → *Send password recovery*. El enlace llega al correo del cliente.
+- **Registro público desactivado:** las cuentas solo se crean desde el dashboard.
+- Las cuentas de GitHub y Netlify del desarrollador no son necesarias para operar el día a día; solo para desplegar cambios de código.
 
 ### Reglas de negocio
 
