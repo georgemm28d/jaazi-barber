@@ -18,7 +18,7 @@ jobs:
       - name: Empaquetar el sitio
         run: |
           mkdir -p dist
-          cp index.html agendar.html revisar.html panel.html robots.txt llms.txt sitemap.xml .nojekyll dist/
+          cp *.html robots.txt llms.txt sitemap.xml .nojekyll dist/
           cp -r assets dist/
           cd dist && zip -qr ../sitio.zip .
 
