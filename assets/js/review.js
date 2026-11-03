@@ -699,7 +699,7 @@
       closeReschedule(card, false);
       render();
       if (window.UI) {
-        UI.toast("Cita cambiada al " + Jaazi.formatLong(updated.date) + " · " + Jaazi.timeLabel(updated.time) + ".");
+        UI.toast("Cita cambiada: " + Jaazi.formatLong(updated.date) + " · " + Jaazi.timeLabel(updated.time));
       }
       if (titleEl) {
         titleEl.setAttribute("tabindex", "-1");

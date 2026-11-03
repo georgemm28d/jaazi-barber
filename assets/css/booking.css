@@ -1079,7 +1079,7 @@
 }
 
 @media (prefers-reduced-motion: reduce) {
-  .step, .confirm, .cancel-confirm { animation: none; }
+  .step, .confirm, .cancel-confirm, .reschedule { animation: none; }
   .confirm__icon circle { stroke-dashoffset: 0; animation: none; }
   .confirm__icon path { stroke-dashoffset: 0; animation: none; }
   .appt { transition: opacity 120ms ease; }
