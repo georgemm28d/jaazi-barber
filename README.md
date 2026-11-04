@@ -39,7 +39,7 @@ Proyecto real, de principio a fin y sin equipo:
 
 - Login con Supabase Auth y autorización por tabla `admins`.
 - Métricas de hoy, semana y próximas citas.
-- Confirmar, completar y cancelar; historial; ingresos estimados.
+- Completar y cancelar; historial; ingresos estimados.
 - Bloqueos de horas o días completos, con validación de solapamientos.
 
 **Backend**
@@ -50,6 +50,28 @@ Proyecto real, de principio a fin y sin equipo:
 - RLS activo: el rol anónimo no puede leer `bookings` ni `blocks`.
 - Toda la lógica de jornada, zona horaria, bloqueos y solapamientos vive en la base de datos.
 - Avisos por correo al barbero en cada alta o cambio (trigger en Postgres + `pg_net` + Resend); la API key vive en Vault, no en el cliente.
+
+## Capturas
+
+| Paso 1 · Servicio | Paso 2 · Día y hora |
+|---|---|
+| ![Reserva, paso 1: elección de servicio](docs/shot-booking-service.jpg) | ![Reserva, paso 2: calendario y horarios](docs/shot-booking-calendar.jpg) |
+
+| Paso 3 · Datos | Confirmación |
+|---|---|
+| ![Reserva, paso 3: datos del cliente](docs/shot-booking-form.jpg) | ![Confirmación con código de cita](docs/shot-booking-confirmation.jpg) |
+
+| Revisar cita | Cambiar fecha y hora |
+|---|---|
+| ![Revisar cita con código y teléfono](docs/shot-review.jpg) | ![Editor para cambiar fecha y hora](docs/shot-reschedule.jpg) |
+
+| Panel en móvil | Reserva en móvil |
+|---|---|
+| <img src="docs/shot-panel-mobile.jpg" width="320" alt="Panel de agenda en móvil"> | <img src="docs/shot-booking-mobile.jpg" width="320" alt="Reserva en móvil, paso 2"> |
+
+**Modo oscuro**
+
+![Home en modo oscuro](docs/shot-home-dark.jpg)
 
 ## Decisiones técnicas
 
@@ -106,7 +128,7 @@ Los números, el método y los pendientes están en [`docs/qa.md`](docs/qa.md).
 
 ![Vista del panel de agenda con datos ficticios](docs/preview-panel.jpg)
 
-Es una copia del panel con datos ficticios y acciones en memoria: puedes confirmar, completar, cancelar y bloquear horas. No se conecta con Supabase, no toca la agenda real y se reinicia al recargar. Existe para que el panel sea evaluable sin credenciales.
+Es una copia del panel con datos ficticios y acciones en memoria: puedes completar, cancelar y bloquear horas. No se conecta con Supabase, no toca la agenda real y se reinicia al recargar. Existe para que el panel sea evaluable sin credenciales.
 
 ## Stack
 
