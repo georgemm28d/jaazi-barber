@@ -139,3 +139,4 @@ El sitio se publica en **Netlify** (cuenta del cliente) y se actualiza solo: cad
 - Cuenta Netlify: `jaazielbarber09@gmail.com`. Token de despliegue guardado como secreto del repo
   (`NETLIFY_AUTH_TOKEN` y `NETLIFY_SITE_ID`). Se revoca desde *User settings → Applications → Personal access tokens*.
 - GitHub Pages sigue sirviendo la misma copia desde `main`, pero la dirección oficial y el `canonical` son los de Netlify.
+- **Badge de Netlify (limitación conocida):** el plan Free inyecta `/.netlify/scripts/hud` después de `</html>` y un badge fijo en la esquina. No se puede desactivar sin plan de pago, así que se acepta. El HTML del repositorio es válido; la copia de GitHub Pages se sirve sin inyección (0 errores en el validador W3C). Para eliminarlo: pasar a un plan de pago o mover el sitio principal a otro hosting y dejar Netlify como redirección.
