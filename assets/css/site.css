@@ -293,9 +293,10 @@ body.menu-open { overflow: hidden; }
   font-size: 7.5px;
   font-weight: 500;
   letter-spacing: 0.34em;
-  color: var(--muted);
+  color: #5f5349;
   text-transform: uppercase;
 }
+html[data-theme="dark"] .brand__sub { color: var(--muted); }
 
 .nav {
   display: flex;

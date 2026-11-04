@@ -49,6 +49,7 @@ Proyecto real, de principio a fin y sin equipo:
 - Funciones `create_booking`, `lookup_bookings`, `cancel_booking` y `reschedule_booking` como `SECURITY DEFINER`.
 - RLS activo: el rol anónimo no puede leer `bookings` ni `blocks`.
 - Toda la lógica de jornada, zona horaria, bloqueos y solapamientos vive en la base de datos.
+- Avisos por correo al barbero en cada alta o cambio (trigger en Postgres + `pg_net` + Resend); la API key vive en Vault, no en el cliente.
 
 ## Decisiones técnicas
 
@@ -113,6 +114,7 @@ Es una copia del panel con datos ficticios y acciones en memoria: puedes confirm
 |---|---|
 | Frontend | HTML5 semántico, CSS con custom properties y Grid, JavaScript vanilla |
 | Backend | Supabase: Postgres, RLS, funciones RPC y Auth |
+| Correo | Resend + `pg_net` + Vault, disparado por trigger en `bookings` |
 | Hosting | Netlify (principal) y GitHub Pages (respaldo) |
 | CI | GitHub Actions: empaqueta y publica en cada push a `main` |
 | QA | W3C Nu, axe-core, Playwright, pruebas manuales de teclado |

@@ -75,15 +75,16 @@
   line-height: 1.4;
   text-align: center;
   box-shadow: 0 12px 30px rgba(23, 18, 16, 0.28);
-  opacity: 0;
+  visibility: hidden;
   pointer-events: none;
   transform: translate(-50%, 12px);
-  transition: opacity 180ms ease, transform 180ms ease;
+  transition: transform 180ms ease, visibility 0s linear 180ms;
 }
 
 .demo-toast.is-visible {
-  opacity: 1;
+  visibility: visible;
   transform: translate(-50%, 0);
+  transition: transform 180ms ease;
 }
 
 @media (max-width: 560px) {

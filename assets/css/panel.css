@@ -336,7 +336,6 @@ body[data-page="panel"] main { flex: 1 0 auto; }
   background: currentColor;
 }
 .bchip--confirmed { background: rgba(177, 120, 74, 0.14); color: #7a4a27; }
-.bchip--pending { background: rgba(158, 122, 30, 0.16); color: #7a5b12; }
 .bchip--completed { background: rgba(110, 96, 85, 0.14); color: var(--muted); }
 .bchip--cancelled { background: rgba(160, 58, 42, 0.12); color: #8a2f21; }
 

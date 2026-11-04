@@ -49,7 +49,7 @@ create table if not exists public.bookings (
   email        text,
   notes        text,
   status       text not null default 'confirmed'
-               check (status in ('pending', 'confirmed', 'cancelled', 'completed')),
+               check (status in ('confirmed', 'cancelled', 'completed')),
   created_at   timestamptz not null default now(),
   updated_at   timestamptz not null default now(),
   cancelled_at timestamptz
@@ -59,7 +59,7 @@ create index if not exists bookings_date_idx  on public.bookings (date, time);
 create index if not exists bookings_phone_idx on public.bookings (phone);
 create unique index if not exists bookings_active_slot_uidx
   on public.bookings (date, time)
-  where status in ('pending', 'confirmed');
+  where status = 'confirmed';
 
 -- ---------- Bloqueos de agenda ----------
 
@@ -114,7 +114,7 @@ create or replace view public.public_busy as
          b.time as start_time,
          (b.time + b.duration * interval '1 minute')::time as end_time
     from public.bookings b
-   where b.status in ('pending', 'confirmed')
+   where b.status = 'confirmed'
   union all
   select k.date, k.start_time, k.end_time
     from public.blocks k;
@@ -202,7 +202,7 @@ begin
   if exists (
     select 1 from public.bookings b
      where b.date = p_date
-       and b.status in ('pending', 'confirmed')
+       and b.status = 'confirmed'
        and v_start < (extract(hour from b.time)::int * 60 + extract(minute from b.time)::int + b.duration)
        and (extract(hour from b.time)::int * 60 + extract(minute from b.time)::int) < v_end
   ) then
@@ -308,7 +308,7 @@ begin
          updated_at = now()
    where upper(b.code) = upper(btrim(coalesce(p_code, '')))
      and (b.phone = digits or right(b.phone, 10) = right(digits, 10))
-     and b.status in ('pending', 'confirmed')
+     and b.status = 'confirmed'
      and b.date >= (now() at time zone 'America/Bogota')::date;
 
   return found;
@@ -348,7 +348,7 @@ begin
     from public.bookings
    where upper(code) = v_code
      and (phone = v_phone or right(phone, 10) = right(v_phone, 10))
-     and status in ('pending', 'confirmed')
+     and status = 'confirmed'
    for update;
 
   if not found then
@@ -400,7 +400,7 @@ begin
   if exists (
     select 1 from public.bookings o
      where o.date = p_date
-       and o.status in ('pending', 'confirmed')
+       and o.status = 'confirmed'
        and o.id <> b.id
        and v_start < (extract(hour from o.time)::int * 60 + extract(minute from o.time)::int + o.duration)
        and (extract(hour from o.time)::int * 60 + extract(minute from o.time)::int) < v_end

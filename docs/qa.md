@@ -90,6 +90,7 @@ Medición de la portada a 390×844, DPR 2, con red del entorno de pruebas:
 - Consultar, cambiar y cancelar exigen **código + teléfono** mediante funciones `SECURITY DEFINER`.
 - `create_booking` y `reschedule_booking` validan jornada, zona `America/Bogota`, bloqueos y solapamientos en una transacción.
 - La `anon key` es pública por diseño; la `service_role` no aparece en el cliente ni en el repositorio.
+- La API key de Resend vive en Vault y solo la lee una función `SECURITY DEFINER`; nunca llega al navegador.
 - No hay credenciales en el código. El token de Netlify vive en los secretos de GitHub Actions.
 
 ## Cobertura y límites
@@ -99,6 +100,7 @@ Medición de la portada a 390×844, DPR 2, con red del entorno de pruebas:
 - **Rendimiento:** sin Lighthouse/PSI ni datos de campo; la cifra de LCP es orientativa.
 - **Netlify:** el badge y el script inyectado son una limitación del plan Free.
 - **Google Business Profile:** no hay perfil verificable enlazado todavía.
+- **Correo:** el trigger de avisos está implementado; el envío real queda pendiente de crear la cuenta de Resend y guardar la API key en Vault.
 
 ## Cómo reproducir
 

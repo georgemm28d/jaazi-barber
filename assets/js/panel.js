@@ -34,7 +34,6 @@
   }
 
   var STATUS_LABELS = {
-    pending: "Pendiente",
     confirmed: "Confirmada",
     completed: "Completada",
     cancelled: "Cancelada"
@@ -70,7 +69,7 @@
   }
 
   function isActive(status) {
-    return status === "pending" || status === "confirmed";
+    return status === "confirmed";
   }
 
   function tomorrowKey() {
@@ -292,16 +291,12 @@
   }
 
   function actionsMarkup(b) {
-    if (!isActive(b.status)) return "";
+    if (b.status !== "confirmed") return "";
 
-    var buttons = "";
-    if (b.status === "pending") {
-      buttons += '<button class="mini-btn mini-btn--primary" type="button" data-action="confirmed" data-id="' + esc(b.id) + '">Confirmar</button>';
-    } else {
-      buttons += '<button class="mini-btn mini-btn--primary" type="button" data-action="completed" data-id="' + esc(b.id) + '">Completar</button>';
-    }
-    buttons += '<button class="mini-btn mini-btn--danger" type="button" data-action="cancel" data-id="' + esc(b.id) + '">Cancelar cita</button>';
-    return '<div class="bcard__actions" data-actions>' + buttons + "</div>";
+    return '<div class="bcard__actions" data-actions>' +
+      '<button class="mini-btn mini-btn--primary" type="button" data-action="completed" data-id="' + esc(b.id) + '">Completar</button>' +
+      '<button class="mini-btn mini-btn--danger" type="button" data-action="cancel" data-id="' + esc(b.id) + '">Cancelar cita</button>' +
+      "</div>";
   }
 
   function cardMarkup(b) {
@@ -519,7 +514,6 @@
       if (booking && status === "cancelled") booking.cancelledAt = patch.cancelled_at;
       render();
       var messages = {
-        confirmed: "Cita confirmada.",
         completed: "Cita marcada como completada.",
         cancelled: "Cita cancelada. El horario quedó libre."
       };

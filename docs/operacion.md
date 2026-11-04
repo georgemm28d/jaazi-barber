@@ -28,8 +28,33 @@ Si el proyecto se creó antes de las migraciones, ejecutar en orden desde el SQL
 1. `supabase/migrations/2026-11-02-fix-timezone.sql` — cálculo de fechas en `America/Bogota`.
 2. `supabase/migrations/2026-11-02-secure-lookup.sql` — `lookup_bookings` exige código + teléfono.
 3. `supabase/migrations/2026-11-02-reschedule.sql` — `reschedule_booking`.
+4. `supabase/migrations/2026-11-04-remove-pending.sql` — elimina el estado `pending` y deja solo `confirmed`, `completed` y `cancelled`.
+5. `supabase/migrations/2026-11-04-booking-email.sql` — trigger de avisos por correo (requiere Resend).
 
-Un proyecto nuevo creado con `schema.sql` ya incluye las tres.
+Un proyecto nuevo creado con `schema.sql` ya incluye el estado sin `pending`. La migración de correo se aplica aparte porque necesita la API key.
+
+### Notificaciones por correo
+
+El trigger `booking_email_notify` envía un correo a **jaazielbarber09@gmail.com** en cada alta o cambio de cita: nueva, reprogramada, cancelada, completada o actualizada. Lo hace con [Resend](https://resend.com) y `pg_net`; la API key se guarda en Vault, nunca en el cliente ni en el repo.
+
+1. Crear una cuenta de Resend con **jaazielbarber09@gmail.com** y generar una API key.
+2. En el SQL Editor de Supabase, guardar la key:
+   ```sql
+   select vault.create_secret('re_xxxxxxxx', 'resend_api_key');
+   ```
+3. Opcional, para usar un remitente con dominio verificado:
+   ```sql
+   select vault.create_secret('Jaazi Barber <citas@tudominio.com>', 'resend_from');
+   ```
+   Sin `resend_from`, se usa `Jaazi Barber <onboarding@resend.dev>`, que en el plan de pruebas de Resend solo entrega al correo dueño de la cuenta.
+4. Opcional, para cambiar el destinatario:
+   ```sql
+   select vault.create_secret('otro@correo.com', 'booking_notify_to');
+   ```
+5. Aplicar `supabase/migrations/2026-11-04-booking-email.sql`.
+6. Probar con una cita de prueba y borrarla después. Revisar el log de Resend o `select * from net._http_response order by id desc limit 5;`.
+
+Si falta `resend_api_key`, la cita se guarda igual y Postgres emite un warning; el correo no bloquea la reserva. La API key solo se lee dentro de una función `SECURITY DEFINER` y no se expone en `public_busy` ni en el panel.
 
 ### Acceso del panel
 
@@ -42,8 +67,8 @@ Un proyecto nuevo creado con `schema.sql` ya incluye las tres.
 
 - Toda la agenda trabaja en **hora de Colombia** (`America/Bogota`), no en UTC ni en la hora del visitante.
 - Jornada 9:00–19:00; el servicio debe terminar antes de las 19:00.
-- Sin solapamientos entre citas activas (`pending`/`confirmed`) ni con bloqueos.
-- Estados: `pending`, `confirmed`, `completed`, `cancelled`. Las reservas nuevas entran como `confirmed`.
+- Sin solapamientos entre citas activas (`confirmed`) ni con bloqueos.
+- Estados: `confirmed`, `completed`, `cancelled`. Las reservas nuevas entran como `confirmed`.
 - Cancelación en cualquier momento y sin costo; cambio de fecha y hora mientras la cita no haya empezado, sujeto a disponibilidad.
 
 ## Despliegue
