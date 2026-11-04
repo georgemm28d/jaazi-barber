@@ -56,6 +56,8 @@ El trigger `booking_email_notify` envía un correo a **jaazielbarber09@gmail.com
 
 Si falta `resend_api_key`, la cita se guarda igual y Postgres emite un warning; el correo no bloquea la reserva. La API key solo se lee dentro de una función `SECURITY DEFINER` y no se expone en `public_busy` ni en el panel.
 
+**Estado actual:** configurado y probado el 4 de noviembre de 2026. El secreto `resend_api_key` está en Vault, el trigger `booking_email_notify` está activo y se verificaron los avisos de alta y reprogramación. El valor de la key no se documenta ni se versiona.
+
 ### Acceso del panel
 
 - Crear el usuario en **Authentication → Users** con el correo del cliente y una contraseña.

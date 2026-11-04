@@ -60,7 +60,8 @@ Comprobaciones manuales:
 - **Consulta:** código + teléfono; un dato suelto no devuelve la cita.
 - **Cambio:** solo mueve fecha y hora; conserva servicio, duración, precio y datos del cliente.
 - **Cancelación:** confirmación explícita y liberación del horario.
-- **Demo del panel:** confirmar, completar, cancelar con confirmación, añadir y quitar bloqueos.
+- **Demo del panel:** completar, cancelar con confirmación, añadir y quitar bloqueos.
+- **Correo:** cita temporal insertada y reprogramada; Resend entregó ambos avisos; la fila se eliminó después.
 - **Código local:** 6 caracteres, igual que el backend.
 
 ## Rendimiento
@@ -100,7 +101,7 @@ Medición de la portada a 390×844, DPR 2, con red del entorno de pruebas:
 - **Rendimiento:** sin Lighthouse/PSI ni datos de campo; la cifra de LCP es orientativa.
 - **Netlify:** el badge y el script inyectado son una limitación del plan Free.
 - **Google Business Profile:** no hay perfil verificable enlazado todavía.
-- **Correo:** el trigger de avisos está implementado; el envío real queda pendiente de crear la cuenta de Resend y guardar la API key en Vault.
+- **Correo:** trigger probado con una cita temporal; Resend entregó “Nueva cita” y “Cita reprogramada”, y la fila de prueba se eliminó después.
 
 ## Cómo reproducir
 
