@@ -25,16 +25,18 @@
   <meta property="og:title" content="Jaazi Barber — Barbería en Chía, Cundinamarca">
   <meta property="og:description" content="Corte, barba y color. Cita previa en Chía, Cundinamarca.">
   <meta property="og:url" content="https://jaazibarber.netlify.app/">
-  <meta property="og:image" content="https://jaazibarber.netlify.app/assets/img/jaazi-retrato.jpg">
+  <meta property="og:image" content="https://jaazibarber.netlify.app/assets/img/jaazi-og.jpg">
   <meta property="og:image:width" content="1200">
-  <meta property="og:image:height" content="1500">
+  <meta property="og:image:height" content="630">
   <meta property="og:image:alt" content="Jaazi, barbero de Jaazi Barber, en su estudio de Chía">
   <meta property="og:locale" content="es_CO">
   <meta name="twitter:card" content="summary_large_image">
   <meta name="twitter:title" content="Jaazi Barber — Barbería en Chía, Cundinamarca">
   <meta name="twitter:description" content="Corte, barba y color. Cita previa en Chía.">
-  <meta name="twitter:image" content="https://jaazibarber.netlify.app/assets/img/jaazi-retrato.jpg">
+  <meta name="twitter:image" content="https://jaazibarber.netlify.app/assets/img/jaazi-og.jpg">
+  <meta name="twitter:image:alt" content="Jaazi, barbero de Jaazi Barber, en su estudio de Chía">
   <link rel="icon" href="assets/favicon.svg" type="image/svg+xml">
+  <link rel="apple-touch-icon" href="assets/apple-touch-icon.png">
   <link rel="preload" href="assets/fonts/fraunces-latin.woff2" as="font" type="font/woff2" crossorigin>
   <link rel="preload" href="assets/fonts/fraunces-latin-italic.woff2" as="font" type="font/woff2" crossorigin>
   <link rel="preload" href="assets/fonts/inter-latin.woff2" as="font" type="font/woff2" crossorigin>
@@ -48,6 +50,7 @@
   {
     "@context": "https://schema.org",
     "@type": "BarberShop",
+    "@id": "https://jaazibarber.netlify.app/#barbershop",
     "name": "Jaazi Barber",
     "url": "https://jaazibarber.netlify.app/",
     "image": "https://jaazibarber.netlify.app/assets/img/jaazi-retrato.jpg",
@@ -69,6 +72,11 @@
         "closes": "19:00"
       }
     ],
+    "areaServed": [
+      { "@type": "City", "name": "Chía" },
+      { "@type": "AdministrativeArea", "name": "Cundinamarca" }
+    ],
+    "hasMap": "https://www.google.com/maps/search/?api=1&query=Jaazi%20Barber%2C%20Calle%204%20%231-39%2C%20Ch%C3%ADa%2C%20Cundinamarca",
     "currenciesAccepted": "COP",
     "paymentAccepted": "Efectivo, Transferencia bancaria",
     "priceRange": "$$",
