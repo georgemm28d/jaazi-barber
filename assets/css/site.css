@@ -995,6 +995,11 @@ html[data-theme="dark"] .theme-toggle__moon {
   color: var(--bone);
   transition: color 160ms ease;
 }
+.footer__list a {
+  display: inline-flex;
+  align-items: center;
+  min-height: 44px;
+}
 .footer__list li { color: rgba(244, 238, 229, 0.82); }
 @media (hover: hover) and (pointer: fine) {
   .footer a:hover { color: var(--copper-light); }
