@@ -1,146 +1,151 @@
 # Jaazi Barber
 
-Sitio web de **Jaazi Barber**, barbería de una sola silla en **Chía, Cundinamarca (Colombia)**.
-Páginas en español, sin build: HTML, CSS y JavaScript vanilla. La agenda compartida vive en **Supabase** (Postgres + API REST + Auth); el sitio se publica como archivos estáticos en GitHub Pages.
+Sitio de reservas y agenda para una barbería de una sola silla en **Chía, Colombia**. La web permite reservar, cambiar o cancelar una cita sin llamar; el panel privado le da al barbero una vista única de su día, sus bloqueos y sus ingresos estimados.
 
-> Publicado en **https://jaazibarber.netlify.app/** (Netlify, cuenta del cliente `jaazielbarber09@gmail.com`).
-> La copia en GitHub Pages sigue activa como respaldo: https://georgemm28d.github.io/jaazi-barber/.
-> Incluye tema claro/oscuro (preferencia del sistema + toggle persistente en el navegador).
+[**Ver el sitio**](https://jaazibarber.netlify.app/) · [**Probar la demo del panel**](https://jaazibarber.netlify.app/panel-demo.html) · [**Evidencia de QA**](docs/qa.md) · [**Operación**](docs/operacion.md)
 
 ![Vista de escritorio del sitio Jaazi Barber](docs/preview-desktop.jpg)
 
 <p align="center"><img src="docs/preview-mobile.jpg" width="300" alt="Vista móvil del sitio Jaazi Barber"></p>
 
-## Páginas
+---
 
-- `index.html` — home: hero, servicios, el estudio, trabajo reciente, FAQ y CTA.
-- `agendar.html` — reserva en 3 pasos (servicio → día/hora → datos) con confirmación, código y `.ics`.
-- `revisar.html` — consulta por código **y** teléfono; cambiar fecha y hora, cancelación y añadir al calendario.
-- `privacidad.html` — política de tratamiento de datos personales (Ley 1581 de 2012): responsable, finalidades, derechos del titular, retención y proveedores.
-- `panel.html` — **panel privado** (login con correo y contraseña): citas próximas, del día e historial; confirmar, completar y cancelar; bloqueos de horas; ingresos estimados. No está enlazado desde la web pública, lleva `noindex` y `robots.txt` lo excluye.
+## El problema
 
-Horario: **todos los días, 9:00–19:00**, franjas de 30 min y 2 h de antelación para hoy.
+Jaazi trabaja solo, en un estudio privado y siempre con cita previa. La agenda se gestionaba a mano: no había una vista compartida del día ni una forma de que el cliente reservara, cambiara o cancelara por su cuenta. Cada movimiento dependía de una conversación y de que alguien recordara el hueco.
 
-## Modos de funcionamiento
+El objetivo era doble: que el cliente complete una reserva en tres pasos, y que Jaazi pueda operar la agenda desde el móvil sin depender de recordatorios manuales.
 
-La agenda tiene dos modos, decididos por `assets/js/config.js`:
+## Mi rol
 
-1. **Compartido (Supabase)** — si `supabaseUrl` y `supabaseAnonKey` están rellenos. Las citas se guardan en la base de datos y se ven desde cualquier dispositivo. Es el modo de producción.
-2. **Local (respaldo)** — si la configuración está vacía, todo funciona con `localStorage` (`jaazi.bookings.v2`) como antes. Sirve para abrir el sitio sin backend; las citas no salen del navegador.
+Proyecto real, de principio a fin y sin equipo:
 
-Los textos de privacidad, las notas de “revisar cita” y la página `privacidad.html` se adaptan al modo activo.
+- Dirección de arte y diseño de la interfaz.
+- Frontend en HTML, CSS y JavaScript, sin build ni dependencias.
+- Modelo de datos, funciones SQL, vistas y políticas RLS en Postgres.
+- Integración con Supabase (REST, RPC y Auth).
+- Despliegue, automatización y QA.
 
-## Backend (Supabase)
+## Qué construí
 
-### Estado actual
+**Web pública**
 
-Ya está creado, configurado y conectado:
+- `index.html`: propuesta de valor, servicios con precios, estudio, trabajo real, FAQ y datos estructurados.
+- `agendar.html`: reserva en tres pasos (servicio → día y hora → datos), con confirmación, código y archivo `.ics`.
+- `revisar.html`: consulta con **código + teléfono**, cambio de fecha y hora, y cancelación.
+- `privacidad.html`: política de tratamiento conforme a la Ley 1581 de 2012.
 
-- Proyecto **jaazi-barber** en Supabase, región `sa-east-1` (São Paulo), plan gratuito. Ref. `kavtsigejtugsyiisvsz`; URL `https://kavtsigejtugsyiisvsz.supabase.co`.
-- Esquema `supabase/schema.sql` aplicado: tablas, vista `public_busy`, funciones y RLS.
-- Panel: **https://jaazibarber.netlify.app/panel.html** con la cuenta **jaazielbarber09@gmail.com**. Es la única cuenta autorizada en `admins` y la única propietaria de la organización de Supabase.
-- El registro público de cuentas está desactivado: nadie puede crearse un usuario nuevo.
-- `assets/js/config.js` apunta al proyecto con la clave publicable (`sb_publishable_…`), pública por diseño.
+**Panel privado**
 
-Si el proyecto ya estaba creado antes del **2 de noviembre de 2026**, ejecuta una vez
-`supabase/migrations/2026-11-02-fix-timezone.sql` en el SQL Editor. Corrige el cálculo de
-fechas para que las citas del mismo día se validen en hora de Colombia y no en UTC.
+- Login con Supabase Auth y autorización por tabla `admins`.
+- Métricas de hoy, semana y próximas citas.
+- Confirmar, completar y cancelar; historial; ingresos estimados.
+- Bloqueos de horas o días completos, con validación de solapamientos.
 
-Ese mismo día se aplicó `supabase/migrations/2026-11-02-secure-lookup.sql`: `lookup_bookings`
-pasó de aceptar código **o** teléfono a exigir **código + teléfono**, y se eliminó la firma
-antigua de un solo argumento. Si rehaces el proyecto desde cero con `schema.sql` no hace falta
-ejecutarla: el esquema ya trae la versión segura.
+**Backend**
 
-También se añadió `supabase/migrations/2026-11-02-reschedule.sql`: la función
-`reschedule_booking` permite cambiar la fecha y la hora de una cita activa sin tocar el
-servicio ni los datos del cliente. Valida la jornada, los bloqueos y los solapamientos en la
-misma transacción. `schema.sql` ya la incluye.
+- Postgres con `services`, `bookings`, `blocks` y `admins`.
+- Vista `public_busy` que expone **solo fecha, hora de inicio y hora de fin**; nunca nombres, teléfonos ni códigos.
+- Funciones `create_booking`, `lookup_bookings`, `cancel_booking` y `reschedule_booking` como `SECURITY DEFINER`.
+- RLS activo: el rol anónimo no puede leer `bookings` ni `blocks`.
+- Toda la lógica de jornada, zona horaria, bloqueos y solapamientos vive en la base de datos.
 
-La contraseña del panel se entrega por un canal privado y **no se guarda en el repositorio**. Se cambia en Supabase → **Authentication → Users** → usuario → **Send password recovery** (llega al correo del cliente) o asignando un hash bcrypt nuevo en `auth.users.encrypted_password`. Es independiente de la contraseña de supabase.com, aunque las dos usen el mismo correo.
+## Decisiones técnicas
 
-### Si hay que rehacerlo desde cero
+**1. La agenda no se lee desde el cliente.**
+El frontend nunca consulta `bookings`. La disponibilidad sale de `public_busy`, una vista sin datos personales, y cualquier operación sobre una cita pasa por una función que exige **código + teléfono**. Si la `anon key` se copia, no hay nada que enumerar.
 
-1. Crear un proyecto en [supabase.com](https://supabase.com).
-2. Abrir **SQL Editor** y ejecutar `supabase/schema.sql`. Crea:
-   - `services` (precio y duración autoritativos), `bookings`, `blocks` y `admins`.
-   - La vista `public_busy`, que expone solo fecha, hora y duración de lo ocupado.
-   - Las funciones `create_booking`, `lookup_bookings`, `cancel_booking` y `reschedule_booking` (`SECURITY DEFINER`).
-   - RLS: nadie anónimo puede leer `bookings`; solo se llega a los datos por las funciones. Consultar, cambiar y cancelar exigen **código + teléfono**.
-3. En **Authentication → Users**, crear el usuario del panel con el correo **jaazielbarber09@gmail.com** y una contraseña, y añadirlo a `admins` si no lo sembró el esquema. No crear cuentas extra: cada fila de `admins` puede ver todas las citas.
-   - El panel solo lee datos si el correo autenticado está en esa tabla.
-   - En **Authentication → Providers → Email**, desactiva *Enable signups* para que nadie pueda crearse una cuenta.
-4. Copiar **Project URL** y la clave publicable (Settings → API Keys) en `assets/js/config.js`.
-5. Publicar: `git push` a `main`. GitHub Pages sirve los archivos tal cual.
+**2. La base de datos es la fuente de verdad.**
+`create_booking` y `reschedule_booking` validan en una sola transacción: jornada 9:00–19:00, zona `America/Bogota`, bloques, citas activas y solapamientos. El JavaScript no decide si un hueco es válido; solo muestra lo que la base confirma.
 
-### Seguridad
+**3. Código + teléfono en vez de cuentas.**
+Reservar no exige registro. Gestionar una cita exige el código de 6 caracteres **y** el teléfono con el que se reservó. Es menos fricción para el cliente y menos superficie de datos; el costo es que quien tenga ambos datos puede gestionar la cita, y así se explica en la política de privacidad.
 
-- `bookings` y `blocks` tienen RLS y no se pueden leer con la `anon key`.
-- Los clientes solo llegan a sus citas por `create_booking`, `lookup_bookings`, `cancel_booking` y `reschedule_booking`. Las tres últimas exigen **código + teléfono**: un dato suelto no revela nada.
-- El panel exige sesión y que el correo esté en la tabla `admins`; el resto de cuentas autenticadas no ve nada.
-- La clave publicable (`sb_publishable_…`) es pública por diseño: las reglas de la base de datos son las que protegen los datos personales. La `service_role` nunca se incluye en el sitio.
-- Consultar, cambiar y cancelar exigen código + teléfono; quien conozca ambos puede gestionar la cita.
-- `privacidad.html` documenta el tratamiento conforme a la Ley 1581 de 2012 y se enlaza desde el consentimiento de `agendar.html`, los pies de página y `llms.txt`.
+**4. Sin build, sin dependencias.**
+HTML, CSS y JavaScript vanilla; fuentes autoalojadas y Supabase por REST. El sitio se despliega como archivos estáticos y no tiene `node_modules`. El trade-off es DOM manual y cero framework; la ventaja es control total del peso y del HTML servido.
 
-### Entrega al cliente
+**5. Accesibilidad y SEO como requisitos, no como extra.**
+Navegación por teclado, foco gestionado en el panel de cambio, objetivos táctiles de 44 px, contraste AA, `prefers-reduced-motion`, JSON-LD de `BarberShop` y `FAQPage`, sitemap y `llms.txt`.
 
-- **Supabase:** organización «Jaazi Barber», con un solo propietario: `jaazielbarber09@gmail.com`. Proyecto `jaazi-barber` (`kavtsigejtugsyiisvsz`), plan gratuito.
-- **Panel:** `https://jaazibarber.netlify.app/panel.html`, cuenta `jaazielbarber09@gmail.com`, única fila de `admins`. La contraseña se entrega aparte.
-- **Netlify:** cuenta `jaazielbarber09@gmail.com`, sitio `jaazibarber.netlify.app`.
-- **Recuperación del panel:** Supabase → Authentication → Users → usuario → *Send password recovery*. El enlace llega al correo del cliente.
-- **Registro público desactivado:** las cuentas solo se crean desde el dashboard.
-- Las cuentas de GitHub y Netlify del desarrollador no son necesarias para operar el día a día; solo para desplegar cambios de código.
+## Arquitectura
 
-### Reglas de negocio
-
-- Toda la agenda trabaja en **hora de Colombia** (`America/Bogota`, UTC-5), no en la hora del servidor (UTC) ni en la del visitante. Las funciones de Supabase calculan `v_today`/`v_now` con `now() at time zone 'America/Bogota'`.
-- Jornada 9:00–19:00; el servicio debe terminar antes de las 19:00.
-- Sin solapamientos entre citas activas (`pending`/`confirmed`) ni con bloqueos.
-- Estados: `pending`, `confirmed`, `completed`, `cancelled`. Las reservas nuevas entran como `confirmed`.
-- Cancelación permitida en cualquier momento y sin costo. Cambio de fecha y hora permitido mientras la cita no haya empezado, sujeto a disponibilidad.
-
-## Estructura
-
-```
-assets/
-  css/      site.css, booking.css, panel.css
-  js/       config.js, api.js, store.js, site.js, booking.js, review.js, panel.js
-  fonts/    Fraunces + Inter (woff2, self-hosted)
-  img/      jaazi-retrato.jpg, trabajo-01…06.jpg, trabajo-estudio.jpg
-supabase/
-  migrations/  2026-11-02-fix-timezone.sql, 2026-11-02-secure-lookup.sql, 2026-11-02-reschedule.sql
-  schema.sql
+```mermaid
+flowchart LR
+  W["Web pública<br/>HTML · CSS · JS"] -->|"anon key + RPC"| S["Supabase"]
+  P["Panel privado<br/>Auth JWT"] -->|"JWT + RLS"| S
+  S --> DB[("Postgres<br/>services · bookings · blocks · admins")]
+  DB --> V["public_busy<br/>solo fecha y hora"]
+  V --> W
 ```
 
-## Ver en local
+| Tabla / vista | Función |
+|---|---|
+| `services` | Precio y duración autoritativos |
+| `bookings` | Citas, estados y datos del cliente; RLS sin lectura anónima |
+| `blocks` | Horas bloqueadas por el barbero |
+| `admins` | Correos autorizados para el panel |
+| `public_busy` | Disponibilidad sin datos personales |
+
+El esquema completo está en [`supabase/schema.sql`](supabase/schema.sql).
+
+## Resultados verificables
+
+- **0 errores** del validador W3C en las cuatro páginas públicas del repositorio.
+- **0 violaciones** de axe-core WCAG 2.0/2.1 A/AA en el flujo de reserva.
+- Contraste **5.76:1 / 6.48:1** en texto secundario y **5.25:1 / 6.94:1** en tarjetas de historial.
+- Objetivos táctiles de **44 px** en footer, acciones de cita y botones del editor.
+- **CLS 0.0009**; **540 KB y 16 peticiones** en la portada móvil.
+- Flujos probados con Playwright: reservar, consultar, cambiar fecha/hora, cancelar, reintentar disponibilidad y foco del editor.
+
+Los números, el método y los pendientes están en [`docs/qa.md`](docs/qa.md).
+
+## Demo del panel
+
+[**Abrir la demo**](https://jaazibarber.netlify.app/panel-demo.html)
+
+Es una copia del panel con datos ficticios y acciones en memoria: puedes confirmar, completar, cancelar y bloquear horas. No se conecta con Supabase, no toca la agenda real y se reinicia al recargar. Existe para que el panel sea evaluable sin credenciales.
+
+## Stack
+
+| Capa | Decisión |
+|---|---|
+| Frontend | HTML5 semántico, CSS con custom properties y Grid, JavaScript vanilla |
+| Backend | Supabase: Postgres, RLS, funciones RPC y Auth |
+| Hosting | Netlify (principal) y GitHub Pages (respaldo) |
+| CI | GitHub Actions: empaqueta y publica en cada push a `main` |
+| QA | W3C Nu, axe-core, Playwright, pruebas manuales de teclado |
+| Tipografía | Fraunces e Inter, autoalojadas en `woff2` |
+
+## Cómo ejecutarlo
 
 ```bash
 python -m http.server 4173 --bind 127.0.0.1
 ```
 
-Abrir `http://127.0.0.1:4173/`. El panel está en `http://127.0.0.1:4173/panel.html`.
+Abre `http://127.0.0.1:4173/`. Sin configuración de Supabase, la reserva funciona en modo local con `localStorage`; el panel privado necesita el backend.
 
-## Datos del negocio
+Para conectar la agenda real, credenciales, migraciones y despliegue, consulta [`docs/operacion.md`](docs/operacion.md).
 
-- Dirección: Calle 4 # 1-39, conjunto Serralta, torre 12, apartamento 205, Chía, Cundinamarca.
-- Teléfono / WhatsApp: +57 313 538 1239 · Email: Jaazielbarber09@gmail.com
-- Instagram: [@jaazii.barber](https://www.instagram.com/jaazii.barber)
-- Servicios: corte personalizado, corte + barba, barba, colores fantasía, mechas platinadas y platinado global.
-- Precios en COP: corte personalizado $ 27.000 (45 min), corte + barba $ 35.000 (60 min), barba $ 15.000 (30 min), colores fantasía $ 120.000 (2 h), mechas platinadas $ 250.000 (4 h, incluye corte), platinado global $ 250.000 (4 h, incluye corte).
-- Pago: efectivo o transferencia, en el estudio.
+## Estructura
 
-## SEO / GEO
+```
+assets/
+  css/      site.css, booking.css, panel.css, demo.css
+  js/       config.js, api.js, store.js, site.js, booking.js, review.js, panel.js
+  fonts/    Fraunces + Inter (woff2, self-hosted)
+  img/      retrato, trabajo real y imagen social 1200×630
+docs/       qa.md, operacion.md y capturas
+supabase/   schema.sql y migraciones
+panel-demo.html
+```
 
-Incluye JSON-LD (`BarberShop` + `FAQPage`), Open Graph/Twitter, `canonical`, `og:url`, `sitemap.xml` y `robots.txt`.
-Todas las URLs absolutas apuntan a `https://jaazibarber.netlify.app/`; si algún día se compra un dominio propio,
-hay que cambiarlas en `index.html`, `agendar.html`, `revisar.html`, `sitemap.xml` y `robots.txt`.
-`llms.txt` contiene los datos reales del negocio.
+## Documentación
 
-## Despliegue
+- [`docs/qa.md`](docs/qa.md): evidencia, mediciones y pendientes.
+- [`docs/operacion.md`](docs/operacion.md): Supabase, despliegue, respaldo y entrega.
+- [`supabase/schema.sql`](supabase/schema.sql): esquema, RLS y funciones.
+- [`llms.txt`](llms.txt): resumen del negocio para asistentes generativos.
 
-El sitio se publica en **Netlify** (cuenta del cliente) y se actualiza solo: cada `git push` a `main` dispara
-`.github/workflows/deploy.yml`, que empaqueta los archivos públicos y los sube por la API de Netlify.
+## Licencia y créditos
 
-- Cuenta Netlify: `jaazielbarber09@gmail.com`. Token de despliegue guardado como secreto del repo
-  (`NETLIFY_AUTH_TOKEN` y `NETLIFY_SITE_ID`). Se revoca desde *User settings → Applications → Personal access tokens*.
-- GitHub Pages sigue sirviendo la misma copia desde `main`, pero la dirección oficial y el `canonical` son los de Netlify.
-- **Badge de Netlify (limitación conocida):** el plan Free inyecta `/.netlify/scripts/hud` después de `</html>` y un badge fijo en la esquina. No se puede desactivar sin plan de pago, así que se acepta. El HTML del repositorio es válido; la copia de GitHub Pages se sirve sin inyección (0 errores en el validador W3C). Para eliminarlo: pasar a un plan de pago o mover el sitio principal a otro hosting y dejar Netlify como redirección.
+Proyecto de portafolio de [@georgemm28d](https://github.com/georgemm28d). La marca, los textos y las fotografías de Jaazi Barber se muestran con permiso del cliente y no se licencian para reutilización. El código se comparte para evaluación técnica.

@@ -1,0 +1,478 @@
+<!doctype html>
+<html lang="es">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Demo del panel — Jaazi Barber</title>
+  <meta name="robots" content="noindex, nofollow, noarchive">
+  <meta name="theme-color" content="#f4eee5">
+  <script>
+    (function () {
+      try {
+        var stored = localStorage.getItem("jaazi.theme");
+        var dark = stored ? stored === "dark" : window.matchMedia("(prefers-color-scheme: dark)").matches;
+        var theme = dark ? "dark" : "light";
+        document.documentElement.setAttribute("data-theme", theme);
+        document.documentElement.style.colorScheme = theme;
+        var meta = document.querySelector('meta[name="theme-color"]');
+        if (meta) meta.setAttribute("content", theme === "dark" ? "#12100e" : "#f4eee5");
+      } catch (err) { /* sin preferencia guardada */ }
+    })();
+  </script>
+  <link rel="icon" href="assets/favicon.svg" type="image/svg+xml">
+  <link rel="apple-touch-icon" href="assets/apple-touch-icon.png">
+  <link rel="preload" href="assets/fonts/fraunces-latin.woff2" as="font" type="font/woff2" crossorigin>
+  <link rel="preload" href="assets/fonts/inter-latin.woff2" as="font" type="font/woff2" crossorigin>
+  <link rel="stylesheet" href="assets/fonts/fonts.css">
+  <link rel="stylesheet" href="assets/css/site.css">
+  <link rel="stylesheet" href="assets/css/panel.css">
+  <link rel="stylesheet" href="assets/css/demo.css">
+  <script src="assets/js/site.js" defer></script>
+</head>
+<body data-page="panel">
+  <a class="skip-link" href="#panel-main">Saltar al contenido</a>
+
+  <div class="demo-strip" role="note">
+    <div class="container demo-strip__inner">
+      <p><strong>Demo</strong> · Datos ficticios · Los cambios se quedan en esta pestaña</p>
+      <a href="index.html">Volver al sitio</a>
+    </div>
+  </div>
+
+  <header class="panel-bar">
+    <div class="panel-bar__inner">
+      <a class="brand" href="index.html" aria-label="Jaazi Barber, inicio">
+        <span class="brand__mark" aria-hidden="true">J</span>
+        <span class="brand__text">Jaazi<span class="brand__sub">Barber</span></span>
+      </a>
+      <div class="panel-bar__actions">
+        <span class="panel-bar__tag">Demo del panel</span>
+        <button class="theme-toggle" type="button" data-theme-toggle aria-pressed="false" aria-label="Activar modo oscuro" title="Activar modo oscuro">
+          <svg class="theme-toggle__sun" viewBox="0 0 24 24" fill="none" aria-hidden="true"><circle cx="12" cy="12" r="4" stroke="currentColor" stroke-width="1.5"/><path d="M12 2v2M12 20v2M2 12h2M20 12h2M4.9 4.9l1.4 1.4M17.7 17.7l1.4 1.4M19.1 4.9l-1.4 1.4M6.3 17.7l-1.4 1.4" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"/></svg>
+          <svg class="theme-toggle__moon" viewBox="0 0 24 24" fill="none" aria-hidden="true"><path d="M20 14.5A8.5 8.5 0 0 1 9.5 4a8.5 8.5 0 1 0 10.5 10.5Z" stroke="currentColor" stroke-width="1.5" stroke-linejoin="round"/></svg>
+        </button>
+      </div>
+    </div>
+  </header>
+
+  <main id="panel-main" tabindex="-1">
+    <div class="container">
+      <section id="app-view">
+        <div class="panel-head">
+          <div>
+            <p class="eyebrow">Panel privado · demo</p>
+            <h1>Agenda de Jaazi.</h1>
+            <p class="lede" id="today-label"></p>
+          </div>
+          <div class="metrics" role="group" aria-label="Resumen">
+            <div class="metric">
+              <span>Hoy</span>
+              <strong data-metric="today">—</strong>
+              <small data-metric-count="today"></small>
+            </div>
+            <div class="metric">
+              <span>Esta semana</span>
+              <strong data-metric="week">—</strong>
+              <small data-metric-count="week"></small>
+            </div>
+            <div class="metric">
+              <span>Próximas</span>
+              <strong data-metric="upcoming">—</strong>
+              <small data-metric-count="upcoming"></small>
+            </div>
+          </div>
+        </div>
+
+        <p class="demo-note" role="note">
+          Así ve Jaazi su agenda: citas, estados, bloqueos e ingresos estimados. Aquí las acciones
+          funcionan en memoria para que puedas probarlas; al recargar, la demo vuelve al inicio.
+        </p>
+
+        <div class="tabs" role="tablist" aria-label="Filtrar citas">
+          <button class="tab" type="button" role="tab" id="tab-upcoming" aria-selected="true" aria-controls="booking-panel" data-tab="upcoming">Próximas</button>
+          <button class="tab" type="button" role="tab" id="tab-today" aria-selected="false" aria-controls="booking-panel" data-tab="today" tabindex="-1">Hoy</button>
+          <button class="tab" type="button" role="tab" id="tab-history" aria-selected="false" aria-controls="booking-panel" data-tab="history" tabindex="-1">Historial</button>
+        </div>
+
+        <div class="panel-grid">
+          <section class="panel-card" id="booking-panel" role="tabpanel" aria-labelledby="tab-upcoming">
+            <div class="panel-card__head">
+              <h2 id="list-title">Próximas citas</h2>
+              <span class="panel-card__count" id="list-count" aria-live="polite"></span>
+            </div>
+            <div class="booking-list" id="booking-list"></div>
+          </section>
+
+          <aside class="panel-card panel-card--side">
+            <div class="panel-card__head">
+              <h2>Bloquear horas</h2>
+            </div>
+            <p class="panel-hint">Almuerzo, diligencias o días completos. Un bloqueo oculta esos horarios en la web.</p>
+
+            <form id="block-form" class="block-form" novalidate>
+              <div class="field">
+                <label for="block-date">Día</label>
+                <input class="input" id="block-date" name="date" type="date" required>
+              </div>
+              <div class="block-form__row">
+                <div class="field">
+                  <label for="block-start">Desde</label>
+                  <select class="input" id="block-start" name="start"></select>
+                </div>
+                <div class="field">
+                  <label for="block-end">Hasta</label>
+                  <select class="input" id="block-end" name="end"></select>
+                </div>
+              </div>
+              <div class="field">
+                <label for="block-reason">Motivo <span class="field__optional">(opcional)</span></label>
+                <input class="input" id="block-reason" name="reason" type="text" maxlength="80" placeholder="Almuerzo, cita médica…">
+              </div>
+              <p class="field__error" id="block-error" role="alert" hidden></p>
+              <div class="block-form__actions">
+                <button class="btn btn--primary btn--block" type="submit">
+                  Bloquear
+                  <svg viewBox="0 0 24 24" fill="none" aria-hidden="true"><rect x="5" y="10" width="14" height="10" rx="2" stroke="currentColor" stroke-width="1.6"/><path d="M8 10V7a4 4 0 0 1 8 0v3" stroke="currentColor" stroke-width="1.6" stroke-linecap="round"/></svg>
+                </button>
+                <button class="link-btn" type="button" data-block-day>Rellenar 9:00–19:00</button>
+              </div>
+            </form>
+
+            <h3 class="block-list__title">Bloqueos próximos</h3>
+            <div class="block-list" id="block-list"></div>
+          </aside>
+        </div>
+      </section>
+    </div>
+  </main>
+
+  <footer class="panel-foot">
+    <div class="container">
+      <p>Jaazi Barber · Chía, Cundinamarca · <a href="index.html">Ver la web pública</a></p>
+      <p>Demo con datos ficticios. No conecta con la agenda real ni con Supabase.</p>
+    </div>
+  </footer>
+
+  <div class="demo-toast" id="demo-toast" role="status" aria-live="polite"></div>
+
+  <script>
+    (function () {
+      "use strict";
+
+      var OPEN = 9 * 60;
+      var CLOSE = 19 * 60;
+      var STATUS = { pending: "Pendiente", confirmed: "Confirmada", completed: "Completada", cancelled: "Cancelada" };
+      var TITLES = { upcoming: "Próximas citas", today: "Citas de hoy", history: "Historial" };
+
+      function pad(n) { return String(n).padStart(2, "0"); }
+      function keyOf(d) { return d.getFullYear() + "-" + pad(d.getMonth() + 1) + "-" + pad(d.getDate()); }
+      function addDays(d, n) { var x = new Date(d.getFullYear(), d.getMonth(), d.getDate()); x.setDate(x.getDate() + n); return x; }
+      function fromKey(k) { var p = k.split("-").map(Number); return new Date(p[0], p[1] - 1, p[2]); }
+      function todayKey() { return keyOf(new Date()); }
+      function longDate(k) {
+        var s = new Intl.DateTimeFormat("es-CO", { weekday: "long", day: "numeric", month: "long" }).format(fromKey(k));
+        return s.charAt(0).toUpperCase() + s.slice(1);
+      }
+      function money(n) { return "$ " + new Intl.NumberFormat("es-CO").format(n); }
+      function durationLabel(m) {
+        if (m < 60) return m + " min";
+        var h = m / 60;
+        return h === 1 ? "1 h" : (Number.isInteger(h) ? h + " h" : Math.floor(h) + " h " + (m % 60) + " min");
+      }
+      function endTime(time, duration) {
+        var p = time.split(":").map(Number);
+        var total = p[0] * 60 + p[1] + (Number(duration) || 45);
+        return pad(Math.floor(total / 60)) + ":" + pad(total % 60);
+      }
+      function esc(v) {
+        return String(v == null ? "" : v).replace(/&/g, "&amp;").replace(/</g, "&lt;")
+          .replace(/>/g, "&gt;").replace(/"/g, "&quot;").replace(/'/g, "&#39;");
+      }
+
+      var today = todayKey();
+      var state = {
+        filter: "upcoming",
+        bookings: [
+          { id: "d1", code: "JZ-DEMO01", serviceName: "Corte personalizado", price: 27000, duration: 45, date: today, time: "10:00", name: "Camila R.", phone: "300 000 0001", status: "confirmed" },
+          { id: "d2", code: "JZ-DEMO02", serviceName: "Corte + barba", price: 35000, duration: 60, date: today, time: "15:30", name: "Andrés M.", phone: "300 000 0002", status: "pending" },
+          { id: "d3", code: "JZ-DEMO03", serviceName: "Barba", price: 15000, duration: 30, date: keyOf(addDays(new Date(), 1)), time: "09:00", name: "Felipe G.", phone: "300 000 0003", status: "confirmed" },
+          { id: "d4", code: "JZ-DEMO04", serviceName: "Colores fantasía", price: 120000, duration: 120, date: keyOf(addDays(new Date(), 1)), time: "11:00", name: "Valentina P.", phone: "300 000 0004", status: "pending" },
+          { id: "d5", code: "JZ-DEMO05", serviceName: "Corte personalizado", price: 27000, duration: 45, date: keyOf(addDays(new Date(), 3)), time: "14:00", name: "Sofía L.", phone: "300 000 0005", status: "confirmed" },
+          { id: "d6", code: "JZ-DEMO06", serviceName: "Corte + barba", price: 35000, duration: 60, date: keyOf(addDays(new Date(), -1)), time: "16:00", name: "Daniel R.", phone: "300 000 0006", status: "completed" },
+          { id: "d7", code: "JZ-DEMO07", serviceName: "Barba", price: 15000, duration: 30, date: keyOf(addDays(new Date(), -2)), time: "12:00", name: "Laura C.", phone: "300 000 0007", status: "cancelled" }
+        ],
+        blocks: [
+          { id: "b1", date: keyOf(addDays(new Date(), 2)), start: "13:00", end: "14:00", reason: "Almuerzo" }
+        ]
+      };
+
+      var listEl = document.getElementById("booking-list");
+      var listTitle = document.getElementById("list-title");
+      var listCount = document.getElementById("list-count");
+      var blockListEl = document.getElementById("block-list");
+      var blockForm = document.getElementById("block-form");
+      var blockDate = document.getElementById("block-date");
+      var blockStart = document.getElementById("block-start");
+      var blockEnd = document.getElementById("block-end");
+      var blockReason = document.getElementById("block-reason");
+      var blockError = document.getElementById("block-error");
+      var toastEl = document.getElementById("demo-toast");
+      var toastTimer = null;
+
+      document.getElementById("today-label").textContent = longDate(today) + " · 9:00–19:00";
+
+      function toast(message) {
+        toastEl.textContent = message;
+        toastEl.classList.add("is-visible");
+        clearTimeout(toastTimer);
+        toastTimer = setTimeout(function () { toastEl.classList.remove("is-visible"); }, 2600);
+      }
+
+      function isActive(s) { return s === "pending" || s === "confirmed"; }
+
+      function weekRange() {
+        var now = new Date();
+        var d = new Date(now.getFullYear(), now.getMonth(), now.getDate());
+        var offset = (d.getDay() + 6) % 7;
+        var start = addDays(d, -offset);
+        return { start: keyOf(start), end: keyOf(addDays(start, 6)) };
+      }
+
+      function metrics() {
+        var week = weekRange();
+        var out = { today: { total: 0, count: 0 }, week: { total: 0, count: 0 }, upcoming: 0 };
+        state.bookings.forEach(function (b) {
+          if (b.status === "cancelled") return;
+          if (b.date === today) { out.today.total += b.price; out.today.count += 1; }
+          if (b.date >= week.start && b.date <= week.end) { out.week.total += b.price; out.week.count += 1; }
+          if (isActive(b.status) && b.date >= today) out.upcoming += 1;
+        });
+        return out;
+      }
+
+      function filtered() {
+        var list;
+        if (state.filter === "today") {
+          list = state.bookings.filter(function (b) { return b.date === today; });
+          return list.sort(function (a, b) { return a.time.localeCompare(b.time); });
+        }
+        if (state.filter === "history") {
+          list = state.bookings.filter(function (b) { return b.date < today || b.status === "cancelled" || b.status === "completed"; });
+          return list.sort(function (a, b) { return (b.date + b.time).localeCompare(a.date + a.time); });
+        }
+        list = state.bookings.filter(function (b) { return isActive(b.status) && b.date >= today; });
+        return list.sort(function (a, b) { return (a.date + a.time).localeCompare(b.date + b.time); });
+      }
+
+      function statusChip(s) {
+        var k = STATUS[s] ? s : "confirmed";
+        return '<span class="bchip bchip--' + k + '">' + STATUS[k] + "</span>";
+      }
+
+      function actions(b) {
+        if (!isActive(b.status)) return "";
+        var html = "";
+        html += b.status === "pending"
+          ? '<button class="mini-btn mini-btn--primary" type="button" data-action="confirmed" data-id="' + b.id + '">Confirmar</button>'
+          : '<button class="mini-btn mini-btn--primary" type="button" data-action="completed" data-id="' + b.id + '">Completar</button>';
+        html += '<button class="mini-btn mini-btn--danger" type="button" data-action="cancel" data-id="' + b.id + '">Cancelar cita</button>';
+        return '<div class="bcard__actions" data-actions>' + html + "</div>";
+      }
+
+      function card(b) {
+        var time = b.time;
+        var suffix = Number(time.slice(0, 2)) >= 12 ? "p.m." : "a.m.";
+        return '<article class="bcard" data-id="' + b.id + '">' +
+          '<div class="bcard__time"><strong>' + time + "</strong><span>" + suffix + "</span></div>" +
+          '<div class="bcard__main">' +
+            '<div class="bcard__top"><h3 class="bcard__service">' + esc(b.serviceName) + "</h3>" + statusChip(b.status) + "</div>" +
+            '<p class="bcard__meta">' + esc(b.name) + " · " + esc(b.phone) + "</p>" +
+            '<p class="bcard__meta">' + esc(longDate(b.date)) + " · " + durationLabel(b.duration) + " · " + money(b.price) + " · Código " + b.code + "</p>" +
+            actions(b) +
+          "</div>" +
+        "</article>";
+      }
+
+      function daySep(k) {
+        var label = k === today ? "<strong>Hoy</strong> · " + longDate(k)
+          : k === keyOf(addDays(new Date(), 1)) ? "<strong>Mañana</strong> · " + longDate(k)
+          : "<strong>" + longDate(k) + "</strong>";
+        return '<h3 class="day-sep">' + label + "</h3>";
+      }
+
+      function renderBookings() {
+        var list = filtered();
+        listTitle.textContent = TITLES[state.filter];
+        listCount.textContent = list.length ? list.length + (list.length === 1 ? " cita" : " citas") : "";
+        if (!list.length) {
+          listEl.innerHTML = '<p class="booking-empty">' + (state.filter === "upcoming"
+            ? "No hay citas próximas."
+            : state.filter === "today" ? "Hoy no hay citas agendadas." : "Todavía no hay historial.") + "</p>";
+          return;
+        }
+        var html = "";
+        var last = null;
+        list.forEach(function (b) {
+          if (b.date !== last) { html += daySep(b.date); last = b.date; }
+          html += card(b);
+        });
+        listEl.innerHTML = html;
+      }
+
+      function renderMetrics() {
+        var m = metrics();
+        var word = function (n) { return n + (n === 1 ? " cita" : " citas"); };
+        document.querySelector('[data-metric="today"]').textContent = money(m.today.total);
+        document.querySelector('[data-metric-count="today"]').textContent = word(m.today.count);
+        document.querySelector('[data-metric="week"]').textContent = money(m.week.total);
+        document.querySelector('[data-metric-count="week"]').textContent = word(m.week.count);
+        document.querySelector('[data-metric="upcoming"]').textContent = m.upcoming;
+        document.querySelector('[data-metric-count="upcoming"]').textContent = word(m.upcoming);
+      }
+
+      function renderBlocks() {
+        if (!state.blocks.length) {
+          blockListEl.innerHTML = '<p class="block-empty">No hay bloqueos próximos.</p>';
+          return;
+        }
+        blockListEl.innerHTML = state.blocks.map(function (b) {
+          return '<div class="block-item" data-block-id="' + b.id + '">' +
+            '<div class="block-item__body"><div class="block-item__when">' + longDate(b.date) + " · " + b.start + "–" + b.end + "</div>" +
+            (b.reason ? '<div class="block-item__reason">' + esc(b.reason) + "</div>" : "") + "</div>" +
+            '<button class="icon-btn" type="button" data-remove-block="' + b.id + '" aria-label="Quitar bloqueo" title="Quitar bloqueo">' +
+              '<svg viewBox="0 0 24 24" fill="none" aria-hidden="true"><path d="M4 7h16M9 7V5h6v2M6 7l1 13h10l1-13M10 11v6M14 11v6" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg>' +
+            "</button></div>";
+        }).join("");
+      }
+
+      function render() { renderMetrics(); renderBookings(); renderBlocks(); }
+
+      function selectOptions(from, to, step, selected) {
+        var html = "";
+        for (var m = from; m <= to; m += step) {
+          var v = pad(Math.floor(m / 60)) + ":" + pad(m % 60);
+          html += '<option value="' + v + '"' + (v === selected ? " selected" : "") + ">" + v + "</option>";
+        }
+        return html;
+      }
+      blockStart.innerHTML = selectOptions(OPEN, CLOSE - 30, 30, "12:00");
+      blockEnd.innerHTML = selectOptions(OPEN + 30, CLOSE, 30, "13:00");
+      blockDate.min = today;
+      blockDate.value = keyOf(addDays(new Date(), 2));
+
+      function overlapsBooking(date, start, end) {
+        return state.bookings.some(function (b) {
+          if (b.date !== date || !isActive(b.status)) return false;
+          return start < endTime(b.time, b.duration) && b.time < end;
+        });
+      }
+      function overlapsBlock(date, start, end) {
+        return state.blocks.some(function (b) { return b.date === date && start < b.end && b.start < end; });
+      }
+
+      blockForm.addEventListener("submit", function (e) {
+        e.preventDefault();
+        var date = blockDate.value;
+        var start = blockStart.value;
+        var end = blockEnd.value;
+        blockError.hidden = true;
+        if (!date) { blockError.textContent = "Elige un día para bloquear."; blockError.hidden = false; return; }
+        if (date < today) { blockError.textContent = "Ese día ya pasó. Elige hoy o una fecha futura."; blockError.hidden = false; return; }
+        if (end <= start) { blockError.textContent = "La hora final debe ser posterior a la inicial."; blockError.hidden = false; return; }
+        if (overlapsBlock(date, start, end)) { blockError.textContent = "Ya existe un bloqueo que se cruza con ese horario."; blockError.hidden = false; return; }
+        if (overlapsBooking(date, start, end)) { blockError.textContent = "Hay una cita en ese rango. Cancélala primero o elige otro horario."; blockError.hidden = false; return; }
+        state.blocks.push({ id: "b" + Date.now(), date: date, start: start, end: end, reason: blockReason.value.trim() });
+        blockReason.value = "";
+        renderBlocks();
+        toast("Demo: bloqueo añadido.");
+      });
+
+      document.querySelector("[data-block-day]").addEventListener("click", function () {
+        blockStart.value = "09:00";
+        blockEnd.value = "19:00";
+        blockStart.focus();
+      });
+
+      listEl.addEventListener("click", function (e) {
+        var cardEl = e.target.closest(".bcard");
+        if (!cardEl) return;
+
+        if (e.target.closest("[data-keep]")) {
+          var confirm = cardEl.querySelector(".bconfirm");
+          var actionsEl = cardEl.querySelector("[data-actions]");
+          if (confirm) confirm.remove();
+          if (actionsEl) actionsEl.hidden = false;
+          return;
+        }
+
+        var doCancel = e.target.closest("[data-do-cancel]");
+        if (doCancel) {
+          var booking = state.bookings.filter(function (b) { return b.id === doCancel.dataset.doCancel; })[0];
+          if (booking) booking.status = "cancelled";
+          render();
+          toast("Demo: cita cancelada. El horario queda libre.");
+          return;
+        }
+
+        var action = e.target.closest("[data-action]");
+        if (!action) return;
+        var id = action.dataset.id;
+        var target = state.bookings.filter(function (b) { return b.id === id; })[0];
+        if (!target) return;
+
+        if (action.dataset.action === "cancel") {
+          var acts = cardEl.querySelector("[data-actions]");
+          if (acts) acts.hidden = true;
+          var box = document.createElement("div");
+          box.className = "bconfirm";
+          box.innerHTML = '<p>¿Cancelar esta cita? El cliente pierde el cupo.</p>' +
+            '<button class="mini-btn" type="button" data-keep>Mantener</button>' +
+            '<button class="mini-btn mini-btn--danger" type="button" data-do-cancel="' + id + '">Sí, cancelar</button>';
+          cardEl.querySelector(".bcard__main").appendChild(box);
+          var keep = box.querySelector("[data-keep]");
+          if (keep) keep.focus();
+          return;
+        }
+
+        target.status = action.dataset.action;
+        render();
+        toast(action.dataset.action === "confirmed" ? "Demo: cita confirmada." : "Demo: cita completada.");
+      });
+
+      blockListEl.addEventListener("click", function (e) {
+        var button = e.target.closest("[data-remove-block]");
+        if (!button) return;
+        var id = button.dataset.removeBlock;
+        state.blocks = state.blocks.filter(function (b) { return b.id !== id; });
+        renderBlocks();
+        toast("Demo: bloqueo eliminado.");
+      });
+
+      var tabs = Array.prototype.slice.call(document.querySelectorAll("[data-tab]"));
+      function selectTab(tab, focus) {
+        state.filter = tab.dataset.tab;
+        tabs.forEach(function (other) {
+          var on = other === tab;
+          other.setAttribute("aria-selected", on ? "true" : "false");
+          other.tabIndex = on ? 0 : -1;
+        });
+        document.getElementById("booking-panel").setAttribute("aria-labelledby", tab.id);
+        renderBookings();
+        if (focus) tab.focus();
+      }
+      tabs.forEach(function (tab) {
+        tab.addEventListener("click", function () { selectTab(tab, false); });
+        tab.addEventListener("keydown", function (e) {
+          var index = tabs.indexOf(tab);
+          if (e.key === "ArrowRight") { e.preventDefault(); selectTab(tabs[(index + 1) % tabs.length], true); }
+          if (e.key === "ArrowLeft") { e.preventDefault(); selectTab(tabs[(index - 1 + tabs.length) % tabs.length], true); }
+          if (e.key === "Home") { e.preventDefault(); selectTab(tabs[0], true); }
+          if (e.key === "End") { e.preventDefault(); selectTab(tabs[tabs.length - 1], true); }
+        });
+      });
+
+      render();
+    })();
+  </script>
+</body>
+</html>

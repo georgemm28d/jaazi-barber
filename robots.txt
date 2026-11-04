@@ -2,7 +2,11 @@ User-agent: *
 Allow: /
 Disallow: /panel.html
 Disallow: /panel
+Disallow: /panel-demo.html
+Disallow: /panel-demo
 Disallow: /jaazi-barber/panel.html
 Disallow: /jaazi-barber/panel
+Disallow: /jaazi-barber/panel-demo.html
+Disallow: /jaazi-barber/panel-demo
 
 Sitemap: https://jaazibarber.netlify.app/sitemap.xml
