@@ -7,6 +7,10 @@ Páginas en español, sin build: HTML, CSS y JavaScript vanilla. La agenda compa
 > La copia en GitHub Pages sigue activa como respaldo: https://georgemm28d.github.io/jaazi-barber/.
 > Incluye tema claro/oscuro (preferencia del sistema + toggle persistente en el navegador).
 
+![Vista de escritorio del sitio Jaazi Barber](docs/preview-desktop.jpg)
+
+<p align="center"><img src="docs/preview-mobile.jpg" width="300" alt="Vista móvil del sitio Jaazi Barber"></p>
+
 ## Páginas
 
 - `index.html` — home: hero, servicios, el estudio, trabajo reciente, FAQ y CTA.
