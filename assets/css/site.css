@@ -558,6 +558,7 @@ html[data-theme="dark"] .theme-toggle__moon {
   min-height: 540px;
   overflow: hidden;
 }
+picture { display: contents; }
 .hero__media img {
   position: absolute;
   inset: 0;

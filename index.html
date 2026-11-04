@@ -249,7 +249,11 @@
           </dl>
         </div>
         <div class="hero__media">
-          <img src="assets/img/jaazi-retrato.jpg" alt="Jaazi, barbero de Jaazi Barber, en su estudio de Chía" width="1200" height="1500" fetchpriority="high">
+          <picture>
+            <source type="image/avif" srcset="assets/img/jaazi-retrato-600.avif 600w, assets/img/jaazi-retrato-900.avif 900w, assets/img/jaazi-retrato-1200.avif 1200w" sizes="(max-width: 900px) 100vw, (max-width: 1240px) 50vw, 620px">
+            <source type="image/webp" srcset="assets/img/jaazi-retrato-600.webp 600w, assets/img/jaazi-retrato-900.webp 900w, assets/img/jaazi-retrato-1200.webp 1200w" sizes="(max-width: 900px) 100vw, (max-width: 1240px) 50vw, 620px">
+            <img src="assets/img/jaazi-retrato.jpg" srcset="assets/img/jaazi-retrato-600.jpg 600w, assets/img/jaazi-retrato-900.jpg 900w, assets/img/jaazi-retrato-1200.jpg 1200w" sizes="(max-width: 900px) 100vw, (max-width: 1240px) 50vw, 620px" alt="Jaazi, barbero de Jaazi Barber, en su estudio de Chía" width="1200" height="1500" fetchpriority="high">
+          </picture>
           <span class="hero__stamp" aria-hidden="true">6 años · Una sola silla</span>
         </div>
       </section>
@@ -339,7 +343,11 @@
     <section class="section hairline" id="estudio" aria-labelledby="estudio-title">
       <div class="container studio">
         <figure class="studio__media" data-reveal style="margin:0">
-          <img src="assets/img/trabajo-estudio.jpg" alt="Corte texturizado terminado en el estudio de Jaazi en Chía" width="464" height="580" loading="lazy">
+          <picture>
+            <source type="image/avif" srcset="assets/img/trabajo-estudio.avif">
+            <source type="image/webp" srcset="assets/img/trabajo-estudio.webp">
+            <img src="assets/img/trabajo-estudio.jpg" alt="Corte texturizado terminado en el estudio de Jaazi en Chía" width="464" height="580" loading="lazy">
+          </picture>
           <figcaption class="studio__cap">Trabajo real · Chía, Cundinamarca</figcaption>
         </figure>
         <div class="studio__body" data-reveal data-delay="80">
@@ -372,27 +380,51 @@
 
         <div class="work-grid">
           <figure class="work" data-reveal>
-            <img src="assets/img/trabajo-01.jpg" alt="Corte personalizado con degradado y textura natural" width="464" height="580" loading="lazy">
+            <picture>
+              <source type="image/avif" srcset="assets/img/trabajo-01.avif">
+              <source type="image/webp" srcset="assets/img/trabajo-01.webp">
+              <img src="assets/img/trabajo-01.jpg" alt="Corte personalizado con degradado y textura natural" width="464" height="580" loading="lazy">
+            </picture>
             <figcaption><span>Corte personalizado</span>Fade y textura</figcaption>
           </figure>
           <figure class="work" data-reveal data-delay="50">
-            <img src="assets/img/trabajo-02.jpg" alt="Mechas platinadas en rubio platino con textura" width="464" height="580" loading="lazy">
+            <picture>
+              <source type="image/avif" srcset="assets/img/trabajo-02.avif">
+              <source type="image/webp" srcset="assets/img/trabajo-02.webp">
+              <img src="assets/img/trabajo-02.jpg" alt="Mechas platinadas en rubio platino con textura" width="464" height="580" loading="lazy">
+            </picture>
             <figcaption><span>Mechas platinadas</span>Rubio platino</figcaption>
           </figure>
           <figure class="work" data-reveal data-delay="100">
-            <img src="assets/img/trabajo-03.jpg" alt="Corte texturizado con laterales cortos" width="464" height="580" loading="lazy">
+            <picture>
+              <source type="image/avif" srcset="assets/img/trabajo-03.avif">
+              <source type="image/webp" srcset="assets/img/trabajo-03.webp">
+              <img src="assets/img/trabajo-03.jpg" alt="Corte texturizado con laterales cortos" width="464" height="580" loading="lazy">
+            </picture>
             <figcaption><span>Corte personalizado</span>Textura y laterales cortos</figcaption>
           </figure>
           <figure class="work" data-reveal data-delay="150">
-            <img src="assets/img/trabajo-04.jpg" alt="Platinado global en rubio platino visto desde atrás" width="464" height="580" loading="lazy">
+            <picture>
+              <source type="image/avif" srcset="assets/img/trabajo-04.avif">
+              <source type="image/webp" srcset="assets/img/trabajo-04.webp">
+              <img src="assets/img/trabajo-04.jpg" alt="Platinado global en rubio platino visto desde atrás" width="464" height="580" loading="lazy">
+            </picture>
             <figcaption><span>Platinado global</span>Rubio y pulido</figcaption>
           </figure>
           <figure class="work" data-reveal data-delay="200">
-            <img src="assets/img/trabajo-05.jpg" alt="Detalle de corte con barba perfilada" width="464" height="580" loading="lazy">
+            <picture>
+              <source type="image/avif" srcset="assets/img/trabajo-05.avif">
+              <source type="image/webp" srcset="assets/img/trabajo-05.webp">
+              <img src="assets/img/trabajo-05.jpg" alt="Detalle de corte con barba perfilada" width="464" height="580" loading="lazy">
+            </picture>
             <figcaption><span>Detalle</span>Perfilado de barba</figcaption>
           </figure>
           <figure class="work" data-reveal data-delay="250">
-            <img src="assets/img/trabajo-06.jpg" alt="Diseño de nuca a navaja sobre degradado" width="464" height="580" loading="lazy">
+            <picture>
+              <source type="image/avif" srcset="assets/img/trabajo-06.avif">
+              <source type="image/webp" srcset="assets/img/trabajo-06.webp">
+              <img src="assets/img/trabajo-06.jpg" alt="Diseño de nuca a navaja sobre degradado" width="464" height="580" loading="lazy">
+            </picture>
             <figcaption><span>Detalle</span>Diseño de nuca</figcaption>
           </figure>
         </div>
