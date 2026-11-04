@@ -4,12 +4,12 @@
 
 ## Páginas
 
-- [Servicios](index.html#servicios): corte personalizado $ 27.000 (45 min), corte + barba $ 35.000 (60 min), barba $ 15.000 (30 min), colores fantasía $ 120.000 (2 h), mechas platinadas $ 250.000 (4 h, incluye corte), platinado global $ 250.000 (4 h, incluye corte), en COP
-- [Trabajo reciente](index.html#trabajo): fotos reales del trabajo en el estudio
-- [Preguntas frecuentes](index.html#preguntas): duración, cancelación en cualquier momento, pago, atención con cita y ubicación
-- [Agendar cita](agendar.html): reserva en línea en 3 pasos, confirmación con código JZ-XXXXXX
-- [Revisar, cambiar o cancelar cita](revisar.html): con el código JZ-XXXXXX y el teléfono con el que se reservó (los dos datos deben coincidir); permite cambiar la fecha y la hora o cancelar
-- [Privacidad](privacidad.html): política de tratamiento de datos personales (Ley 1581 de 2012), derechos del titular y contacto
+- [Servicios](https://jaazibarber.netlify.app/#servicios): corte personalizado $ 27.000 (45 min), corte + barba $ 35.000 (60 min), barba $ 15.000 (30 min), colores fantasía $ 120.000 (2 h), mechas platinadas $ 250.000 (4 h, incluye corte), platinado global $ 250.000 (4 h, incluye corte), en COP
+- [Trabajo reciente](https://jaazibarber.netlify.app/#trabajo): fotos reales del trabajo en el estudio
+- [Preguntas frecuentes](https://jaazibarber.netlify.app/#preguntas): duración, cambio de fecha y hora, cancelación en cualquier momento, pago, atención con cita y ubicación
+- [Agendar cita](https://jaazibarber.netlify.app/agendar): reserva en línea en 3 pasos, confirmación con código JZ-XXXXXX
+- [Revisar, cambiar o cancelar cita](https://jaazibarber.netlify.app/revisar): con el código JZ-XXXXXX y el teléfono con el que se reservó (los dos datos deben coincidir); permite cambiar la fecha y la hora o cancelar
+- [Privacidad](https://jaazibarber.netlify.app/privacidad): política de tratamiento de datos personales (Ley 1581 de 2012), derechos del titular y contacto
 - La agenda es compartida: los horarios ocupados se actualizan para todos los dispositivos
 
 ## Datos

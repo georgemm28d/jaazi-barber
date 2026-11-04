@@ -225,7 +225,7 @@ window.Jaazi = (function () {
     var code = "";
     do {
       code = "JZ-";
-      for (var i = 0; i < 4; i++) {
+      for (var i = 0; i < 6; i++) {
         code += alphabet.charAt(Math.floor(Math.random() * alphabet.length));
       }
     } while (list.some(function (b) { return b.code === code; }));

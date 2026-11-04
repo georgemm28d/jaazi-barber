@@ -7,19 +7,19 @@
     <priority>1.0</priority>
   </url>
   <url>
-    <loc>https://jaazibarber.netlify.app/agendar.html</loc>
+    <loc>https://jaazibarber.netlify.app/agendar</loc>
     <lastmod>2026-11-03</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.9</priority>
   </url>
   <url>
-    <loc>https://jaazibarber.netlify.app/revisar.html</loc>
+    <loc>https://jaazibarber.netlify.app/revisar</loc>
     <lastmod>2026-11-03</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.6</priority>
   </url>
   <url>
-    <loc>https://jaazibarber.netlify.app/privacidad.html</loc>
+    <loc>https://jaazibarber.netlify.app/privacidad</loc>
     <lastmod>2026-11-03</lastmod>
     <changefreq>yearly</changefreq>
     <priority>0.3</priority>

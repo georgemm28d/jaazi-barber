@@ -1087,7 +1087,6 @@ html[data-theme="dark"] .theme-toggle__moon {
   letter-spacing: 0.04em;
   text-transform: none;
   color: var(--muted);
-  opacity: 0.8;
 }
 .input {
   width: 100%;
@@ -1101,7 +1100,7 @@ html[data-theme="dark"] .theme-toggle__moon {
   color: var(--ink);
   transition: border-color 160ms ease, background-color 160ms ease, box-shadow 160ms ease;
 }
-.input::placeholder { color: var(--muted); opacity: 0.65; }
+.input::placeholder { color: var(--muted); opacity: 1; }
 .input:focus {
   outline: none;
   border-color: var(--ink);
@@ -1357,4 +1356,13 @@ html[data-theme="dark"] textarea:-webkit-autofill {
   .btn:active { transform: none; }
   .theme-toggle, .theme-toggle svg { transition: none; }
   .toast { transform: none; }
+  .btn:hover svg,
+  .service__link:hover .service__arrow,
+  .work:hover img,
+  .nav__link:hover::after { transform: none; }
+  .btn svg,
+  .service__link,
+  .service__arrow,
+  .work img,
+  .nav__link::after { transition: none; }
 }

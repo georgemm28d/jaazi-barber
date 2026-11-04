@@ -441,13 +441,14 @@
     panel.className = "reschedule";
     panel.setAttribute("role", "group");
     panel.setAttribute("aria-label", "Cambiar fecha y hora de la cita");
+    panel.setAttribute("tabindex", "-1");
     panel.innerHTML =
       '<div class="reschedule__head">' +
         '<p class="reschedule__title">Cambiar fecha y hora</p>' +
         '<button class="reschedule__back" type="button" data-reschedule-close>Volver</button>' +
       '</div>' +
       '<p class="reschedule__hint">Mantienes ' + esc(booking.serviceName) + " · " + esc(Jaazi.durationLabel(booking.duration)) + ".</p>" +
-      '<p class="reschedule__loading" data-reschedule-loading>Buscando horarios…</p>' +
+      '<p class="reschedule__loading" data-reschedule-loading aria-live="polite">Buscando horarios…</p>' +
       '<div class="reschedule__body" data-reschedule-body hidden>' +
         '<div class="dates" data-reschedule-dates role="radiogroup" aria-label="Nuevo día"></div>' +
         '<div class="times-wrap" data-reschedule-times hidden><div data-reschedule-groups></div></div>' +
@@ -458,6 +459,7 @@
       '</div>';
     actions.parentNode.insertBefore(panel, actions.nextSibling);
     card.setAttribute("data-rescheduling", "");
+    panel.focus({ preventScroll: true });
 
     editor = {
       card: card,

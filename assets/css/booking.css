@@ -768,8 +768,7 @@
   transition: opacity 200ms ease, transform 200ms var(--ease), border-color 200ms ease;
 }
 .appt.is-leaving { opacity: 0; transform: translateY(-4px); }
-.appt--past { opacity: 0.62; }
-.appt--past:hover { opacity: 0.8; }
+.appt--past { background: var(--bone); }
 .appt__date {
   display: flex;
   flex-direction: column;
@@ -837,7 +836,7 @@
 .status--completed::before { background: var(--copper-deep); }
 .status--cancelled { color: var(--danger); }
 .status--cancelled::before { background: var(--danger); }
-.appt--cancelled { opacity: 0.62; }
+.appt--cancelled { background: var(--bone); }
 .appt--cancelled .appt__service {
   text-decoration: line-through;
   text-decoration-thickness: 1px;
@@ -1082,6 +1081,6 @@
   .step, .confirm, .cancel-confirm, .reschedule { animation: none; }
   .confirm__icon circle { stroke-dashoffset: 0; animation: none; }
   .confirm__icon path { stroke-dashoffset: 0; animation: none; }
-  .appt { transition: opacity 120ms ease; }
+  .appt { transition: none; }
   .appt.is-leaving { transform: none; }
 }

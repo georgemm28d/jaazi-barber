@@ -27,7 +27,8 @@
     time: null,
     booking: null,
     submitting: false,
-    busy: null
+    busy: null,
+    busyError: false
   };
   var reduceMotion = window.matchMedia("(prefers-reduced-motion: reduce)");
   var api = window.JaaziApi && window.JaaziApi.enabled ? window.JaaziApi : null;
@@ -41,14 +42,17 @@
   function loadBusy() {
     if (!api) {
       state.busy = null;
+      state.busyError = false;
       return Promise.resolve();
     }
     var from = Jaazi.todayKey();
     var to = Jaazi.keyOf(Jaazi.addDays(Jaazi.shopNow(), 20));
     return api.busy(from, to).then(function (map) {
       state.busy = map;
+      state.busyError = false;
     }, function () {
-      state.busy = {};
+      state.busy = null;
+      state.busyError = true;
     });
   }
 
@@ -79,6 +83,18 @@
     ["service", "date", "time"].forEach(function (name) {
       setStepError(name, "");
     });
+  }
+
+  function showBusyError() {
+    dateList.innerHTML =
+      '<p class="slots-empty">No pudimos cargar la disponibilidad. ' +
+      '<button type="button" class="link-btn" data-retry-busy>Reintentar</button></p>';
+    timesWrap.hidden = true;
+    state.date = null;
+    state.time = null;
+    updateSummary();
+    saveDraft();
+    setStepError("date", "No pudimos consultar la agenda. Reintenta antes de elegir un día.");
   }
 
   function setFieldError(input, message) {
@@ -174,7 +190,13 @@
       if (api) {
         dateList.innerHTML = '<p class="slots-empty">Cargando disponibilidad…</p>';
         timesWrap.hidden = true;
-        loadBusy().then(renderDates);
+        loadBusy().then(function () {
+          if (state.busyError) {
+            showBusyError();
+            return;
+          }
+          renderDates();
+        });
       } else {
         renderDates();
       }
@@ -400,6 +422,21 @@
       updateSummary();
       saveDraft();
     }
+  });
+
+  form.addEventListener("click", function (event) {
+    if (!event.target.closest("[data-retry-busy]")) return;
+    clearStepErrors();
+    state.busyError = false;
+    dateList.innerHTML = '<p class="slots-empty">Cargando disponibilidad…</p>';
+    timesWrap.hidden = true;
+    loadBusy().then(function () {
+      if (state.busyError) {
+        showBusyError();
+        return;
+      }
+      renderDates();
+    });
   });
 
   form.querySelectorAll("[data-next]").forEach(function (button) {
