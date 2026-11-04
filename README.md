@@ -94,7 +94,7 @@ El esquema completo está en [`supabase/schema.sql`](supabase/schema.sql).
 - **0 violaciones** de axe-core WCAG 2.0/2.1 A/AA en home, reserva, revisión y demo.
 - Contraste **5.76:1 / 6.48:1** en texto secundario y **5.25:1 / 6.94:1** en tarjetas de historial.
 - Objetivos táctiles de **44 px** en footer, acciones de cita y botones del editor.
-- **CLS 0.0009**; **540 KB y 16 peticiones** en la portada móvil.
+- **CLS 0.0009**; **300 KB y 16 peticiones** en la portada móvil (44 % menos que antes), con AVIF/WebP y `srcset` en el héroe y la galería.
 - Flujos probados con Playwright: reservar, consultar, cambiar fecha/hora, cancelar, reintentar disponibilidad y foco del editor.
 
 Los números, el método y los pendientes están en [`docs/qa.md`](docs/qa.md).

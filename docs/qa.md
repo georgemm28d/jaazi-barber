@@ -13,7 +13,7 @@ Mediciones hechas el **4 de noviembre de 2026** sobre el sitio en vivo y una cop
 | Desbordamiento horizontal | **0 px** a 320 y 390 px |
 | Flujos de reserva | Reservar, consultar, cambiar fecha/hora, cancelar y reintentar disponibilidad |
 | Consola | **0 errores** en las páginas probadas |
-| Rendimiento | **540 KB, 16 peticiones, CLS 0.0009** |
+| Rendimiento | **300 KB, 16 peticiones, CLS 0.0009** en móvil |
 
 ## HTML
 
@@ -65,20 +65,23 @@ Comprobaciones manuales:
 
 ## Rendimiento
 
-Medición de la portada a 390×844 con red del entorno de pruebas:
+Medición de la portada a 390×844, DPR 2, con red del entorno de pruebas:
 
-| Métrica | Valor |
-|---|---:|
-| Transferencia | 540 KB |
-| Peticiones | 16 |
-| Fuentes | 193 KB (3 preloads) |
-| Imagen del héroe | 200 KB |
-| CLS | 0.0009 |
-| LCP | 6.0 s* |
+| Métrica | Antes | Después |
+|---|---:|---:|
+| Transferencia móvil | 540 KB | **300 KB** |
+| Peticiones móvil | 16 | **16** |
+| Transferencia escritorio | — | **366 KB** |
+| Fuentes | 193 KB | **183 KB** (Inter subset) |
+| Imagen del héroe | 200 KB | **36.7 KB** (900w AVIF) |
+| CLS | 0.0009 | **0.0009** |
+| LCP | 6.0 s* | **2.2–6.3 s*** |
 
-\* Medido desde una conexión con latencia alta; no es un dato de campo ni una medición Lighthouse. El CLS es el dato más estable. La imagen del héroe ya usa `fetchpriority="high"` y dimensiones explícitas, pero no tiene `srcset` ni AVIF/WebP.
+\* El LCP depende mucho de la latencia de la red en este entorno: la última pasada dio **2.24 s** en móvil; no es un dato de campo ni una medición Lighthouse. El CLS es el dato más estable.
 
-**Pendiente de optimización:** variantes responsivas del retrato y la galería, AVIF/WebP y subset de fuentes. Objetivo: menos de 350 KB y LCP < 2.5 s en móvil.
+**Optimización aplicada:** el héroe usa `<picture>` con AVIF, WebP y JPEG, `srcset` de 600/900/1200 y `sizes`; la galería y la foto del estudio tienen AVIF/WebP con fallback JPEG; Inter se sirvió subseteado. La imagen del héroe conserva `fetchpriority="high"` y dimensiones explícitas.
+
+**Pendiente de optimización:** subset o instancing de Fraunces (las dos variantes siguen pesando 66 y 80 KB), medir con Lighthouse/PSI y validar en red 4G real. Objetivo: bajar de 300 KB y estabilizar el LCP por debajo de 2.5 s.
 
 ## Seguridad y datos
 
