@@ -193,7 +193,9 @@ begin
   if v_start % 30 <> 0 then
     raise exception 'invalid_slot';
   end if;
-  if v_start < 540 or v_end > 1140 then
+  -- 19:00 es el último inicio permitido, no el fin de la jornada:
+  -- una cita puede terminar después de las 19:00.
+  if v_start < 540 or v_start > 1140 then
     raise exception 'outside_hours';
   end if;
 
@@ -372,7 +374,9 @@ begin
   if v_start % 30 <> 0 then
     raise exception 'invalid_slot';
   end if;
-  if v_start < 540 or v_end > 1140 then
+  -- 19:00 es el último inicio permitido, no el fin de la jornada:
+  -- una cita puede terminar después de las 19:00.
+  if v_start < 540 or v_start > 1140 then
     raise exception 'outside_hours';
   end if;
 

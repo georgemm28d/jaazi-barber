@@ -79,7 +79,7 @@ Proyecto real, de principio a fin y sin equipo:
 El frontend nunca consulta `bookings`. La disponibilidad sale de `public_busy`, una vista sin datos personales, y cualquier operación sobre una cita pasa por una función que exige **código + teléfono**. Si la `anon key` se copia, no hay nada que enumerar.
 
 **2. La base de datos es la fuente de verdad.**
-`create_booking` y `reschedule_booking` validan en una sola transacción: jornada 9:00–19:00, zona `America/Bogota`, bloques, citas activas y solapamientos. El JavaScript no decide si un hueco es válido; solo muestra lo que la base confirma.
+`create_booking` y `reschedule_booking` validan en una sola transacción: ventana de reserva 9:00–19:00 (las 19:00 son el último inicio, no el cierre), zona `America/Bogota`, bloques, citas activas y solapamientos. El JavaScript no decide si un hueco es válido; solo muestra lo que la base confirma.
 
 **3. Código + teléfono en vez de cuentas.**
 Reservar no exige registro. Gestionar una cita exige el código de 6 caracteres **y** el teléfono con el que se reservó. Es menos fricción para el cliente y menos superficie de datos; el costo es que quien tenga ambos datos puede gestionar la cita, y así se explica en la política de privacidad.

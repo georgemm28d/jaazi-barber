@@ -57,6 +57,7 @@ Comprobaciones manuales:
 
 - **Disponibilidad:** fallo simulado de `public_busy` → 0 fechas, aviso y botón “Reintentar”; al reintentar, 21 fechas reales.
 - **Reserva:** servicio → día/hora → datos → confirmación con código `JZ-XXXXXX`.
+- **Ventana de reserva:** el último inicio es a las 19:00; una cita puede terminar después. Verificado con servicios de 30 min, 2 h y 4 h.
 - **Consulta:** código + teléfono; un dato suelto no devuelve la cita.
 - **Cambio:** solo mueve fecha y hora; conserva servicio, duración, precio y datos del cliente.
 - **Cancelación:** confirmación explícita y liberación del horario.
@@ -89,7 +90,7 @@ Medición de la portada a 390×844, DPR 2, con red del entorno de pruebas:
 - `bookings` y `blocks` tienen RLS; el rol anónimo no puede leerlas.
 - `public_busy` expone solo fecha, inicio y fin; nunca nombre, teléfono, correo o código.
 - Consultar, cambiar y cancelar exigen **código + teléfono** mediante funciones `SECURITY DEFINER`.
-- `create_booking` y `reschedule_booking` validan jornada, zona `America/Bogota`, bloqueos y solapamientos en una transacción.
+- `create_booking` y `reschedule_booking` validan la ventana de reserva, la zona `America/Bogota`, los bloqueos y los solapamientos en una transacción.
 - La `anon key` es pública por diseño; la `service_role` no aparece en el cliente ni en el repositorio.
 - La API key de Resend vive en Vault y solo la lee una función `SECURITY DEFINER`; nunca llega al navegador.
 - No hay credenciales en el código. El token de Netlify vive en los secretos de GitHub Actions.

@@ -320,7 +320,9 @@ window.Jaazi = (function () {
     var isToday = dateKey === todayKey();
     var nowMinutes = now.getHours() * 60 + now.getMinutes();
     var result = [];
-    for (var start = OPEN; start + duration <= CLOSE; start += STEP) {
+    // CLOSE es el último inicio permitido, no el fin de la jornada:
+    // una cita puede terminar después de las 19:00.
+    for (var start = OPEN; start <= CLOSE; start += STEP) {
       if (isToday && start < nowMinutes + LEAD) continue;
       var time = timeOf(start);
       var available = busy
