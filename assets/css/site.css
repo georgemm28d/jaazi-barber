@@ -1372,12 +1372,3 @@ html[data-theme="dark"] textarea:-webkit-autofill {
   .work img,
   .nav__link::after { transition: none; }
 }
-
-/* ---------- Badge de Netlify (plan Free) ----------
-   Ocultado visualmente mientras el sitio siga en el plan Free.
-   El script /.netlify/scripts/hud y el HTML inyectado después de </html>
-   siguen presentes: esto no los elimina ni corrige el validador W3C.
-   Revisar si se cambia de plan o de hosting. */
-iframe#nl-badge-frame {
-  display: none !important;
-}
