@@ -392,16 +392,6 @@
   outline: 2px solid var(--copper-deep);
   outline-offset: 2px;
 }
-.time__tag {
-  position: absolute;
-  top: 2px;
-  right: 4px;
-  font-size: 7px;
-  letter-spacing: 0.08em;
-  text-transform: uppercase;
-  color: var(--muted);
-}
-.time:has(input:checked) .time__tag { color: var(--copper-light); }
 
 .availability-note {
   display: flex;

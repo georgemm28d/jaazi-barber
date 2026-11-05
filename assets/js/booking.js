@@ -355,14 +355,12 @@
       groupSlots.forEach(function (slot) {
         var label = document.createElement("label");
         label.className = "time";
-        var hours = parseInt(slot.time.slice(0, 2), 10);
         label.innerHTML =
           '<input type="radio" name="time" value="' + slot.time + '"' +
           (state.time === slot.time ? " checked" : "") +
           (slot.available ? "" : " disabled") +
           ' aria-label="' + Jaazi.timeLabel(slot.time) + (slot.available ? "" : ", no disponible") + '">' +
-          "<span>" + Jaazi.timeLabel(slot.time).replace(" a.m.", "").replace(" p.m.", "") + "</span>" +
-          '<span class="time__tag">' + (hours >= 12 ? "pm" : "am") + "</span>";
+          "<span>" + Jaazi.timeLabel(slot.time) + "</span>";
         grid.appendChild(label);
       });
 

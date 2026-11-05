@@ -97,7 +97,7 @@ window.JaaziApi = (function () {
 
   var MESSAGES = {
     slot_taken: "Ese horario acaba de ocuparse. Elige otro, por favor.",
-    outside_hours: "La hora de inicio debe estar entre 9:00 y 19:00. Elige otra.",
+    outside_hours: "La hora de inicio debe estar entre 9:00 am y 7:00 pm. Elige otra.",
     invalid_slot: "Ese horario ya no está disponible. Elige otro.",
     invalid_name: "Revisa tu nombre.",
     invalid_phone: "Revisa tu teléfono.",

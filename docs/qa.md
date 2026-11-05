@@ -57,7 +57,8 @@ Comprobaciones manuales:
 
 - **Disponibilidad:** fallo simulado de `public_busy` → 0 fechas, aviso y botón “Reintentar”; al reintentar, 21 fechas reales.
 - **Reserva:** servicio → día/hora → datos → confirmación con código `JZ-XXXXXX`.
-- **Ventana de reserva:** el último inicio es a las 19:00; una cita puede terminar después. Verificado con servicios de 30 min, 2 h y 4 h.
+- **Ventana de reserva:** el último inicio es a las 7:00 pm; una cita puede terminar después. Verificado con servicios de 30 min, 2 h y 4 h.
+- **Formato de hora:** 12 h con `am`/`pm` en reserva, revisión y panel; la base y las APIs siguen en 24 h.
 - **Consulta:** código + teléfono; un dato suelto no devuelve la cita.
 - **Cambio:** solo mueve fecha y hora; conserva servicio, duración, precio y datos del cliente.
 - **Cancelación:** confirmación explícita y liberación del horario.

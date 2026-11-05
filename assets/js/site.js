@@ -193,7 +193,7 @@
         var today = Jaazi.todayKey();
         var tomorrow = Jaazi.keyOf(Jaazi.addDays(Jaazi.shopNow(), 1));
         var prefix = found.date === today ? "hoy" : found.date === tomorrow ? "mañana" : "el " + Jaazi.formatMedium(found.date);
-        nextSlot.textContent = prefix + " · " + Jaazi.timeLabel(found.time);
+        nextSlot.textContent = prefix + " · " + Jaazi.timeLabel(found.time).replace(" ", "\u00a0");
       } else {
         nextSlot.textContent = "consulta la agenda";
       }

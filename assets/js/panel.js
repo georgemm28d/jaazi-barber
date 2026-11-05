@@ -211,8 +211,8 @@
         setAlert("");
       }
       render();
-      var stamp = Jaazi.shopNow().toLocaleTimeString("es-CO", { hour: "2-digit", minute: "2-digit" });
-      refreshNote.textContent = "Actualizado " + stamp;
+      var now = Jaazi.shopNow();
+      refreshNote.textContent = "Actualizado " + Jaazi.timeLabel(now.getHours() + ":" + now.getMinutes());
     }, function (err) {
       if (err && err.status === 401) return;
       setAlert(api.friendly(err));
@@ -300,9 +300,9 @@
   }
 
   function cardMarkup(b) {
-    var time = String(b.time).slice(0, 5);
-    var hour = parseInt(time.slice(0, 2), 10);
-    var suffix = hour >= 12 ? "p.m." : "a.m.";
+    var label = Jaazi.timeLabel(b.time).split(" ");
+    var time = label[0];
+    var suffix = label[1] || "";
     var phone = String(b.phone || "");
     var tel = phone.replace(/[^\d+]/g, "");
     var wa = waNumber(phone);
@@ -394,7 +394,7 @@
     blockListEl.innerHTML = state.blocks.map(function (block) {
       return '<div class="block-item" data-block-id="' + esc(block.id) + '">' +
         '<div class="block-item__body">' +
-          '<div class="block-item__when">' + esc(cap(Jaazi.formatLong(block.date))) + " · " + esc(block.start) + "–" + esc(block.end) + "</div>" +
+          '<div class="block-item__when">' + esc(cap(Jaazi.formatLong(block.date))) + " · " + esc(Jaazi.timeLabel(block.start)) + " – " + esc(Jaazi.timeLabel(block.end)) + "</div>" +
           (block.reason ? '<div class="block-item__reason">' + esc(block.reason) + "</div>" : "") +
         "</div>" +
         '<button class="icon-btn" type="button" data-remove-block="' + esc(block.id) + '" aria-label="Quitar bloqueo" title="Quitar bloqueo">' +
@@ -416,7 +416,7 @@
     var html = "";
     for (var m = from; m <= to; m += step) {
       var value = String(Math.floor(m / 60)).padStart(2, "0") + ":" + String(m % 60).padStart(2, "0");
-      html += '<option value="' + value + '"' + (value === selected ? " selected" : "") + ">" + value + "</option>";
+      html += '<option value="' + value + '"' + (value === selected ? " selected" : "") + ">" + Jaazi.timeLabel(value) + "</option>";
     }
     return html;
   }
@@ -637,7 +637,7 @@
 
   function init() {
     var today = Jaazi.todayKey();
-    todayLabel.textContent = cap(Jaazi.formatLong(today)) + " · 9:00–19:00";
+    todayLabel.textContent = cap(Jaazi.formatLong(today)) + " · 9:00 am – 7:00 pm";
 
     if (!api) {
       showLogin();

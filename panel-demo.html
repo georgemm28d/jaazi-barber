@@ -134,7 +134,7 @@
                   Bloquear
                   <svg viewBox="0 0 24 24" fill="none" aria-hidden="true"><rect x="5" y="10" width="14" height="10" rx="2" stroke="currentColor" stroke-width="1.6"/><path d="M8 10V7a4 4 0 0 1 8 0v3" stroke="currentColor" stroke-width="1.6" stroke-linecap="round"/></svg>
                 </button>
-                <button class="link-btn" type="button" data-block-day>Rellenar 9:00–19:00</button>
+                <button class="link-btn" type="button" data-block-day>Rellenar 9:00 am – 7:00 pm</button>
               </div>
             </form>
 
@@ -179,6 +179,12 @@
         var h = m / 60;
         return h === 1 ? "1 h" : (Number.isInteger(h) ? h + " h" : Math.floor(h) + " h " + (m % 60) + " min");
       }
+      function timeLabel(t) {
+        var p = String(t).split(":").map(Number);
+        var h = p[0];
+        var suffix = h >= 12 ? "pm" : "am";
+        return (h % 12 || 12) + ":" + pad(p[1]) + " " + suffix;
+      }
       function endTime(time, duration) {
         var p = time.split(":").map(Number);
         var total = p[0] * 60 + p[1] + (Number(duration) || 45);
@@ -219,7 +225,7 @@
       var toastEl = document.getElementById("demo-toast");
       var toastTimer = null;
 
-      document.getElementById("today-label").textContent = longDate(today) + " · 9:00–19:00";
+      document.getElementById("today-label").textContent = longDate(today) + " · 9:00 am – 7:00 pm";
 
       function toast(message) {
         toastEl.textContent = message;
@@ -278,10 +284,9 @@
       }
 
       function card(b) {
-        var time = b.time;
-        var suffix = Number(time.slice(0, 2)) >= 12 ? "p.m." : "a.m.";
+        var label = timeLabel(b.time).split(" ");
         return '<article class="bcard" data-id="' + b.id + '">' +
-          '<div class="bcard__time"><strong>' + time + "</strong><span>" + suffix + "</span></div>" +
+          '<div class="bcard__time"><strong>' + label[0] + "</strong><span>" + label[1] + "</span></div>" +
           '<div class="bcard__main">' +
             '<div class="bcard__top"><h3 class="bcard__service">' + esc(b.serviceName) + "</h3>" + statusChip(b.status) + "</div>" +
             '<p class="bcard__meta">' + esc(b.name) + " · " + esc(b.phone) + "</p>" +
@@ -335,7 +340,7 @@
         }
         blockListEl.innerHTML = state.blocks.map(function (b) {
           return '<div class="block-item" data-block-id="' + b.id + '">' +
-            '<div class="block-item__body"><div class="block-item__when">' + longDate(b.date) + " · " + b.start + "–" + b.end + "</div>" +
+            '<div class="block-item__body"><div class="block-item__when">' + longDate(b.date) + " · " + timeLabel(b.start) + " – " + timeLabel(b.end) + "</div>" +
             (b.reason ? '<div class="block-item__reason">' + esc(b.reason) + "</div>" : "") + "</div>" +
             '<button class="icon-btn" type="button" data-remove-block="' + b.id + '" aria-label="Quitar bloqueo" title="Quitar bloqueo">' +
               '<svg viewBox="0 0 24 24" fill="none" aria-hidden="true"><path d="M4 7h16M9 7V5h6v2M6 7l1 13h10l1-13M10 11v6M14 11v6" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg>' +
@@ -349,7 +354,7 @@
         var html = "";
         for (var m = from; m <= to; m += step) {
           var v = pad(Math.floor(m / 60)) + ":" + pad(m % 60);
-          html += '<option value="' + v + '"' + (v === selected ? " selected" : "") + ">" + v + "</option>";
+          html += '<option value="' + v + '"' + (v === selected ? " selected" : "") + ">" + timeLabel(v) + "</option>";
         }
         return html;
       }

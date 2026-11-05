@@ -274,7 +274,6 @@ body[data-page="panel"] main { flex: 1 0 auto; }
 .bcard__time span {
   font-size: 9.5px;
   letter-spacing: 0.08em;
-  text-transform: uppercase;
   color: var(--muted);
 }
 

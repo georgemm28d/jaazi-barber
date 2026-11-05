@@ -133,7 +133,7 @@ window.Jaazi = (function () {
   function timeLabel(time) {
     var p = String(time).split(":").map(Number);
     var h = p[0];
-    var suffix = h >= 12 ? "p.m." : "a.m.";
+    var suffix = h >= 12 ? "pm" : "am";
     var h12 = h % 12 || 12;
     return h12 + ":" + pad(p[1]) + " " + suffix;
   }

@@ -1316,7 +1316,6 @@ html[data-theme="dark"] .toast {
 html[data-theme="dark"] .date:has(input:checked) .date__dow,
 html[data-theme="dark"] .date:has(input:checked) .date__mon { color: rgba(23, 18, 16, 0.62); }
 html[data-theme="dark"] .date:has(input:checked) .date__note { color: #7a4a27; }
-html[data-theme="dark"] .time:has(input:checked) .time__tag { color: #7a4a27; }
 html[data-theme="dark"] .stepper li.is-done .stepper__num { color: #171210; }
 html[data-theme="dark"] .choice:has(input:checked) {
   border-color: var(--copper-light);
