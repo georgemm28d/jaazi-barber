@@ -1,0 +1,143 @@
+<!doctype html>
+<html lang="es">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Página no encontrada — Jaazi Barber · Chía</title>
+  <meta name="robots" content="noindex">
+  <meta name="theme-color" content="#f4eee5">
+  <script>
+    (function () {
+      try {
+        var stored = localStorage.getItem("jaazi.theme");
+        var dark = stored ? stored === "dark" : window.matchMedia("(prefers-color-scheme: dark)").matches;
+        var theme = dark ? "dark" : "light";
+        document.documentElement.setAttribute("data-theme", theme);
+        document.documentElement.style.colorScheme = theme;
+        var meta = document.querySelector('meta[name="theme-color"]');
+        if (meta) meta.setAttribute("content", theme === "dark" ? "#12100e" : "#f4eee5");
+      } catch (err) { /* sin preferencia guardada */ }
+    })();
+  </script>
+  <link rel="icon" href="/assets/favicon.svg" type="image/svg+xml">
+  <link rel="apple-touch-icon" href="/assets/apple-touch-icon.png">
+  <link rel="preload" href="/assets/fonts/fraunces-latin.woff2" as="font" type="font/woff2" crossorigin>
+  <link rel="preload" href="/assets/fonts/inter-latin.woff2" as="font" type="font/woff2" crossorigin>
+  <link rel="stylesheet" href="/assets/fonts/fonts.css">
+  <link rel="stylesheet" href="/assets/css/site.css">
+  <script src="/assets/js/site.js" defer></script>
+</head>
+<body data-page="404">
+  <a class="skip-link" href="#main">Saltar al contenido</a>
+
+  <header class="site-header">
+    <div class="container site-header__inner">
+      <a class="brand" href="/" aria-label="Jaazi Barber, inicio">
+        <span class="brand__mark" aria-hidden="true">J</span>
+        <span class="brand__text">Jaazi<span class="brand__sub">Barber</span></span>
+      </a>
+      <nav class="nav" aria-label="Navegación principal">
+        <a class="nav__link" href="/#servicios">Servicios</a>
+        <a class="nav__link" href="/#estudio">El estudio</a>
+        <a class="nav__link" href="/#trabajo">Trabajo</a>
+        <a class="nav__link" href="/#preguntas">Preguntas</a>
+      </nav>
+      <div class="site-header__actions">
+        <a class="btn btn--sm" href="/agendar">Agendar cita</a>
+        <button class="theme-toggle" type="button" data-theme-toggle aria-pressed="false" aria-label="Activar modo oscuro" title="Activar modo oscuro">
+          <svg class="theme-toggle__sun" viewBox="0 0 24 24" fill="none" aria-hidden="true"><circle cx="12" cy="12" r="4" stroke="currentColor" stroke-width="1.5"/><path d="M12 2v2M12 20v2M2 12h2M20 12h2M4.9 4.9l1.4 1.4M17.7 17.7l1.4 1.4M19.1 4.9l-1.4 1.4M6.3 17.7l-1.4 1.4" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"/></svg>
+          <svg class="theme-toggle__moon" viewBox="0 0 24 24" fill="none" aria-hidden="true"><path d="M20 14.5A8.5 8.5 0 0 1 9.5 4a8.5 8.5 0 1 0 10.5 10.5Z" stroke="currentColor" stroke-width="1.5" stroke-linejoin="round"/></svg>
+        </button>
+        <button class="menu-toggle" type="button" aria-expanded="false" aria-controls="mobile-menu">
+          <span class="menu-toggle__label">Menú</span>
+          <span class="menu-toggle__bars" aria-hidden="true"><i></i><i></i></span>
+        </button>
+      </div>
+    </div>
+  </header>
+
+  <div class="mobile-menu" id="mobile-menu" hidden>
+    <nav class="mobile-menu__nav" aria-label="Navegación móvil">
+      <a class="mobile-menu__link" href="/#servicios"><span>01</span>Servicios</a>
+      <a class="mobile-menu__link" href="/#estudio"><span>02</span>El estudio</a>
+      <a class="mobile-menu__link" href="/#trabajo"><span>03</span>Trabajo</a>
+      <a class="mobile-menu__link" href="/#preguntas"><span>04</span>Preguntas</a>
+      <a class="mobile-menu__link" href="/agendar"><span>05</span>Agendar cita</a>
+    </nav>
+    <div>
+      <a class="btn btn--block" href="/">
+        Volver al inicio
+        <svg viewBox="0 0 24 24" fill="none" aria-hidden="true"><path d="M5 12h14M13 6l6 6-6 6" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"/></svg>
+      </a>
+      <div class="mobile-menu__meta" style="margin-top: 20px;">
+        <span>Todos los días · 9:00 am – 7:00 pm</span>
+        <span>Chía, Cundinamarca</span>
+      </div>
+    </div>
+  </div>
+
+  <main id="main" tabindex="-1">
+    <section class="section">
+      <div class="container">
+        <header class="page-head">
+          <p class="eyebrow">Error 404</p>
+          <h1>Esta página no existe.</h1>
+          <p class="lede">Puede que el enlace esté mal escrito o que la página se haya movido. La agenda y los servicios siguen aquí.</p>
+        </header>
+        <p>
+          <a class="btn" href="/agendar">
+            Agendar cita
+            <svg viewBox="0 0 24 24" fill="none" aria-hidden="true"><path d="M5 12h14M13 6l6 6-6 6" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"/></svg>
+          </a>
+          <a class="btn btn--ghost" href="/">Volver al inicio</a>
+        </p>
+      </div>
+    </section>
+  </main>
+
+  <footer class="site-footer">
+    <div class="container">
+      <div class="footer__grid">
+        <div class="footer__brand">
+          <a class="brand" href="/" aria-label="Jaazi Barber, inicio">
+            <span class="brand__mark" aria-hidden="true">J</span>
+            <span class="brand__text">Jaazi<span class="brand__sub">Barber</span></span>
+          </a>
+          <p class="footer__tagline">Barbería de una sola silla en Chía, Cundinamarca. Corte, barba y color, con cita previa.</p>
+        </div>
+        <div>
+          <h3>Navegación</h3>
+          <ul class="footer__list">
+            <li><a href="/#servicios">Servicios</a></li>
+            <li><a href="/#estudio">El estudio</a></li>
+            <li><a href="/#trabajo">Trabajo</a></li>
+            <li><a href="/agendar">Agendar cita</a></li>
+            <li><a href="/revisar">Revisar cita</a></li>
+            <li><a href="/privacidad">Privacidad</a></li>
+          </ul>
+        </div>
+        <div>
+          <h3>Visita</h3>
+          <ul class="footer__list">
+            <li>Calle 4 # 1-39<br>Conjunto Serralta, torre 12<br>Apartamento 205<br>Chía, Cundinamarca</li>
+            <li>Todos los días<br>9:00 am – 7:00 pm</li>
+          </ul>
+        </div>
+        <div>
+          <h3>Contacto</h3>
+          <ul class="footer__list">
+            <li><a href="tel:+573135381239">+57 313 538 1239</a></li>
+            <li><a href="mailto:Jaazielbarber09@gmail.com">Jaazielbarber09@gmail.com</a></li>
+            <li><a href="https://www.instagram.com/jaazii.barber" target="_blank" rel="noopener">Instagram @jaazii.barber</a></li>
+            <li><a href="https://wa.me/573135381239" target="_blank" rel="noopener">WhatsApp</a></li>
+          </ul>
+        </div>
+      </div>
+      <div class="footer__bottom">
+        <p>© <span data-year>2026</span> Jaazi Barber · Precios en COP.</p>
+        <p>Todos los días · 9:00 am – 7:00 pm · Chía, Cundinamarca</p>
+      </div>
+    </div>
+  </footer>
+</body>
+</html>

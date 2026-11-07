@@ -22,7 +22,7 @@ Validado con `validator.w3.org/nu` por POST del HTML fuente:
 - `index.html`, `agendar.html`, `revisar.html`, `privacidad.html`: 0 errores.
 - `panel.html` y `panel-demo.html`: 0 errores.
 
-El HTML **servido por Netlify** añade 2 errores (`Stray start tag "script"` y `Cannot recover after last error`) porque el plan Free inyecta `/.netlify/scripts/hud` después de `</html>`. No viene del repositorio; la copia de GitHub Pages valida con 0 errores. Está documentado en [`operacion.md`](operacion.md).
+El HTML **servido por Cloudflare Pages** no añade scripts ni errores: el repositorio y el sitio publicado validan con 0 errores. La limitación del badge de Netlify quedó atrás con la migración.
 
 ## Accesibilidad
 
@@ -94,14 +94,14 @@ Medición de la portada a 390×844, DPR 2, con red del entorno de pruebas:
 - `create_booking` y `reschedule_booking` validan la ventana de reserva, la zona `America/Bogota`, los bloqueos y los solapamientos en una transacción.
 - La `anon key` es pública por diseño; la `service_role` no aparece en el cliente ni en el repositorio.
 - La API key de Resend vive en Vault y solo la lee una función `SECURITY DEFINER`; nunca llega al navegador.
-- No hay credenciales en el código. El token de Netlify vive en los secretos de GitHub Actions.
+- No hay credenciales en el código. El despliegue usa la integración de Cloudflare Pages con GitHub, sin tokens en el repositorio.
 
 ## Cobertura y límites
 
 - **Navegador:** Chromium (Playwright). Falta probar Safari/iOS y Firefox en dispositivos reales.
 - **Lectores de pantalla:** no se hicieron pruebas con NVDA, VoiceOver ni TalkBack.
 - **Rendimiento:** sin Lighthouse/PSI ni datos de campo; la cifra de LCP es orientativa.
-- **Netlify:** el badge y el script inyectado son una limitación del plan Free.
+- **Cloudflare Pages:** sin badge ni scripts inyectados; el plan Free permite uso comercial.
 - **Google Business Profile:** no hay perfil verificable enlazado todavía.
 - **Correo:** trigger probado con una cita temporal; Resend entregó “Nueva cita” y “Cita reprogramada”, y la fila de prueba se eliminó después.
 

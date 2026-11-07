@@ -2,7 +2,7 @@
 
 Sitio de reservas y agenda para una barbería de una sola silla en **Chía, Colombia**. La web permite reservar, cambiar o cancelar una cita sin llamar; el panel privado le da al barbero una vista única de su día, sus bloqueos y sus ingresos estimados.
 
-[**Ver el sitio**](https://jaazibarber.netlify.app/) · [**Probar la demo del panel**](https://jaazibarber.netlify.app/panel-demo.html) · [**Evidencia de QA**](docs/qa.md) · [**Operación**](docs/operacion.md)
+[**Ver el sitio**](https://jaazi-barber.pages.dev/) · [**Probar la demo del panel**](https://jaazi-barber.pages.dev/panel-demo.html) · [**Evidencia de QA**](docs/qa.md) · [**Operación**](docs/operacion.md)
 
 ![Vista de escritorio del sitio Jaazi Barber](docs/preview-desktop.jpg)
 
@@ -124,7 +124,7 @@ Los números, el método y los pendientes están en [`docs/qa.md`](docs/qa.md).
 
 ## Demo del panel
 
-[**Abrir la demo**](https://jaazibarber.netlify.app/panel-demo.html)
+[**Abrir la demo**](https://jaazi-barber.pages.dev/panel-demo.html)
 
 ![Vista del panel de agenda con datos ficticios](docs/preview-panel.jpg)
 
@@ -137,8 +137,8 @@ Es una copia del panel con datos ficticios y acciones en memoria: puedes complet
 | Frontend | HTML5 semántico, CSS con custom properties y Grid, JavaScript vanilla |
 | Backend | Supabase: Postgres, RLS, funciones RPC y Auth |
 | Correo | Resend + `pg_net` + Vault, disparado por trigger en `bookings` |
-| Hosting | Netlify (principal) y GitHub Pages (respaldo) |
-| CI | GitHub Actions: empaqueta y publica en cada push a `main` |
+| Hosting | Cloudflare Pages (principal) y GitHub Pages (respaldo) |
+| CI | Cloudflare Pages: build y despliegue automático en cada push a `main` |
 | QA | W3C Nu, axe-core, Playwright, pruebas manuales de teclado |
 | Tipografía | Fraunces e Inter, autoalojadas en `woff2` |
 

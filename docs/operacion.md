@@ -75,17 +75,21 @@ Si falta `resend_api_key`, la cita se guarda igual y Postgres emite un warning; 
 
 ## Despliegue
 
-Cada `git push` a `main` dispara `.github/workflows/deploy.yml`, que empaqueta los archivos públicos y los sube a Netlify por la API. GitHub Pages sirve la misma copia desde `main` como respaldo.
+El sitio se publica en **Cloudflare Pages** con integración directa al repositorio de GitHub: cada push a `main` construye y publica automáticamente. No hay tokens ni secretos de despliegue en GitHub.
 
-- Secretos del repo: `NETLIFY_AUTH_TOKEN` y `NETLIFY_SITE_ID`. Se rotan desde *User settings → Applications → Personal access tokens*.
-- El flujo de Netlify copia `*.html`, `robots.txt`, `llms.txt`, `sitemap.xml`, `.nojekyll` y `assets/`. La carpeta `docs/` no se publica en el sitio.
-- **Badge de Netlify:** el plan Free inyecta `/.netlify/scripts/hud` después de `</html>` y un badge fijo. No se puede desactivar sin plan de pago; se acepta. El HTML del repositorio es válido y GitHub Pages no inyecta nada.
+- **Proyecto:** `jaazi-barber` → `https://jaazi-barber.pages.dev/`.
+- **Build command:** `bash build.sh`.
+- **Build output directory:** `dist`.
+- `build.sh` copia solo los archivos públicos (`*.html`, `robots.txt`, `llms.txt`, `sitemap.xml`, `_headers`, `.nojekyll` y `assets/`). `docs/`, `supabase/` y el resto del repositorio no se publican.
+- **Caché:** Cloudflare sirve los estáticos con `ETag` y revalidación; no se define caché personalizada para evitar versiones viejas tras un deploy. Si hiciera falta, se purga desde *Caching → Configuration → Purge Everything*.
+- **Dominio y HTTPS:** se configuran en *Custom domains*. Para un dominio propio, añadir el registro DNS que indique el panel y activar *Always Use HTTPS*.
+- **Badge:** Cloudflare Pages no inyecta publicidad ni scripts; el HTML servido es el del repositorio.
 
 ## Entrega al cliente
 
-- **Sitio:** `https://jaazibarber.netlify.app/`
-- **Panel:** `https://jaazibarber.netlify.app/panel.html` (no enlazado desde la web pública, `noindex` y excluido en `robots.txt`).
-- **Demo del panel:** `https://jaazibarber.netlify.app/panel-demo.html` (datos ficticios, sin Supabase).
+- **Sitio:** `https://jaazi-barber.pages.dev/`
+- **Panel:** `https://jaazi-barber.pages.dev/panel.html` (no enlazado desde la web pública, `noindex` y excluido en `robots.txt`).
+- **Demo del panel:** `https://jaazi-barber.pages.dev/panel-demo.html` (datos ficticios, sin Supabase).
 - **Cuentas:** el correo del administrador vive en la tabla `admins`; la contraseña se entrega aparte.
 - **Respaldo:** `https://georgemm28d.github.io/jaazi-barber/`
 
