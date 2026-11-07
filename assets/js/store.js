@@ -18,16 +18,16 @@ window.Jaazi = (function () {
       id: "corte-personalizado",
       name: "Corte personalizado",
       price: 27000,
-      duration: 45,
-      meta: "45 min · tijera y máquina",
+      duration: 30,
+      meta: "30 min · tijera y máquina",
       desc: "Tijera y máquina, adaptado a tu rostro y a tu rutina."
     },
     {
       id: "corte-barba",
       name: "Corte + barba",
       price: 35000,
-      duration: 60,
-      meta: "60 min · corte y barba",
+      duration: 30,
+      meta: "30 min · corte y barba",
       desc: "Corte completo más perfilado y arreglo de barba."
     },
     {
@@ -301,7 +301,7 @@ window.Jaazi = (function () {
       if (excludeCode && b.code === excludeCode) return false;
       if (b.date !== dateKey) return false;
       var s = minutesOf(b.time);
-      return start < s + (b.duration || 45) && s < end;
+      return start < s + (b.duration || 30) && s < end;
     });
   }
 
@@ -357,7 +357,7 @@ window.Jaazi = (function () {
   function isPast(booking) {
     var d = parseKey(booking.date);
     var start = new Date(d.getFullYear(), d.getMonth(), d.getDate(), Math.floor(minutesOf(booking.time) / 60), minutesOf(booking.time) % 60);
-    return start.getTime() + (booking.duration || 45) * 60000 < shopNow().getTime();
+    return start.getTime() + (booking.duration || 30) * 60000 < shopNow().getTime();
   }
 
   /* ---------- Calendario (.ics) ---------- */
@@ -365,7 +365,7 @@ window.Jaazi = (function () {
   function icsDate(dateKey, time, duration) {
     var d = parseKey(dateKey);
     var start = minutesOf(time);
-    var end = start + (duration || 45);
+    var end = start + (duration || 30);
     function stamp(mins) {
       var dayOffset = Math.floor(mins / 1440);
       var m = mins % 1440;

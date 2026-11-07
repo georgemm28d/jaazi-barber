@@ -4,7 +4,7 @@
 
 ## Páginas
 
-- [Servicios](https://jaazibarber.netlify.app/#servicios): corte personalizado $ 27.000 (45 min), corte + barba $ 35.000 (60 min), barba $ 15.000 (30 min), colores fantasía $ 120.000 (2 h), mechas platinadas $ 250.000 (4 h, incluye corte), platinado global $ 250.000 (4 h, incluye corte), en COP
+- [Servicios](https://jaazibarber.netlify.app/#servicios): corte personalizado $ 27.000 (30 min), corte + barba $ 35.000 (30 min), barba $ 15.000 (30 min), colores fantasía $ 120.000 (2 h), mechas platinadas $ 250.000 (4 h, incluye corte), platinado global $ 250.000 (4 h, incluye corte), en COP
 - [Trabajo reciente](https://jaazibarber.netlify.app/#trabajo): fotos reales del trabajo en el estudio
 - [Preguntas frecuentes](https://jaazibarber.netlify.app/#preguntas): duración, cambio de fecha y hora, cancelación en cualquier momento, pago, atención con cita y ubicación
 - [Agendar cita](https://jaazibarber.netlify.app/agendar): reserva en línea en 3 pasos, confirmación con código JZ-XXXXXX

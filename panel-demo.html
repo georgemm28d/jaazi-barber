@@ -187,7 +187,7 @@
       }
       function endTime(time, duration) {
         var p = time.split(":").map(Number);
-        var total = p[0] * 60 + p[1] + (Number(duration) || 45);
+        var total = p[0] * 60 + p[1] + (Number(duration) || 30);
         return pad(Math.floor(total / 60)) + ":" + pad(total % 60);
       }
       function esc(v) {
@@ -199,12 +199,12 @@
       var state = {
         filter: "upcoming",
         bookings: [
-          { id: "d1", code: "JZ-DEMO01", serviceName: "Corte personalizado", price: 27000, duration: 45, date: today, time: "10:00", name: "Camila R.", phone: "300 000 0001", status: "confirmed" },
-          { id: "d2", code: "JZ-DEMO02", serviceName: "Corte + barba", price: 35000, duration: 60, date: today, time: "15:30", name: "Andrés M.", phone: "300 000 0002", status: "confirmed" },
+          { id: "d1", code: "JZ-DEMO01", serviceName: "Corte personalizado", price: 27000, duration: 30, date: today, time: "10:00", name: "Camila R.", phone: "300 000 0001", status: "confirmed" },
+          { id: "d2", code: "JZ-DEMO02", serviceName: "Corte + barba", price: 35000, duration: 30, date: today, time: "15:30", name: "Andrés M.", phone: "300 000 0002", status: "confirmed" },
           { id: "d3", code: "JZ-DEMO03", serviceName: "Barba", price: 15000, duration: 30, date: keyOf(addDays(new Date(), 1)), time: "09:00", name: "Felipe G.", phone: "300 000 0003", status: "confirmed" },
           { id: "d4", code: "JZ-DEMO04", serviceName: "Colores fantasía", price: 120000, duration: 120, date: keyOf(addDays(new Date(), 1)), time: "11:00", name: "Valentina P.", phone: "300 000 0004", status: "confirmed" },
-          { id: "d5", code: "JZ-DEMO05", serviceName: "Corte personalizado", price: 27000, duration: 45, date: keyOf(addDays(new Date(), 3)), time: "14:00", name: "Sofía L.", phone: "300 000 0005", status: "confirmed" },
-          { id: "d6", code: "JZ-DEMO06", serviceName: "Corte + barba", price: 35000, duration: 60, date: keyOf(addDays(new Date(), -1)), time: "16:00", name: "Daniel R.", phone: "300 000 0006", status: "completed" },
+          { id: "d5", code: "JZ-DEMO05", serviceName: "Corte personalizado", price: 27000, duration: 30, date: keyOf(addDays(new Date(), 3)), time: "14:00", name: "Sofía L.", phone: "300 000 0005", status: "confirmed" },
+          { id: "d6", code: "JZ-DEMO06", serviceName: "Corte + barba", price: 35000, duration: 30, date: keyOf(addDays(new Date(), -1)), time: "16:00", name: "Daniel R.", phone: "300 000 0006", status: "completed" },
           { id: "d7", code: "JZ-DEMO07", serviceName: "Barba", price: 15000, duration: 30, date: keyOf(addDays(new Date(), -2)), time: "12:00", name: "Laura C.", phone: "300 000 0007", status: "cancelled" }
         ],
         blocks: [

@@ -88,7 +88,7 @@
 
   function endTime(time, duration) {
     var parts = String(time).split(":").map(Number);
-    var total = parts[0] * 60 + parts[1] + (Number(duration) || 45);
+    var total = parts[0] * 60 + parts[1] + (Number(duration) || 30);
     return String(Math.floor(total / 60)).padStart(2, "0") + ":" + String(total % 60).padStart(2, "0");
   }
 

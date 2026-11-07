@@ -19,8 +19,8 @@ create table if not exists public.services (
 );
 
 insert into public.services (id, name, price, duration, meta, description, sort) values
-  ('corte-personalizado', 'Corte personalizado', 27000,  45, '45 min · tijera y máquina', 'Tijera y máquina, adaptado a tu rostro y a tu rutina.', 1),
-  ('corte-barba',         'Corte + barba',        35000,  60, '60 min · corte y barba',     'Corte completo más perfilado y arreglo de barba.', 2),
+  ('corte-personalizado', 'Corte personalizado', 27000,  30, '30 min · tijera y máquina', 'Tijera y máquina, adaptado a tu rostro y a tu rutina.', 1),
+  ('corte-barba',         'Corte + barba',        35000,  30, '30 min · corte y barba',     'Corte completo más perfilado y arreglo de barba.', 2),
   ('barba',               'Barba',                15000,  30, '30 min · perfilado y acabado','Perfilado, arreglo y acabado de barba.', 3),
   ('colores-fantasia',    'Colores fantasía',    120000, 120, '2 h · color a elección',      'Color a elección con preparación y acabado.', 4),
   ('mechas-platinadas',   'Mechas platinadas',   250000, 240, '4 h · incluye corte',         'Platinado por mechas, incluye corte.', 5),

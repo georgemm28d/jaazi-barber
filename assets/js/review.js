@@ -409,7 +409,7 @@
     var ranges = map[booking.date];
     if (!ranges || !ranges.length) return map;
     var start = minutesOf(booking.time);
-    var end = start + (Number(booking.duration) || 45);
+    var end = start + (Number(booking.duration) || 30);
     map[booking.date] = ranges.filter(function (range) {
       return !(range[0] === start && range[1] === end);
     });
