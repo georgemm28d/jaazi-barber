@@ -1,6 +1,6 @@
 # Jaazi Barber
 
-> Barbería de una sola silla en Chía, Cundinamarca, Colombia. Corte, barba y color con cita previa. Todos los días 9:00–19:00. Calle 4 # 1-39, conjunto Serralta, torre 12, apartamento 205, Chía. Sitio: https://jaazi-barber.pages.dev/
+> Barbería de una sola silla en Chía, Cundinamarca, Colombia. Corte, barba y color con cita previa. Lunes a sábado 9:00–19:00; domingos 12:00–17:00. Calle 4 # 1-39, conjunto Serralta, torre 12, apartamento 205, Chía. Sitio: https://jaazi-barber.pages.dev/
 
 ## Páginas
 
@@ -16,7 +16,7 @@
 
 - Nombre: Jaazi Barber
 - Dirección: Calle 4 # 1-39, conjunto Serralta, torre 12, apartamento 205, Chía, Cundinamarca, Colombia
-- Horario: todos los días, 9:00–19:00
+- Horario: lunes a sábado, 9:00–19:00; domingos, 12:00–17:00
 - Teléfono / WhatsApp: +57 313 538 1239
 - Email: Jaazielbarber09@gmail.com
 - Instagram: https://www.instagram.com/jaazii.barber

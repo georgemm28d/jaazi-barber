@@ -8,8 +8,10 @@ window.Jaazi = (function () {
 
   var KEY = "jaazi.bookings.v2";
   var SHOP_TZ = "America/Bogota";
-  var OPEN = 9 * 60;         // 9:00
-  var CLOSE = 19 * 60;       // 19:00
+  var OPEN = 9 * 60;          // lunes a sábado, 9:00
+  var CLOSE = 19 * 60;        // último inicio entre semana, 19:00
+  var SUNDAY_OPEN = 12 * 60;  // domingo, 12:00
+  var SUNDAY_CLOSE = 17 * 60; // último inicio del domingo, 17:00
   var STEP = 30;             // cada 30 min
   var LEAD = 120;            // 2 h de antelación para hoy
 
@@ -170,6 +172,21 @@ window.Jaazi = (function () {
     return false; // abre todos los días
   }
 
+  // La jornada del domingo es más corta: 12:00 a 17:00.
+  // El cierre es el último inicio permitido, no el fin del servicio.
+  function scheduleFor(dateKey) {
+    var sunday = parseKey(dateKey).getDay() === 0;
+    return {
+      open: sunday ? SUNDAY_OPEN : OPEN,
+      close: sunday ? SUNDAY_CLOSE : CLOSE
+    };
+  }
+
+  function scheduleLabel(dateKey) {
+    var bounds = scheduleFor(dateKey);
+    return timeLabel(timeOf(bounds.open)) + " – " + timeLabel(timeOf(bounds.close));
+  }
+
   function getService(id) {
     for (var i = 0; i < SERVICES.length; i++) {
       if (SERVICES[i].id === id) return SERVICES[i];
@@ -319,10 +336,11 @@ window.Jaazi = (function () {
     var now = shopNow();
     var isToday = dateKey === todayKey();
     var nowMinutes = now.getHours() * 60 + now.getMinutes();
+    var bounds = scheduleFor(dateKey);
     var result = [];
-    // CLOSE es el último inicio permitido, no el fin de la jornada:
-    // una cita puede terminar después de las 19:00.
-    for (var start = OPEN; start <= CLOSE; start += STEP) {
+    // El cierre es el último inicio permitido, no el fin de la jornada:
+    // una cita puede terminar después de la hora de cierre.
+    for (var start = bounds.open; start <= bounds.close; start += STEP) {
       if (isToday && start < nowMinutes + LEAD) continue;
       var time = timeOf(start);
       var available = busy
@@ -417,6 +435,8 @@ window.Jaazi = (function () {
     SERVICES: SERVICES,
     OPEN: OPEN,
     CLOSE: CLOSE,
+    SUNDAY_OPEN: SUNDAY_OPEN,
+    SUNDAY_CLOSE: SUNDAY_CLOSE,
     keyOf: keyOf,
     parseKey: parseKey,
     addDays: addDays,
@@ -431,6 +451,8 @@ window.Jaazi = (function () {
     dayNumber: function (key) { return parseKey(key).getDate(); },
     monthShort: function (key) { return MONTHS_SHORT[parseKey(key).getMonth()]; },
     isClosed: isClosed,
+    scheduleFor: scheduleFor,
+    scheduleLabel: scheduleLabel,
     getService: getService,
     read: read,
     addBooking: addBooking,

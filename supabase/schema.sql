@@ -140,6 +140,26 @@ begin
 end;
 $$;
 
+-- ---------- Jornada ----------
+-- El cierre es el último inicio permitido, no el fin del servicio.
+-- Domingo: 12:00-17:00. Resto de días: 9:00-19:00.
+
+create or replace function public.shop_open_minutes(p_date date)
+returns integer
+language sql
+immutable
+as $$
+  select case when extract(dow from p_date)::int = 0 then 720 else 540 end;
+$$;
+
+create or replace function public.shop_close_minutes(p_date date)
+returns integer
+language sql
+immutable
+as $$
+  select case when extract(dow from p_date)::int = 0 then 1020 else 1140 end;
+$$;
+
 -- ---------- Crear cita ----------
 
 create or replace function public.create_booking(
@@ -193,9 +213,9 @@ begin
   if v_start % 30 <> 0 then
     raise exception 'invalid_slot';
   end if;
-  -- 19:00 es el último inicio permitido, no el fin de la jornada:
-  -- una cita puede terminar después de las 19:00.
-  if v_start < 540 or v_start > 1140 then
+  -- La hora de cierre es el último inicio permitido, no el fin del servicio.
+  if v_start < public.shop_open_minutes(p_date)
+     or v_start > public.shop_close_minutes(p_date) then
     raise exception 'outside_hours';
   end if;
 
@@ -374,9 +394,9 @@ begin
   if v_start % 30 <> 0 then
     raise exception 'invalid_slot';
   end if;
-  -- 19:00 es el último inicio permitido, no el fin de la jornada:
-  -- una cita puede terminar después de las 19:00.
-  if v_start < 540 or v_start > 1140 then
+  -- La hora de cierre es el último inicio permitido, no el fin del servicio.
+  if v_start < public.shop_open_minutes(p_date)
+     or v_start > public.shop_close_minutes(p_date) then
     raise exception 'outside_hours';
   end if;
 

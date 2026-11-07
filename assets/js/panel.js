@@ -494,9 +494,10 @@
   });
 
   document.querySelector("[data-block-day]").addEventListener("click", function () {
-    blockStart.value = "09:00";
-    blockEnd.value = "19:00";
     if (!blockDate.value) blockDate.value = Jaazi.todayKey();
+    var bounds = Jaazi.scheduleFor(blockDate.value);
+    blockStart.value = String(Math.floor(bounds.open / 60)).padStart(2, "0") + ":" + String(bounds.open % 60).padStart(2, "0");
+    blockEnd.value = String(Math.floor(bounds.close / 60)).padStart(2, "0") + ":" + String(bounds.close % 60).padStart(2, "0");
     blockStart.focus();
   });
 
@@ -637,7 +638,7 @@
 
   function init() {
     var today = Jaazi.todayKey();
-    todayLabel.textContent = cap(Jaazi.formatLong(today)) + " · 9:00 am – 7:00 pm";
+    todayLabel.textContent = cap(Jaazi.formatLong(today)) + " · " + Jaazi.scheduleLabel(today);
 
     if (!api) {
       showLogin();

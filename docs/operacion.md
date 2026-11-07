@@ -68,7 +68,7 @@ Si falta `resend_api_key`, la cita se guarda igual y Postgres emite un warning; 
 ## Reglas de negocio
 
 - Toda la agenda trabaja en **hora de Colombia** (`America/Bogota`), no en UTC ni en la hora del visitante.
-- Reservas de 9:00 a 19:00; las 19:00 son el **último inicio** permitido, no el fin de la jornada. Un servicio puede terminar después.
+- Reservas de lunes a sábado de 9:00 a 19:00, y domingos de 12:00 a 17:00. La hora de cierre es el **último inicio** permitido, no el fin de la jornada: un servicio puede terminar después.
 - Sin solapamientos entre citas activas (`confirmed`) ni con bloqueos.
 - Estados: `confirmed`, `completed`, `cancelled`. Las reservas nuevas entran como `confirmed`.
 - Cancelación en cualquier momento y sin costo; cambio de fecha y hora mientras la cita no haya empezado, sujeto a disponibilidad.
