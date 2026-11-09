@@ -187,6 +187,13 @@ window.Jaazi = (function () {
     return timeLabel(timeOf(bounds.open)) + " – " + timeLabel(timeOf(bounds.close));
   }
 
+  // Fin real de la jornada para bloquear el día completo: la última cita
+  // puede empezar a la hora de cierre, así que el bloqueo debe pasar un
+  // paso más allá. Si no, un bloqueo 9:00-19:00 deja libre el inicio 19:00.
+  function dayEndFor(dateKey) {
+    return scheduleFor(dateKey).close + STEP;
+  }
+
   function getService(id) {
     for (var i = 0; i < SERVICES.length; i++) {
       if (SERVICES[i].id === id) return SERVICES[i];
@@ -453,6 +460,7 @@ window.Jaazi = (function () {
     isClosed: isClosed,
     scheduleFor: scheduleFor,
     scheduleLabel: scheduleLabel,
+    dayEndFor: dayEndFor,
     getService: getService,
     read: read,
     addBooking: addBooking,

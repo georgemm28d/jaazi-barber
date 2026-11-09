@@ -107,7 +107,7 @@
             <div class="panel-card__head">
               <h2>Bloquear horas</h2>
             </div>
-            <p class="panel-hint">Almuerzo, diligencias o días completos. Un bloqueo oculta esos horarios en la web.</p>
+            <p class="panel-hint">Almuerzo, diligencias o días completos. «Rellenar el día completo» bloquea también la última hora de inicio.</p>
 
             <form id="block-form" class="block-form" novalidate>
               <div class="field">
@@ -134,7 +134,7 @@
                   Bloquear
                   <svg viewBox="0 0 24 24" fill="none" aria-hidden="true"><rect x="5" y="10" width="14" height="10" rx="2" stroke="currentColor" stroke-width="1.6"/><path d="M8 10V7a4 4 0 0 1 8 0v3" stroke="currentColor" stroke-width="1.6" stroke-linecap="round"/></svg>
                 </button>
-                <button class="link-btn" type="button" data-block-day>Rellenar el día</button>
+                <button class="link-btn" type="button" data-block-day>Rellenar el día completo</button>
               </div>
             </form>
 
@@ -174,6 +174,11 @@
       function scheduleFor(k) {
         var sunday = fromKey(k).getDay() === 0;
         return { open: sunday ? SUNDAY_OPEN : OPEN, close: sunday ? SUNDAY_CLOSE : CLOSE };
+      }
+      // La última cita puede empezar a la hora de cierre: el bloqueo de día
+      // completo debe pasar un paso más allá para no dejar libre ese inicio.
+      function dayEndFor(k) {
+        return scheduleFor(k).close + 30;
       }
       function scheduleLabel(k) {
         var b = scheduleFor(k);
@@ -369,10 +374,26 @@
         }
         return html;
       }
-      blockStart.innerHTML = selectOptions(OPEN, CLOSE - 30, 30, "12:00");
-      blockEnd.innerHTML = selectOptions(OPEN + 30, CLOSE, 30, "13:00");
+      function blockTimeValue(m) { return pad(Math.floor(m / 60)) + ":" + pad(m % 60); }
+
+      function rebuildBlockOptions() {
+        var k = blockDate.value || today;
+        var b = scheduleFor(k);
+        var last = dayEndFor(k);
+        var s = blockStart.value;
+        var e = blockEnd.value;
+        blockStart.innerHTML = selectOptions(b.open, b.close, 30, s);
+        blockEnd.innerHTML = selectOptions(b.open + 30, last, 30, e);
+        if (!blockStart.value || blockStart.value < blockTimeValue(b.open)) blockStart.value = blockTimeValue(b.open);
+        if (!blockEnd.value || blockEnd.value <= blockStart.value) blockEnd.value = blockTimeValue(b.open + 30);
+      }
+
       blockDate.min = today;
       blockDate.value = keyOf(addDays(new Date(), 2));
+      rebuildBlockOptions();
+      blockStart.value = "12:00";
+      blockEnd.value = "13:00";
+      blockDate.addEventListener("change", rebuildBlockOptions);
 
       function overlapsBooking(date, start, end) {
         return state.bookings.some(function (b) {
@@ -402,9 +423,11 @@
       });
 
       document.querySelector("[data-block-day]").addEventListener("click", function () {
-        var bounds = scheduleFor(blockDate.value || today);
-        blockStart.value = pad(Math.floor(bounds.open / 60)) + ":" + pad(bounds.open % 60);
-        blockEnd.value = pad(Math.floor(bounds.close / 60)) + ":" + pad(bounds.close % 60);
+        var k = blockDate.value || today;
+        rebuildBlockOptions();
+        var bounds = scheduleFor(k);
+        blockStart.value = blockTimeValue(bounds.open);
+        blockEnd.value = blockTimeValue(dayEndFor(k));
         blockStart.focus();
       });
 

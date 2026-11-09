@@ -421,10 +421,36 @@
     return html;
   }
 
-  blockStart.innerHTML = options(Jaazi.OPEN, Jaazi.CLOSE - 30, 30, "12:00");
-  blockEnd.innerHTML = options(Jaazi.OPEN + 30, Jaazi.CLOSE, 30, "13:00");
+  function blockTimeValue(minutes) {
+    return String(Math.floor(minutes / 60)).padStart(2, "0") + ":" + String(minutes % 60).padStart(2, "0");
+  }
+
+  // Los horarios del formulario dependen del día: el domingo abre 12:00-17:00
+  // y el cierre es el último inicio, así que el fin puede llegar a 17:30/19:30.
+  function rebuildBlockOptions() {
+    var date = blockDate.value || Jaazi.todayKey();
+    var bounds = Jaazi.scheduleFor(date);
+    var last = Jaazi.dayEndFor(date);
+    var start = blockStart.value;
+    var end = blockEnd.value;
+
+    blockStart.innerHTML = options(bounds.open, bounds.close, 30, start);
+    blockEnd.innerHTML = options(bounds.open + 30, last, 30, end);
+
+    if (!blockStart.value || blockStart.value < blockTimeValue(bounds.open)) {
+      blockStart.value = blockTimeValue(bounds.open);
+    }
+    if (!blockEnd.value || blockEnd.value <= blockStart.value) {
+      blockEnd.value = blockTimeValue(bounds.open + 30);
+    }
+  }
+
   blockDate.min = Jaazi.todayKey();
   blockDate.value = Jaazi.todayKey();
+  rebuildBlockOptions();
+  blockStart.value = "12:00";
+  blockEnd.value = "13:00";
+  blockDate.addEventListener("change", rebuildBlockOptions);
 
   function overlapsBooking(date, start, end) {
     return state.bookings.some(function (b) {
@@ -495,9 +521,10 @@
 
   document.querySelector("[data-block-day]").addEventListener("click", function () {
     if (!blockDate.value) blockDate.value = Jaazi.todayKey();
+    rebuildBlockOptions();
     var bounds = Jaazi.scheduleFor(blockDate.value);
-    blockStart.value = String(Math.floor(bounds.open / 60)).padStart(2, "0") + ":" + String(bounds.open % 60).padStart(2, "0");
-    blockEnd.value = String(Math.floor(bounds.close / 60)).padStart(2, "0") + ":" + String(bounds.close % 60).padStart(2, "0");
+    blockStart.value = blockTimeValue(bounds.open);
+    blockEnd.value = blockTimeValue(Jaazi.dayEndFor(blockDate.value));
     blockStart.focus();
   });
 
