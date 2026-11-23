@@ -20,7 +20,7 @@
   var state = { code: "", phone: "", results: [], searched: false, loading: false };
   var editor = null;
   var reduceMotion = window.matchMedia("(prefers-reduced-motion: reduce)");
-  var mapsUrl = "https://www.google.com/maps/search/?api=1&query=Calle+4+%231-39+Conjunto+Serralta+Chia+Cundinamarca+Colombia";
+  var mapsUrl = "https://www.google.com/maps/search/?api=1&query=Calle+12+%239-21+Parque+Principal+Centro+Comercial+Casa+Vieja+Barberia+Monarch+Chia+Cundinamarca+Colombia";
 
   function esc(value) {
     return String(value == null ? "" : value)
