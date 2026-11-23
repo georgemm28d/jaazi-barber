@@ -1,33 +1,15 @@
 /* ==========================================================================
    Jaazi Barber — Temporary location change notice modal
-   Shows once per device (localStorage). Remove script tag & file when no
+   Shows on every visit to the home page. Remove script tag & file when no
    longer needed.
    ========================================================================== */
 
 (function () {
   "use strict";
 
-  var STORAGE_KEY = "jaazi.locationNotice.dismissed.v1";
-  var MAPS_URL =
-    "https://www.google.com/maps/search/?api=1&query=Calle+12+%239-21+Parque+Principal+Centro+Comercial+Casa+Vieja+Barberia+Monarch+Chia+Cundinamarca+Colombia";
+  var MAPS_URL = "https://maps.app.goo.gl/Vfn6iVXtHDe8CDcv8?g_st=iwb";
   var EXIT_DURATION_MS = 190;
   var SVG_NS = "http://www.w3.org/2000/svg";
-
-  function isDismissed() {
-    try {
-      return window.localStorage.getItem(STORAGE_KEY) === "1";
-    } catch (_) {
-      return false;
-    }
-  }
-
-  function markDismissed() {
-    try {
-      window.localStorage.setItem(STORAGE_KEY, "1");
-    } catch (_) {
-      /* Ignore storage quota or private-mode restrictions */
-    }
-  }
 
   function isPanelPage() {
     return (
@@ -165,7 +147,7 @@
   }
 
   function initLocationNotice() {
-    if (!document.body || isPanelPage() || isDismissed()) {
+    if (!document.body || isPanelPage()) {
       return;
     }
 
@@ -233,7 +215,6 @@
     function closeModal() {
       if (isClosing) return;
       isClosing = true;
-      markDismissed();
       modal.overlay.classList.remove("is-open");
 
       var reducedMotion =
