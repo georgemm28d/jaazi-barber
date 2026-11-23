@@ -405,7 +405,7 @@ window.Jaazi = (function () {
     var dates = icsDate(booking.date, booking.time, booking.duration);
     var summary = booking.serviceName + " — Jaazi Barber";
     var description = "Cita " + booking.code + " con Jaazi Barber. Cambios o cancelaciones: Jaazielbarber09@gmail.com";
-    var location = "Calle 4 # 1-39, Conjunto Serralta, Torre 12, Apto 205, Chía, Cundinamarca";
+    var location = "Calle 12 #9-21, Parque Principal de Chía, Centro Comercial Casa Vieja, Barbería Monarch, Chía, Cundinamarca";
     var lines = [
       "BEGIN:VCALENDAR",
       "VERSION:2.0",
