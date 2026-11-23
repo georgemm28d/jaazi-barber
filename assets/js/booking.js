@@ -634,7 +634,7 @@
       "<div><dt>Fecha</dt><dd>" + Jaazi.formatLong(booking.date) + "</dd></div>" +
       "<div><dt>Hora</dt><dd>" + Jaazi.timeLabel(booking.time) + " · " + Jaazi.durationLabel(booking.duration) + "</dd></div>" +
       "<div><dt>Servicio</dt><dd>" + booking.serviceName + "</dd></div>" +
-      "<div><dt>Estudio</dt><dd>Calle 4 # 1-39, Conjunto Serralta, Torre 12, Apto 205, Chía</dd></div>" +
+      "<div><dt>Estudio</dt><dd>Calle 12 #9-21, Parque Principal de Chía, Centro Comercial Casa Vieja, Barbería Monarch</dd></div>" +
       "<div><dt>Precio</dt><dd>" + (booking.priceLabel || "Consultar") + "</dd></div>";
 
     var heading = document.getElementById("confirm-title");
