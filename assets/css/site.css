@@ -1372,3 +1372,213 @@ html[data-theme="dark"] textarea:-webkit-autofill {
   .work img,
   .nav__link::after { transition: none; }
 }
+
+/* ==========================================================================
+   Location change modal (temporary announcement)
+   ========================================================================== */
+
+body.modal-open {
+  overflow: hidden;
+}
+
+.location-modal {
+  position: fixed;
+  inset: 0;
+  z-index: 150;
+  display: grid;
+  place-items: center;
+  padding: clamp(16px, 4vw, 32px);
+  background: rgba(23, 18, 16, 0.62);
+  backdrop-filter: blur(6px);
+  -webkit-backdrop-filter: blur(6px);
+  opacity: 0;
+  transition: opacity 180ms var(--ease);
+}
+
+.location-modal.is-open {
+  opacity: 1;
+  transition: opacity 240ms var(--ease);
+}
+
+.location-modal__dialog {
+  position: relative;
+  width: min(100%, 460px);
+  background: var(--paper);
+  color: var(--ink);
+  border: 1px solid var(--line);
+  border-radius: var(--r-lg);
+  box-shadow: 0 24px 60px rgba(23, 18, 16, 0.34);
+  overflow: hidden;
+  transform-origin: center;
+  opacity: 0;
+  transform: scale(0.95) translateY(6px);
+  transition: opacity 180ms var(--ease), transform 180ms var(--ease);
+}
+
+.location-modal__dialog:focus {
+  outline: none;
+}
+
+.location-modal.is-open .location-modal__dialog {
+  opacity: 1;
+  transform: scale(1) translateY(0);
+  transition: opacity 240ms var(--ease), transform 240ms var(--ease);
+}
+
+html[data-theme="dark"] .location-modal {
+  background: rgba(8, 6, 5, 0.74);
+}
+
+html[data-theme="dark"] .location-modal__dialog {
+  box-shadow: 0 24px 64px rgba(0, 0, 0, 0.68);
+}
+
+.location-modal__close {
+  position: absolute;
+  top: 12px;
+  right: 12px;
+  z-index: 2;
+  width: 44px;
+  height: 44px;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  padding: 0;
+  border: 1px solid var(--line);
+  border-radius: 999px;
+  background: var(--paper);
+  color: var(--ink);
+  cursor: pointer;
+  transition: transform 160ms var(--ease), background-color 160ms ease, border-color 160ms ease;
+}
+
+.location-modal__close:active {
+  transform: scale(0.97);
+}
+
+.location-modal__close:focus-visible {
+  outline: 2px solid var(--copper);
+  outline-offset: 2px;
+}
+
+.location-modal__body {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  text-align: center;
+  gap: 14px;
+  padding: 44px clamp(24px, 5vw, 36px) 32px;
+  color: inherit;
+  text-decoration: none;
+  cursor: pointer;
+  transition: transform 160ms var(--ease), background-color 160ms ease;
+}
+
+.location-modal__body:active {
+  transform: scale(0.985);
+}
+
+.location-modal__body:focus-visible {
+  outline: 2px solid var(--copper);
+  outline-offset: -4px;
+  border-radius: var(--r-lg);
+}
+
+.location-modal__eyebrow {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  font-family: var(--font-sans);
+  font-size: 0.75rem;
+  font-weight: 600;
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+  color: var(--copper-deep);
+}
+
+.location-modal__title {
+  margin: 0;
+  font-family: var(--font-display);
+  font-size: clamp(1.5rem, 4vw, 1.9rem);
+  font-weight: 500;
+  line-height: 1.12;
+  letter-spacing: -0.02em;
+  color: var(--ink);
+}
+
+.location-modal__address {
+  margin: 0;
+  font-family: var(--font-sans);
+  font-size: 0.98rem;
+  line-height: 1.55;
+  color: var(--muted);
+  max-width: 34ch;
+}
+
+.location-modal__address strong {
+  display: block;
+  color: var(--ink);
+  font-weight: 600;
+  margin-bottom: 2px;
+}
+
+.location-modal__cta {
+  margin-top: 6px;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+  padding: 12px 20px;
+  border-radius: var(--r-md);
+  background: var(--ink);
+  color: var(--bone);
+  font-family: var(--font-sans);
+  font-size: 0.9rem;
+  font-weight: 500;
+  letter-spacing: 0.01em;
+  transition: background-color 160ms ease, transform 160ms var(--ease);
+}
+
+.location-modal__hint {
+  margin: 0;
+  font-family: var(--font-sans);
+  font-size: 0.8rem;
+  color: var(--muted);
+}
+
+@media (hover: hover) and (pointer: fine) {
+  .location-modal__close:hover {
+    background: var(--tone);
+    border-color: var(--line-strong);
+  }
+
+  .location-modal__body:hover {
+    background: rgba(177, 120, 74, 0.05);
+  }
+
+  .location-modal__body:hover .location-modal__cta {
+    background: var(--copper-deep);
+  }
+
+  html[data-theme="dark"] .location-modal__body:hover .location-modal__cta {
+    background: var(--copper-light);
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .location-modal,
+  .location-modal.is-open,
+  .location-modal__dialog,
+  .location-modal.is-open .location-modal__dialog,
+  .location-modal__close,
+  .location-modal__body,
+  .location-modal__cta {
+    transition: opacity 180ms ease;
+    transform: none;
+  }
+
+  .location-modal__close:active,
+  .location-modal__body:active {
+    transform: none;
+  }
+}
