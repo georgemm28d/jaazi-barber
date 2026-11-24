@@ -219,6 +219,12 @@ begin
     raise exception 'outside_hours';
   end if;
 
+  -- Antelación mínima de 1 hora para citas del mismo día.
+  if p_date = v_today
+     and v_start < (extract(hour from v_now)::int * 60 + extract(minute from v_now)::int + 60) then
+    raise exception 'too_soon';
+  end if;
+
   perform pg_advisory_xact_lock(hashtext('jaazi:' || p_date::text));
 
   if exists (
@@ -417,6 +423,12 @@ begin
       'status', b.status,
       'created_at', b.created_at
     );
+  end if;
+
+  -- Antelación mínima de 1 hora para citas del mismo día.
+  if p_date = v_today
+     and v_start < (extract(hour from v_now)::int * 60 + extract(minute from v_now)::int + 60) then
+    raise exception 'too_soon';
   end if;
 
   perform pg_advisory_xact_lock(hashtext('jaazi:' || p_date::text));

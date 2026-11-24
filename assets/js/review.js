@@ -677,6 +677,12 @@
       return;
     }
 
+    if (Jaazi.isTooSoon(current.date, current.time)) {
+      showRescheduleError("Para hoy, elige una hora con al menos 1 hora de antelación.");
+      refreshRescheduleBusy();
+      return;
+    }
+
     if (save) {
       save.disabled = true;
       save.textContent = "Guardando…";
@@ -714,7 +720,7 @@
         save.textContent = "Guardar cambio";
       }
       showRescheduleError(api ? api.friendly(err) : "No pudimos cambiar la cita. Inténtalo de nuevo.");
-      if (err && (err.code === "slot_taken" || err.code === "invalid_slot")) {
+      if (err && (err.code === "slot_taken" || err.code === "invalid_slot" || err.code === "too_soon")) {
         current.time = null;
         updateRescheduleSave();
         refreshRescheduleBusy();

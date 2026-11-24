@@ -338,7 +338,14 @@ window.Jaazi = (function () {
     });
   }
 
-  function slotsFor(dateKey, duration, busy, excludeCode) {
+  function isTooSoon(dateKey, time) {
+    if (!dateKey || !time || dateKey !== todayKey()) return false;
+    var now = shopNow();
+    var nowMinutes = now.getHours() * 60 + now.getMinutes();
+    return minutesOf(time) < nowMinutes + LEAD;
+  }
+
+  function slotsFor(dateKey, duration, busy, excludeCode, ignoreLead) {
     if (!dateKey || isClosed(dateKey)) return [];
     var now = shopNow();
     var isToday = dateKey === todayKey();
@@ -348,7 +355,7 @@ window.Jaazi = (function () {
     // El cierre es el último inicio permitido, no el fin de la jornada:
     // una cita puede terminar después de la hora de cierre.
     for (var start = bounds.open; start <= bounds.close; start += STEP) {
-      if (isToday && start < nowMinutes + LEAD) continue;
+      if (!ignoreLead && isToday && start < nowMinutes + LEAD) continue;
       var time = timeOf(start);
       var available = busy
         ? !busyOverlaps(busy, dateKey, start, duration)
@@ -469,6 +476,7 @@ window.Jaazi = (function () {
     updateBooking: updateBooking,
     findBooking: findBooking,
     slotsFor: slotsFor,
+    isTooSoon: isTooSoon,
     isDayAvailable: isDayAvailable,
     nextAvailable: nextAvailable,
     isPast: isPast,

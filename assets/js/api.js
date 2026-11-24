@@ -99,6 +99,7 @@ window.JaaziApi = (function () {
     slot_taken: "Ese horario acaba de ocuparse. Elige otro, por favor.",
     outside_hours: "La hora de inicio debe estar entre 9:00 am y 7:00 pm (domingos, entre 12:00 pm y 5:00 pm). Elige otra.",
     invalid_slot: "Ese horario ya no está disponible. Elige otro.",
+    too_soon: "Para hoy, elige una hora con al menos 1 hora de antelación.",
     invalid_name: "Revisa tu nombre.",
     invalid_phone: "Revisa tu teléfono.",
     service_not_found: "Ese servicio ya no está disponible.",

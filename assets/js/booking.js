@@ -258,6 +258,12 @@
       var count = closed ? 0 : Jaazi.slotsFor(key, s.duration, state.busy).filter(function (slot) {
         return slot.available;
       }).length;
+      var leadOnly = false;
+      if (!closed && count === 0 && key === today) {
+        leadOnly = Jaazi.slotsFor(key, s.duration, state.busy, null, true).some(function (slot) {
+          return slot.available;
+        });
+      }
       var disabled = closed || count === 0;
 
       if (key === state.date) {
@@ -266,8 +272,8 @@
 
       var label = document.createElement("label");
       label.className = "date" + (key === today ? " date--today" : "");
-      var note = closed ? "Cerrado" : count === 0 ? "Lleno" : key === today ? "Hoy" : count + (count === 1 ? " hueco" : " huecos");
-      var fullLabel = Jaazi.formatLong(key) + (closed ? ", cerrado" : count === 0 ? ", sin disponibilidad" : ", " + count + " horarios disponibles");
+      var note = closed ? "Cerrado" : count === 0 ? (leadOnly ? "Sin margen" : "Lleno") : key === today ? "Hoy" : count + (count === 1 ? " hueco" : " huecos");
+      var fullLabel = Jaazi.formatLong(key) + (closed ? ", cerrado" : count === 0 ? (leadOnly ? ", sin horarios con la antelación mínima" : ", sin disponibilidad") : ", " + count + " horarios disponibles");
 
       label.innerHTML =
         '<input type="radio" name="date" value="' + key + '"' +
@@ -552,6 +558,15 @@
       return;
     }
 
+    if (Jaazi.isTooSoon(state.date, state.time)) {
+      state.time = null;
+      renderTimes();
+      updateSummary();
+      goTo(2);
+      if (window.UI) UI.toast("Para hoy, elige una hora con al menos 1 hora de antelación.");
+      return;
+    }
+
     state.submitting = true;
     submitBtn.disabled = true;
     var label = submitBtn.querySelector("[data-submit-label]");
@@ -583,7 +598,7 @@
         showConfirmation(booking);
       }, function (error) {
         resetSubmit();
-        var retry = error.code === "slot_taken" || error.code === "invalid_slot";
+        var retry = error.code === "slot_taken" || error.code === "invalid_slot" || error.code === "too_soon";
         var message = api.friendly(error);
         formError.textContent = message;
         formError.hidden = false;

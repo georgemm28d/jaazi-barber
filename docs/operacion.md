@@ -30,6 +30,7 @@ Si el proyecto se creó antes de las migraciones, ejecutar en orden desde el SQL
 3. `supabase/migrations/2026-11-02-reschedule.sql` — `reschedule_booking`.
 4. `supabase/migrations/2026-11-04-remove-pending.sql` — elimina el estado `pending` y deja solo `confirmed`, `completed` y `cancelled`.
 5. `supabase/migrations/2026-11-04-booking-email.sql` — trigger de avisos por correo (requiere Resend).
+6. `supabase/migrations/2026-11-24-lead-time-1h.sql` — antelación mínima de 1 hora para citas del mismo día.
 
 Un proyecto nuevo creado con `schema.sql` ya incluye el estado sin `pending`. La migración de correo se aplica aparte porque necesita la API key.
 
@@ -69,6 +70,7 @@ Si falta `resend_api_key`, la cita se guarda igual y Postgres emite un warning; 
 
 - Toda la agenda trabaja en **hora de Colombia** (`America/Bogota`), no en UTC ni en la hora del visitante.
 - Reservas de lunes a sábado de 9:00 a 19:00, y domingos de 12:00 a 17:00. La hora de cierre es el **último inicio** permitido, no el fin de la jornada: un servicio puede terminar después.
+- Para citas del **mismo día** se exige **1 hora de antelación**; se valida en el frontend y en `create_booking`/`reschedule_booking`.
 - Sin solapamientos entre citas activas (`confirmed`) ni con bloqueos.
 - Estados: `confirmed`, `completed`, `cancelled`. Las reservas nuevas entran como `confirmed`.
 - Cancelación en cualquier momento y sin costo; cambio de fecha y hora mientras la cita no haya empezado, sujeto a disponibilidad.
