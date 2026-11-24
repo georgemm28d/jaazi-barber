@@ -13,7 +13,7 @@ window.Jaazi = (function () {
   var SUNDAY_OPEN = 12 * 60;  // domingo, 12:00
   var SUNDAY_CLOSE = 17 * 60; // último inicio del domingo, 17:00
   var STEP = 30;             // cada 30 min
-  var LEAD = 120;            // 2 h de antelación para hoy
+  var LEAD = 60;             // 1 h de antelación para hoy
 
   var SERVICES = [
     {
