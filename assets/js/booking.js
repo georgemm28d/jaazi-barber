@@ -260,9 +260,7 @@
       }).length;
       var leadOnly = false;
       if (!closed && count === 0 && key === today) {
-        leadOnly = Jaazi.slotsFor(key, s.duration, state.busy, null, true).some(function (slot) {
-          return slot.available;
-        });
+        leadOnly = Jaazi.isLeadBlocked(key, s.duration, state.busy);
       }
       var disabled = closed || count === 0;
 

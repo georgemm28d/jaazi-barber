@@ -345,6 +345,18 @@ window.Jaazi = (function () {
     return minutesOf(time) < nowMinutes + LEAD;
   }
 
+  // Hay un hueco libre hoy, pero cae dentro de la antelación mínima.
+  function isLeadBlocked(dateKey, duration, busy) {
+    if (!dateKey || dateKey !== todayKey()) return false;
+    var now = shopNow();
+    var nowMinutes = now.getHours() * 60 + now.getMinutes();
+    return slotsFor(dateKey, duration, busy, null, true).some(function (slot) {
+      if (!slot.available) return false;
+      var start = minutesOf(slot.time);
+      return start >= nowMinutes && start < nowMinutes + LEAD;
+    });
+  }
+
   function slotsFor(dateKey, duration, busy, excludeCode, ignoreLead) {
     if (!dateKey || isClosed(dateKey)) return [];
     var now = shopNow();
@@ -477,6 +489,7 @@ window.Jaazi = (function () {
     findBooking: findBooking,
     slotsFor: slotsFor,
     isTooSoon: isTooSoon,
+    isLeadBlocked: isLeadBlocked,
     isDayAvailable: isDayAvailable,
     nextAvailable: nextAvailable,
     isPast: isPast,
