@@ -59,11 +59,11 @@ Proyecto real, de principio a fin y sin equipo:
 
 | Paso 3 · Datos | Confirmación |
 |---|---|
-| ![Reserva, paso 3: datos del cliente](docs/shot-booking-form.jpg) | ![Confirmación con código de cita](docs/shot-booking-confirmation.jpg) |
+| ![Reserva, paso 3: datos del cliente](docs/shot-booking-form.jpg) | ![Confirmación de cita](docs/shot-booking-confirmation.jpg) |
 
 | Revisar cita | Cambiar fecha y hora |
 |---|---|
-| ![Revisar cita con código y teléfono](docs/shot-review.jpg) | ![Editor para cambiar fecha y hora](docs/shot-reschedule.jpg) |
+| ![Revisar cita solo con teléfono](docs/shot-review.jpg) | ![Editor para cambiar fecha y hora](docs/shot-reschedule.jpg) |
 
 | Panel en móvil | Reserva en móvil |
 |---|---|
