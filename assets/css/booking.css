@@ -29,8 +29,12 @@
   padding: clamp(20px, 3vw, 36px);
   border: 1px solid var(--line);
   border-radius: var(--r-lg);
-  background: var(--paper);
+  background-color: var(--paper);
+  background-image: var(--pearl-tex);
   scroll-margin-top: calc(var(--header-h) + 16px);
+}
+html[data-theme="dark"] .panel {
+  background-image: var(--obsidian-tex);
 }
 
 /* ---------- Stepper ---------- */
@@ -821,7 +825,7 @@
 .status--past::before { background: var(--muted); }
 .status--today::before {
   background: var(--copper-deep);
-  box-shadow: 0 0 0 3px rgba(177, 120, 74, 0.18);
+  box-shadow: 0 0 0 3px rgba(52, 57, 68, 0.18);
 }
 .status--completed::before { background: var(--copper-deep); }
 .status--cancelled { color: var(--danger); }

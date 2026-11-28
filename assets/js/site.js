@@ -39,7 +39,7 @@
     var dark = theme === "dark";
     document.documentElement.setAttribute("data-theme", dark ? "dark" : "light");
     document.documentElement.style.colorScheme = dark ? "dark" : "light";
-    if (themeMeta) themeMeta.setAttribute("content", dark ? "#12100e" : "#f4eee5");
+    if (themeMeta) themeMeta.setAttribute("content", dark ? "#0b0c0e" : "#f4f5f7");
     if (themeToggle) {
       var label = dark ? "Desactivar modo oscuro" : "Activar modo oscuro";
       themeToggle.setAttribute("aria-pressed", dark ? "true" : "false");

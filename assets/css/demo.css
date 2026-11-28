@@ -4,7 +4,8 @@
    ========================================================= */
 
 .demo-strip {
-  background: var(--ink);
+  background-color: var(--ink);
+  background-image: var(--obsidian-tex);
   color: var(--bone);
 }
 
@@ -74,7 +75,7 @@
   font-size: 12px;
   line-height: 1.4;
   text-align: center;
-  box-shadow: 0 12px 30px rgba(23, 18, 16, 0.28);
+  box-shadow: 0 12px 30px rgba(11, 12, 14, 0.32);
   visibility: hidden;
   pointer-events: none;
   transform: translate(-50%, 12px);

@@ -6,7 +6,11 @@ body[data-page="panel"] {
   min-height: 100vh;
   display: flex;
   flex-direction: column;
-  background: var(--bone);
+  background-color: var(--bone);
+  background-image: var(--pearl-tex);
+}
+html[data-theme="dark"] body[data-page="panel"] {
+  background-image: var(--obsidian-tex);
 }
 
 body[data-page="panel"] main { flex: 1 0 auto; }
@@ -334,8 +338,8 @@ body[data-page="panel"] main { flex: 1 0 auto; }
   border-radius: 50%;
   background: currentColor;
 }
-.bchip--confirmed { background: rgba(177, 120, 74, 0.14); color: #7a4a27; }
-.bchip--completed { background: rgba(110, 96, 85, 0.14); color: var(--muted); }
+.bchip--confirmed { background: rgba(52, 57, 68, 0.12); color: var(--copper-deep); }
+.bchip--completed { background: rgba(82, 87, 99, 0.12); color: var(--muted); }
 .bchip--cancelled { background: rgba(160, 58, 42, 0.12); color: #8a2f21; }
 
 .mini-btn {
@@ -511,28 +515,28 @@ html[data-theme="dark"] .panel-alert {
   color: #f0a99a;
 }
 html[data-theme="dark"] .bchip--confirmed {
-  background: rgba(195, 139, 92, 0.16);
-  color: #e9c39a;
+  background: rgba(214, 219, 227, 0.14);
+  color: #e6e9f0;
 }
 html[data-theme="dark"] .bchip--pending {
   background: rgba(224, 192, 122, 0.14);
   color: #e0c07a;
 }
 html[data-theme="dark"] .bchip--completed {
-  background: rgba(184, 169, 152, 0.14);
-  color: #b8a998;
+  background: rgba(156, 163, 176, 0.14);
+  color: #aeb5c2;
 }
 html[data-theme="dark"] .bchip--cancelled {
-  background: rgba(229, 139, 120, 0.14);
-  color: #f0a99a;
+  background: rgba(234, 139, 130, 0.14);
+  color: #f2aba3;
 }
 html[data-theme="dark"] .bconfirm {
-  background: rgba(229, 139, 120, 0.1);
-  border-color: rgba(229, 139, 120, 0.28);
+  background: rgba(234, 139, 130, 0.1);
+  border-color: rgba(234, 139, 130, 0.28);
 }
-html[data-theme="dark"] .bconfirm p { color: #f0a99a; }
+html[data-theme="dark"] .bconfirm p { color: #f2aba3; }
 html[data-theme="dark"] .bcard__notes {
-  background: rgba(195, 139, 92, 0.1);
+  background: rgba(214, 219, 227, 0.08);
   color: var(--ink);
 }
 html[data-theme="dark"] .mini-btn--danger:hover { background: rgba(229, 139, 120, 0.1); }
