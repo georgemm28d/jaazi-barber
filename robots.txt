@@ -2,6 +2,7 @@ User-agent: *
 Allow: /
 Disallow: /panel.html
 Disallow: /panel
+Disallow: /panel.webmanifest
 Disallow: /panel-demo.html
 Disallow: /panel-demo
 

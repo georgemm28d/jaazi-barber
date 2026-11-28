@@ -24,7 +24,8 @@ window.JaaziApi = (function () {
 
   function readSession() {
     try {
-      return JSON.parse(sessionStorage.getItem(SESSION_KEY) || "null");
+      var raw = localStorage.getItem(SESSION_KEY) || sessionStorage.getItem(SESSION_KEY);
+      return JSON.parse(raw || "null");
     } catch (err) {
       return null;
     }
@@ -32,8 +33,12 @@ window.JaaziApi = (function () {
 
   function writeSession(session) {
     try {
-      if (session) sessionStorage.setItem(SESSION_KEY, JSON.stringify(session));
-      else sessionStorage.removeItem(SESSION_KEY);
+      if (session) {
+        localStorage.setItem(SESSION_KEY, JSON.stringify(session));
+      } else {
+        localStorage.removeItem(SESSION_KEY);
+      }
+      sessionStorage.removeItem(SESSION_KEY);
     } catch (err) { /* modo privado */ }
   }
 

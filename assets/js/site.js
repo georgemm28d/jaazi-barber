@@ -276,5 +276,211 @@
     return { dismiss: dismiss };
   }
 
+  /* ---------- PWA: Service Worker e instalación ---------- */
+
+  var isPanelApp = document.body && document.body.getAttribute("data-page") === "panel" &&
+    window.location.pathname.indexOf("panel-demo") < 0;
+  var INSTALL_KEY = isPanelApp ? "jaazi.pwa.installed.panel" : "jaazi.pwa.installed.client";
+  var deferredInstall = null;
+  var pwaModal = null;
+  var pwaLastFocus = null;
+
+  function isRunningStandalone() {
+    try {
+      if (window.navigator.standalone === true) return true;
+      if (window.matchMedia && window.matchMedia("(display-mode: standalone)").matches) return true;
+      if (window.matchMedia && window.matchMedia("(display-mode: minimal-ui)").matches) return true;
+    } catch (err) { /* noop */ }
+    return false;
+  }
+
+  function readInstalledFlag() {
+    try { return localStorage.getItem(INSTALL_KEY) === "1"; } catch (err) { return false; }
+  }
+
+  function writeInstalledFlag(installed) {
+    try {
+      if (installed) localStorage.setItem(INSTALL_KEY, "1");
+      else localStorage.removeItem(INSTALL_KEY);
+    } catch (err) { /* noop */ }
+  }
+
+  function setInstallButtonsVisible(visible) {
+    var buttons = document.querySelectorAll("[data-pwa-install]");
+    Array.prototype.forEach.call(buttons, function (btn) {
+      btn.hidden = !visible;
+      var parentLi = btn.parentElement && btn.parentElement.tagName === "LI" ? btn.parentElement : null;
+      if (parentLi) parentLi.hidden = !visible;
+    });
+  }
+
+  function syncInstallVisibility() {
+    if (isRunningStandalone() || readInstalledFlag()) {
+      setInstallButtonsVisible(false);
+    } else {
+      setInstallButtonsVisible(true);
+    }
+  }
+
+  syncInstallVisibility();
+
+  if (navigator.getInstalledRelatedApps) {
+    navigator.getInstalledRelatedApps().then(function (apps) {
+      var target = isPanelApp ? "panel.webmanifest" : "manifest.webmanifest";
+      var found = (apps || []).some(function (app) {
+        return app && app.url && app.url.indexOf(target) >= 0;
+      });
+      if (found) {
+        writeInstalledFlag(true);
+        setInstallButtonsVisible(false);
+      }
+    }).catch(function () { /* noop */ });
+  }
+
+  if (window.matchMedia) {
+    var standaloneMedia = window.matchMedia("(display-mode: standalone)");
+    var onStandaloneChange = function (e) {
+      if (e.matches) setInstallButtonsVisible(false);
+    };
+    if (standaloneMedia.addEventListener) standaloneMedia.addEventListener("change", onStandaloneChange);
+    else if (standaloneMedia.addListener) standaloneMedia.addListener(onStandaloneChange);
+  }
+
+  window.addEventListener("beforeinstallprompt", function (event) {
+    event.preventDefault();
+    deferredInstall = event;
+    writeInstalledFlag(false);
+    if (!isRunningStandalone()) setInstallButtonsVisible(true);
+  });
+
+  window.addEventListener("appinstalled", function () {
+    deferredInstall = null;
+    writeInstalledFlag(true);
+    setInstallButtonsVisible(false);
+    closePwaModal();
+    toast(isPanelApp ? "Panel instalado como aplicación." : "Aplicación instalada en tu dispositivo.");
+  });
+
+  function detectInstallPlatform() {
+    var ua = navigator.userAgent || "";
+    var isIOS = /iPad|iPhone|iPod/.test(ua) ||
+      (navigator.platform === "MacIntel" && navigator.maxTouchPoints > 1);
+    if (isIOS) return "ios";
+    if (/Android/i.test(ua)) return "android";
+    return "desktop";
+  }
+
+  function closePwaModal() {
+    if (!pwaModal) return;
+    pwaModal.classList.remove("is-open");
+    document.body.classList.remove("modal-open");
+    var node = pwaModal;
+    pwaModal = null;
+    setTimeout(function () {
+      if (node.parentNode) node.parentNode.removeChild(node);
+    }, 200);
+    if (pwaLastFocus && typeof pwaLastFocus.focus === "function") {
+      pwaLastFocus.focus({ preventScroll: true });
+    }
+  }
+
+  function openPwaModal(trigger) {
+    if (pwaModal) return;
+    pwaLastFocus = trigger || document.activeElement;
+    var platform = detectInstallPlatform();
+    var appTitle = isPanelApp ? "Panel Jaazi" : "Jaazi Barber";
+    var stepsHtml = "";
+
+    if (platform === "ios") {
+      stepsHtml =
+        "<li>Toca el botón <strong>Compartir</strong> (el cuadrado con flecha hacia arriba) en la barra de Safari.</li>" +
+        "<li>Desliza las opciones y elige <strong>Agregar a inicio</strong>.</li>" +
+        "<li>Toca <strong>Agregar</strong> arriba a la derecha para instalar <strong>" + appTitle + "</strong>.</li>";
+    } else if (platform === "android") {
+      stepsHtml =
+        "<li>Abre el menú <strong>⋮</strong> en la esquina superior derecha de tu navegador.</li>" +
+        "<li>Toca <strong>Instalar aplicación</strong> o <strong>Agregar a la pantalla principal</strong>.</li>" +
+        "<li>Confirma en <strong>Instalar</strong>.</li>";
+    } else {
+      stepsHtml =
+        "<li>En Chrome o Edge, haz clic en el icono <strong>Instalar</strong> a la derecha de la barra de direcciones (o menú <strong>⋮ → Guardar y compartir → Instalar página como app</strong>).</li>" +
+        "<li>En Safari para Mac, abre <strong>Archivo → Agregar al Dock</strong>.</li>";
+    }
+
+    var wrap = document.createElement("div");
+    wrap.className = "location-modal pwa-modal";
+    wrap.setAttribute("role", "dialog");
+    wrap.setAttribute("aria-modal", "true");
+    wrap.setAttribute("aria-labelledby", "pwa-modal-title");
+    wrap.innerHTML =
+      '<div class="location-modal__dialog pwa-modal__dialog" tabindex="-1">' +
+        '<button class="location-modal__close" type="button" data-pwa-close aria-label="Cerrar instrucciones">' +
+          '<svg width="18" height="18" viewBox="0 0 24 24" fill="none" aria-hidden="true"><path d="M6 6l12 12M18 6L6 18" stroke="currentColor" stroke-width="1.6" stroke-linecap="round"/></svg>' +
+        "</button>" +
+        '<div class="pwa-modal__content">' +
+          '<span class="location-modal__eyebrow">Acceso directo</span>' +
+          '<h2 class="location-modal__title" id="pwa-modal-title">Instalar ' + appTitle + "</h2>" +
+          '<ol class="pwa-modal__steps">' + stepsHtml + "</ol>" +
+          '<button class="btn btn--sm btn--block" type="button" data-pwa-close>Entendido</button>' +
+        "</div>" +
+      "</div>";
+
+    document.body.appendChild(wrap);
+    document.body.classList.add("modal-open");
+    pwaModal = wrap;
+
+    void wrap.offsetWidth;
+    wrap.classList.add("is-open");
+
+    var closeBtn = wrap.querySelector("[data-pwa-close]");
+    if (closeBtn) closeBtn.focus({ preventScroll: true });
+
+    wrap.addEventListener("click", function (e) {
+      if (e.target === wrap || e.target.closest("[data-pwa-close]")) {
+        closePwaModal();
+      }
+    });
+  }
+
+  document.addEventListener("keydown", function (event) {
+    if (event.key === "Escape" && pwaModal) {
+      closePwaModal();
+    }
+  });
+
+  document.addEventListener("click", function (event) {
+    var btn = event.target.closest("[data-pwa-install]");
+    if (!btn) return;
+    event.preventDefault();
+
+    if (menuIsOpen()) closeMenu(false);
+
+    if (deferredInstall) {
+      var promptEvent = deferredInstall;
+      deferredInstall = null;
+      promptEvent.prompt();
+      if (promptEvent.userChoice) {
+        promptEvent.userChoice.then(function (choice) {
+          if (choice && choice.outcome === "accepted") {
+            writeInstalledFlag(true);
+            setInstallButtonsVisible(false);
+          }
+        }).catch(function () { /* noop */ });
+      }
+      return;
+    }
+
+    openPwaModal(btn);
+  });
+
+  if ("serviceWorker" in navigator &&
+      (window.location.protocol === "https:" ||
+       window.location.hostname === "localhost" ||
+       window.location.hostname === "127.0.0.1")) {
+    window.addEventListener("load", function () {
+      navigator.serviceWorker.register("/sw.js").catch(function () { /* noop */ });
+    });
+  }
+
   window.UI = { toast: toast };
 })();

@@ -1039,6 +1039,22 @@ picture { display: contents; }
   align-items: center;
   min-height: 44px;
 }
+.footer__btn {
+  display: inline-flex;
+  align-items: center;
+  gap: 7px;
+  min-height: 44px;
+  padding: 0;
+  border: 0;
+  background: none;
+  color: var(--bone);
+  font: inherit;
+  cursor: pointer;
+  transition: color 160ms ease;
+}
+@media (hover: hover) and (pointer: fine) {
+  .footer__btn:hover { color: var(--copper-light); }
+}
 .footer__list li { color: rgba(244, 245, 247, 0.82); }
 @media (hover: hover) and (pointer: fine) {
   .footer a:hover { color: var(--copper-light); }
@@ -1631,4 +1647,30 @@ html[data-theme="dark"] .location-modal__dialog {
   .location-modal__body:active {
     transform: none;
   }
+}
+
+/* ---------- Modal de instalación PWA ---------- */
+
+.pwa-modal__content {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  text-align: left;
+  gap: 16px;
+  padding: 40px clamp(22px, 5vw, 34px) 28px;
+}
+
+.pwa-modal__steps {
+  margin: 2px 0 6px;
+  padding-left: 20px;
+  display: grid;
+  gap: 10px;
+  font-size: 0.94rem;
+  line-height: 1.55;
+  color: var(--muted);
+}
+
+.pwa-modal__steps strong {
+  color: var(--ink);
+  font-weight: 600;
 }

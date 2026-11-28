@@ -5,5 +5,5 @@ set -euo pipefail
 rm -rf dist
 mkdir -p dist
 
-cp *.html robots.txt llms.txt sitemap.xml _headers .nojekyll dist/
+cp *.html *.webmanifest sw.js robots.txt llms.txt sitemap.xml _headers .nojekyll dist/
 cp -r assets dist/

@@ -44,6 +44,21 @@ body[data-page="panel"] main { flex: 1 0 auto; }
   gap: 10px;
 }
 
+.pwa-panel-btn {
+  min-height: 40px;
+  padding: 8px 14px;
+}
+@media (max-width: 480px) {
+  .pwa-panel-btn {
+    width: 40px;
+    height: 40px;
+    min-height: 40px;
+    padding: 0;
+    border-radius: 50%;
+  }
+  .pwa-panel-btn__label { display: none; }
+}
+
 .panel-bar__tag {
   padding: 6px 10px;
   border: 1px solid var(--line-strong);
