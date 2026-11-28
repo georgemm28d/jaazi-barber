@@ -19,12 +19,14 @@ create table if not exists public.services (
 );
 
 insert into public.services (id, name, price, duration, meta, description, sort) values
-  ('corte-personalizado', 'Corte personalizado', 27000,  30, '30 min · tijera y máquina', 'Tijera y máquina, adaptado a tu rostro y a tu rutina.', 1),
-  ('corte-barba',         'Corte + barba',        35000,  30, '30 min · corte y barba',     'Corte completo más perfilado y arreglo de barba.', 2),
-  ('barba',               'Barba',                15000,  30, '30 min · perfilado y acabado','Perfilado, arreglo y acabado de barba.', 3),
-  ('colores-fantasia',    'Colores fantasía',    120000, 120, '2 h · color a elección',      'Color a elección con preparación y acabado.', 4),
-  ('mechas-platinadas',   'Mechas platinadas',   250000, 240, '4 h · incluye corte',         'Platinado por mechas, incluye corte.', 5),
-  ('platinado-global',    'Platinado global',    250000, 240, '4 h · incluye corte',         'Platinado completo de raíz a puntas, incluye corte.', 6)
+  ('corte-personalizado', 'Corte personalizado',   29000,  30, '30 min · tijera y máquina',      'Corte con máquina o tijera según tus gustos y necesidades; incluye bebida de cortesía y un relajante masaje al finalizar.', 1),
+  ('corte-barba',         'Corte y barba',         37000,  30, '30 min · corte y barba',         'Corte con máquina o tijera según tus gustos y necesidades, más perfilado y arreglo de barba con vapor para un afeitado más suave; incluye bebida de cortesía y un relajante masaje al finalizar.', 2),
+  ('barba',               'Barba',                 15000,  30, '30 min · perfilado y acabado',   'Perfilado, arreglo y acabado de barba.', 3),
+  ('servicio-vip',        'Servicio VIP',          45000,  30, '30 min · corte y cuidado facial', 'Corte personalizado con ritual facial (vapor para abrir poros, exfoliación, mascarilla negra para puntos negros e hidratación), masaje relajante y bebida de cortesía.', 4),
+  ('servicio-vip-barba',  'Servicio VIP con barba',55000,  30, '30 min · corte, barba y facial', 'Corte y arreglo de barba con ritual facial (vapor para abrir poros, exfoliación, mascarilla negra para puntos negros e hidratación), masaje relajante y bebida de cortesía.', 5),
+  ('colores-fantasia',    'Colores fantasía',     120000, 120, '2 h · color a elección',         'Color a elección con preparación y acabado.', 6),
+  ('mechas-platinadas',   'Mechas platinadas',    250000, 240, '4 h · incluye corte',            'Platinado por mechas, incluye corte.', 7),
+  ('platinado-global',    'Platinado global',     250000, 240, '4 h · incluye corte',            'Platinado completo de raíz a puntas, incluye corte.', 8)
 on conflict (id) do update set
   name = excluded.name,
   price = excluded.price,

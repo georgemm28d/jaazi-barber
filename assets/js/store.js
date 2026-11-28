@@ -19,18 +19,18 @@ window.Jaazi = (function () {
     {
       id: "corte-personalizado",
       name: "Corte personalizado",
-      price: 27000,
+      price: 29000,
       duration: 30,
       meta: "30 min · tijera y máquina",
-      desc: "Tijera y máquina, adaptado a tu rostro y a tu rutina."
+      desc: "Corte con máquina o tijera según tus gustos y necesidades; incluye bebida de cortesía y un relajante masaje al finalizar."
     },
     {
       id: "corte-barba",
-      name: "Corte + barba",
-      price: 35000,
+      name: "Corte y barba",
+      price: 37000,
       duration: 30,
       meta: "30 min · corte y barba",
-      desc: "Corte completo más perfilado y arreglo de barba."
+      desc: "Corte con máquina o tijera según tus gustos y necesidades, más perfilado y arreglo de barba con vapor para un afeitado más suave; incluye bebida de cortesía y un relajante masaje al finalizar."
     },
     {
       id: "barba",
@@ -39,6 +39,22 @@ window.Jaazi = (function () {
       duration: 30,
       meta: "30 min · perfilado y acabado",
       desc: "Perfilado, arreglo y acabado de barba."
+    },
+    {
+      id: "servicio-vip",
+      name: "Servicio VIP",
+      price: 45000,
+      duration: 30,
+      meta: "30 min · corte y cuidado facial",
+      desc: "Corte personalizado con ritual facial (vapor para abrir poros, exfoliación, mascarilla negra para puntos negros e hidratación), masaje relajante y bebida de cortesía."
+    },
+    {
+      id: "servicio-vip-barba",
+      name: "Servicio VIP con barba",
+      price: 55000,
+      duration: 30,
+      meta: "30 min · corte, barba y facial",
+      desc: "Corte y arreglo de barba con ritual facial (vapor para abrir poros, exfoliación, mascarilla negra para puntos negros e hidratación), masaje relajante y bebida de cortesía."
     },
     {
       id: "colores-fantasia",

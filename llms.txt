@@ -4,7 +4,7 @@
 
 ## Páginas
 
-- [Servicios](https://jaazi-barber.pages.dev/#servicios): corte personalizado $ 27.000 (30 min), corte + barba $ 35.000 (30 min), barba $ 15.000 (30 min), colores fantasía $ 120.000 (2 h), mechas platinadas $ 250.000 (4 h, incluye corte), platinado global $ 250.000 (4 h, incluye corte), en COP
+- [Servicios](https://jaazi-barber.pages.dev/#servicios): corte personalizado $ 29.000 (30 min), corte y barba $ 37.000 (30 min), barba $ 15.000 (30 min), Servicio VIP $ 45.000 (30 min), Servicio VIP con barba $ 55.000 (30 min), colores fantasía $ 120.000 (2 h), mechas platinadas $ 250.000 (4 h, incluye corte), platinado global $ 250.000 (4 h, incluye corte), en COP
 - [Trabajo reciente](https://jaazi-barber.pages.dev/#trabajo): fotos reales del trabajo de Jaazi en Chía
 - [Preguntas frecuentes](https://jaazi-barber.pages.dev/#preguntas): duración, cambio de fecha y hora, cancelación en cualquier momento, pago, atención con cita y ubicación
 - [Agendar cita](https://jaazi-barber.pages.dev/agendar): reserva en línea en 3 pasos, confirmación con código JZ-XXXXXX
@@ -20,7 +20,7 @@
 - Teléfono / WhatsApp: +57 313 538 1239
 - Email: Jaazielbarber09@gmail.com
 - Instagram: https://www.instagram.com/jaazii.barber
-- Precios: COP (corte personalizado $ 27.000, corte + barba $ 35.000, barba $ 15.000, colores fantasía $ 120.000, mechas platinadas $ 250.000, platinado global $ 250.000)
+- Precios: COP (corte personalizado $ 29.000, corte y barba $ 37.000, barba $ 15.000, Servicio VIP $ 45.000, Servicio VIP con barba $ 55.000, colores fantasía $ 120.000, mechas platinadas $ 250.000, platinado global $ 250.000)
 - Pago: efectivo o transferencia en la barbería
 - Moneda: peso colombiano (COP)
 - Idioma: español (Colombia)

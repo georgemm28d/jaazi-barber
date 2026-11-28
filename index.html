@@ -44,7 +44,7 @@
   <link rel="stylesheet" href="assets/css/site.css?v=2">
   <script src="assets/js/config.js"></script>
   <script src="assets/js/api.js" defer></script>
-  <script src="assets/js/store.js" defer></script>
+  <script src="assets/js/store.js?v=2" defer></script>
   <script src="assets/js/site.js?v=2" defer></script>
   <script src="assets/js/location-notice.js" defer></script>
   <script type="application/ld+json">
@@ -94,19 +94,31 @@
         {
           "@type": "Offer",
           "itemOffered": { "@type": "Service", "name": "Corte personalizado" },
-          "price": "27000",
+          "price": "29000",
           "priceCurrency": "COP"
         },
         {
           "@type": "Offer",
-          "itemOffered": { "@type": "Service", "name": "Corte + barba" },
-          "price": "35000",
+          "itemOffered": { "@type": "Service", "name": "Corte y barba" },
+          "price": "37000",
           "priceCurrency": "COP"
         },
         {
           "@type": "Offer",
           "itemOffered": { "@type": "Service", "name": "Barba" },
           "price": "15000",
+          "priceCurrency": "COP"
+        },
+        {
+          "@type": "Offer",
+          "itemOffered": { "@type": "Service", "name": "Servicio VIP" },
+          "price": "45000",
+          "priceCurrency": "COP"
+        },
+        {
+          "@type": "Offer",
+          "itemOffered": { "@type": "Service", "name": "Servicio VIP con barba" },
+          "price": "55000",
           "priceCurrency": "COP"
         },
         {
@@ -130,7 +142,7 @@
       ]
     },
     "sameAs": ["https://www.instagram.com/jaazii.barber"],
-    "dateModified": "2026-11-03"
+    "dateModified": "2026-11-28"
   }
   </script>
   <script type="application/ld+json">
@@ -141,12 +153,12 @@
       {
         "@type": "Question",
         "name": "¿Cuánto dura una cita?",
-        "acceptedAnswer": { "@type": "Answer", "text": "El corte personalizado, el corte + barba y la barba duran 30 minutos; los colores fantasía, 2 horas; y las mechas platinadas o el platinado global, 4 horas. La agenda bloquea el tiempo completo del servicio; llega cinco minutos antes." }
+        "acceptedAnswer": { "@type": "Answer", "text": "El corte personalizado, el corte y barba, la barba, el Servicio VIP y el Servicio VIP con barba duran 30 minutos; los colores fantasía, 2 horas; y las mechas platinadas o el platinado global, 4 horas. La agenda bloquea el tiempo completo del servicio; llega cinco minutos antes." }
       },
       {
         "@type": "Question",
         "name": "¿Cuánto cuestan los servicios?",
-        "acceptedAnswer": { "@type": "Answer", "text": "Corte personalizado, $ 27.000; corte + barba, $ 35.000; barba, $ 15.000; colores fantasía, $ 120.000; mechas platinadas y platinado global, $ 250.000 cada uno. Precios en pesos colombianos (COP)." }
+        "acceptedAnswer": { "@type": "Answer", "text": "Corte personalizado, $ 29.000; corte y barba, $ 37.000; barba, $ 15.000; Servicio VIP, $ 45.000; Servicio VIP con barba, $ 55.000; colores fantasía, $ 120.000; mechas platinadas y platinado global, $ 250.000 cada uno. Precios en pesos colombianos (COP)." }
       },
       {
         "@type": "Question",
@@ -282,9 +294,9 @@
               <span class="service__num">01</span>
               <span class="service__body">
                 <span class="service__name">Corte personalizado</span>
-                <span class="service__desc">Tijera y máquina, adaptado a tu rostro y a tu rutina.</span>
+                <span class="service__desc">Corte con máquina o tijera según tus gustos y necesidades; incluye bebida de cortesía y un relajante masaje al finalizar.</span>
               </span>
-              <span class="service__price"><b>$ 27.000</b><span>30 min</span></span>
+              <span class="service__price"><b>$ 29.000</b><span>30 min</span></span>
               <svg class="service__arrow" viewBox="0 0 24 24" fill="none" aria-hidden="true"><path d="M5 12h14M13 6l6 6-6 6" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg>
             </a>
           </li>
@@ -292,10 +304,10 @@
             <a class="service__link" href="agendar.html?servicio=corte-barba">
               <span class="service__num">02</span>
               <span class="service__body">
-                <span class="service__name">Corte + barba</span>
-                <span class="service__desc">Corte completo más perfilado y arreglo de barba.</span>
+                <span class="service__name">Corte y barba</span>
+                <span class="service__desc">Corte con máquina o tijera según tus gustos y necesidades, más perfilado y arreglo de barba con vapor para un afeitado más suave; incluye bebida de cortesía y un relajante masaje al finalizar.</span>
               </span>
-              <span class="service__price"><b>$ 35.000</b><span>30 min</span></span>
+              <span class="service__price"><b>$ 37.000</b><span>30 min</span></span>
               <svg class="service__arrow" viewBox="0 0 24 24" fill="none" aria-hidden="true"><path d="M5 12h14M13 6l6 6-6 6" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg>
             </a>
           </li>
@@ -311,8 +323,30 @@
             </a>
           </li>
           <li class="service" data-reveal data-delay="180">
-            <a class="service__link" href="agendar.html?servicio=colores-fantasia">
+            <a class="service__link" href="agendar.html?servicio=servicio-vip">
               <span class="service__num">04</span>
+              <span class="service__body">
+                <span class="service__name">Servicio VIP</span>
+                <span class="service__desc">Corte personalizado con ritual facial (vapor para abrir poros, exfoliación, mascarilla negra para puntos negros e hidratación), masaje relajante y bebida de cortesía.</span>
+              </span>
+              <span class="service__price"><b>$ 45.000</b><span>30 min</span></span>
+              <svg class="service__arrow" viewBox="0 0 24 24" fill="none" aria-hidden="true"><path d="M5 12h14M13 6l6 6-6 6" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg>
+            </a>
+          </li>
+          <li class="service" data-reveal data-delay="240">
+            <a class="service__link" href="agendar.html?servicio=servicio-vip-barba">
+              <span class="service__num">05</span>
+              <span class="service__body">
+                <span class="service__name">Servicio VIP con barba</span>
+                <span class="service__desc">Corte y arreglo de barba con ritual facial (vapor para abrir poros, exfoliación, mascarilla negra para puntos negros e hidratación), masaje relajante y bebida de cortesía.</span>
+              </span>
+              <span class="service__price"><b>$ 55.000</b><span>30 min</span></span>
+              <svg class="service__arrow" viewBox="0 0 24 24" fill="none" aria-hidden="true"><path d="M5 12h14M13 6l6 6-6 6" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg>
+            </a>
+          </li>
+          <li class="service" data-reveal data-delay="300">
+            <a class="service__link" href="agendar.html?servicio=colores-fantasia">
+              <span class="service__num">06</span>
               <span class="service__body">
                 <span class="service__name">Colores fantasía</span>
                 <span class="service__desc">Color a elección con preparación y acabado.</span>
@@ -321,9 +355,9 @@
               <svg class="service__arrow" viewBox="0 0 24 24" fill="none" aria-hidden="true"><path d="M5 12h14M13 6l6 6-6 6" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg>
             </a>
           </li>
-          <li class="service" data-reveal data-delay="240">
+          <li class="service" data-reveal data-delay="360">
             <a class="service__link" href="agendar.html?servicio=mechas-platinadas">
-              <span class="service__num">05</span>
+              <span class="service__num">07</span>
               <span class="service__body">
                 <span class="service__name">Mechas platinadas</span>
                 <span class="service__desc">Platinado por mechas, incluye corte.</span>
@@ -332,9 +366,9 @@
               <svg class="service__arrow" viewBox="0 0 24 24" fill="none" aria-hidden="true"><path d="M5 12h14M13 6l6 6-6 6" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg>
             </a>
           </li>
-          <li class="service" data-reveal data-delay="300">
+          <li class="service" data-reveal data-delay="420">
             <a class="service__link" href="agendar.html?servicio=platinado-global">
-              <span class="service__num">06</span>
+              <span class="service__num">08</span>
               <span class="service__body">
                 <span class="service__name">Platinado global</span>
                 <span class="service__desc">Platinado completo de raíz a puntas, incluye corte.</span>
@@ -360,7 +394,7 @@
         <div class="studio__body" data-reveal data-delay="80">
           <p class="eyebrow">02 — El lugar</p>
           <h2 id="estudio-title">Tu cita con Jaazi. Sin esperas.</h2>
-          <p class="lede"><strong>Jaazi Barber</strong> atiende ahora como parte del equipo de <strong>Barbería Monarch</strong> en el Parque Principal de Chía, Cundinamarca. Ofrece corte personalizado, corte + barba, barba, colores fantasía, mechas platinadas y platinado global, con cita previa y precios desde $ 15.000 COP. Jaazi lleva seis años en el oficio y atiende de lunes a sábado de 9:00 am a 7:00 pm y los domingos de 12:00 pm a 5:00 pm.</p>
+          <p class="lede"><strong>Jaazi Barber</strong> atiende ahora como parte del equipo de <strong>Barbería Monarch</strong> en el Parque Principal de Chía, Cundinamarca. Ofrece corte personalizado, corte y barba, barba, Servicio VIP, Servicio VIP con barba, colores fantasía, mechas platinadas y platinado global, con cita previa y precios desde $ 15.000 COP. Jaazi lleva seis años en el oficio y atiende de lunes a sábado de 9:00 am a 7:00 pm y los domingos de 12:00 pm a 5:00 pm.</p>
           <p class="lede">Esta agenda es exclusiva para reservar directo con Jaazi: llegas a tu hora, sin turnos de último minuto ni esperas en sala.</p>
           <p class="lede">Cada cita reserva el tiempo completo del servicio: si el corte pide veinte minutos más, los tiene.</p>
           <p class="lede">Te esperamos en Barbería Monarch (Centro Comercial Casa Vieja), solo con cita previa.</p>
@@ -452,11 +486,11 @@
         <div class="faq__list">
           <details class="faq__item">
             <summary>¿Cuánto dura una cita?<span class="faq__icon" aria-hidden="true"></span></summary>
-            <div class="faq__body">El corte personalizado, el corte + barba y la barba duran 30 minutos. Los colores fantasía, 2 horas; las mechas platinadas y el platinado global, 4 horas. La agenda bloquea el tiempo completo del servicio; llega cinco minutos antes.</div>
+            <div class="faq__body">El corte personalizado, el corte y barba, la barba, el Servicio VIP y el Servicio VIP con barba duran 30 minutos. Los colores fantasía, 2 horas; las mechas platinadas y el platinado global, 4 horas. La agenda bloquea el tiempo completo del servicio; llega cinco minutos antes.</div>
           </details>
           <details class="faq__item">
             <summary>¿Cuánto cuestan los servicios?<span class="faq__icon" aria-hidden="true"></span></summary>
-            <div class="faq__body">Corte personalizado, $ 27.000; corte + barba, $ 35.000; barba, $ 15.000; colores fantasía, $ 120.000; mechas platinadas y platinado global, $ 250.000 cada uno. Precios en pesos colombianos (COP).</div>
+            <div class="faq__body">Corte personalizado, $ 29.000; corte y barba, $ 37.000; barba, $ 15.000; Servicio VIP, $ 45.000; Servicio VIP con barba, $ 55.000; colores fantasía, $ 120.000; mechas platinadas y platinado global, $ 250.000 cada uno. Precios en pesos colombianos (COP).</div>
           </details>
           <details class="faq__item">
             <summary>¿Puedo cambiar o cancelar mi cita?<span class="faq__icon" aria-hidden="true"></span></summary>
