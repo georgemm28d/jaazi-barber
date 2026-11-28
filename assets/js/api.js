@@ -103,7 +103,7 @@ window.JaaziApi = (function () {
     invalid_name: "Revisa tu nombre.",
     invalid_phone: "Revisa tu teléfono.",
     service_not_found: "Ese servicio ya no está disponible.",
-    booking_not_found: "No encontramos una cita activa con ese código y teléfono.",
+    booking_not_found: "No encontramos una cita activa asociada a ese número de teléfono.",
     duplicate: "Ya existe una cita en ese horario. Elige otro."
   };
 
@@ -180,11 +180,11 @@ window.JaaziApi = (function () {
     }).then(mapBooking);
   }
 
-  function lookup(code, phone) {
+  function lookup(phone) {
     if (!enabled) return Promise.resolve([]);
     return request("/rest/v1/rpc/lookup_bookings", {
       method: "POST",
-      body: { p_code: code, p_phone: phone }
+      body: { p_phone: phone }
     }).then(function (rows) {
       return (rows || []).map(mapBooking);
     });

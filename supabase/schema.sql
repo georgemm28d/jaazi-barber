@@ -274,13 +274,17 @@ begin
 end;
 $$;
 
--- ---------- Buscar citas (código + teléfono) ----------
--- Se exigen los dos datos. Un teléfono o un código sueltos no deben
--- permitir ver citas ajenas (Ley 1581 de 2012).
+-- ---------- Buscar citas (solo teléfono) ----------
+-- Exige 10–15 dígitos; devuelve el nombre completo y los datos de la cita
+-- sin exponer correo ni notas privadas, limitado a próximas y últimos 7 días.
 
+create index if not exists bookings_phone_lookup_idx
+  on public.bookings ((right(phone, 10)));
+
+drop function if exists public.lookup_bookings(text, text);
 drop function if exists public.lookup_bookings(text);
 
-create or replace function public.lookup_bookings(p_code text, p_phone text)
+create or replace function public.lookup_bookings(p_phone text)
 returns table (
   code         text,
   service_id   text,
@@ -301,21 +305,34 @@ security definer
 set search_path = public, pg_temp
 as $$
 declare
-  v_code  text := upper(btrim(coalesce(p_code, '')));
   v_phone text := regexp_replace(coalesce(p_phone, ''), '\D', '', 'g');
+  v_today date := (now() at time zone 'America/Bogota')::date;
 begin
-  if v_code !~ '^JZ-[A-Z0-9]{4,8}$' or length(v_phone) < 7 or length(v_phone) > 15 then
+  if length(v_phone) < 10 or length(v_phone) > 15 then
     return;
   end if;
 
   return query
-    select b.code, b.service_id, b.service_name, b.price, b.duration, b.date, b.time,
-           b.name, b.phone, b.email, b.notes, b.status, b.created_at
+    select b.code,
+           b.service_id,
+           b.service_name,
+           b.price,
+           b.duration,
+           b.date,
+           b.time,
+           b.name,
+           b.phone,
+           ''::text as email,
+           ''::text as notes,
+           b.status,
+           b.created_at
       from public.bookings b
-     where upper(b.code) = v_code
-       and (b.phone = v_phone or right(b.phone, 10) = right(v_phone, 10))
-     order by b.date desc, b.time desc
-     limit 5;
+     where (b.phone = v_phone or (length(b.phone) >= 10 and right(b.phone, 10) = right(v_phone, 10)))
+       and b.date >= v_today - 7
+     order by (b.date >= v_today and b.status = 'confirmed') desc,
+              b.date asc,
+              b.time asc
+     limit 10;
 end;
 $$;
 
@@ -524,12 +541,12 @@ grant select, insert, update, delete on public.blocks to authenticated;
 
 revoke all on function public.generate_code() from public, anon, authenticated;
 revoke all on function public.create_booking(text, date, time, text, text, text, text) from public;
-revoke all on function public.lookup_bookings(text, text) from public;
+revoke all on function public.lookup_bookings(text) from public;
 revoke all on function public.cancel_booking(text, text) from public;
 revoke all on function public.reschedule_booking(text, text, date, time) from public;
 
 grant execute on function public.create_booking(text, date, time, text, text, text, text) to anon, authenticated;
-grant execute on function public.lookup_bookings(text, text) to anon, authenticated;
+grant execute on function public.lookup_bookings(text) to anon, authenticated;
 grant execute on function public.cancel_booking(text, text) to anon, authenticated;
 grant execute on function public.reschedule_booking(text, text, date, time) to anon, authenticated;
 

@@ -31,8 +31,8 @@ Proyecto real, de principio a fin y sin equipo:
 **Web pública**
 
 - `index.html`: propuesta de valor, servicios con precios, estudio, trabajo real, FAQ y datos estructurados.
-- `agendar.html`: reserva en tres pasos (servicio → día y hora → datos), con confirmación, código y archivo `.ics`.
-- `revisar.html`: consulta con **código + teléfono**, cambio de fecha y hora, y cancelación.
+- `agendar.html`: reserva en tres pasos (servicio → día y hora → datos), con confirmación inmediata y archivo `.ics`.
+- `revisar.html`: consulta solo con **teléfono**, cambio de fecha y hora, y cancelación.
 - `privacidad.html`: política de tratamiento conforme a la Ley 1581 de 2012.
 
 **Panel privado**
@@ -76,13 +76,13 @@ Proyecto real, de principio a fin y sin equipo:
 ## Decisiones técnicas
 
 **1. La agenda no se lee desde el cliente.**
-El frontend nunca consulta `bookings`. La disponibilidad sale de `public_busy`, una vista sin datos personales, y cualquier operación sobre una cita pasa por una función que exige **código + teléfono**. Si la `anon key` se copia, no hay nada que enumerar.
+El frontend nunca consulta `bookings`. La disponibilidad sale de `public_busy`, una vista sin datos personales, y consultar una cita pasa por la función `lookup_bookings` con el teléfono del cliente (cancelar o reprogramar actúan sobre el código interno de esa cita junto al mismo teléfono). Si la `anon key` se copia, no hay nada que enumerar.
 
 **2. La base de datos es la fuente de verdad.**
 `create_booking` y `reschedule_booking` validan en una sola transacción: ventana de reserva 9:00–19:00 de lunes a sábado y 12:00–17:00 los domingos (la hora de cierre es el último inicio, no el fin del servicio), zona `America/Bogota`, antelación mínima de 1 hora para citas del mismo día, bloques, citas activas y solapamientos. El JavaScript no decide si un hueco es válido; solo muestra lo que la base confirma.
 
-**3. Código + teléfono en vez de cuentas.**
-Reservar no exige registro. Gestionar una cita exige el código de 6 caracteres **y** el teléfono con el que se reservó. Es menos fricción para el cliente y menos superficie de datos; el costo es que quien tenga ambos datos puede gestionar la cita, y así se explica en la política de privacidad.
+**3. Teléfono en vez de cuentas.**
+Reservar no exige registro. Gestionar una cita pide únicamente el teléfono con el que se reservó, sin contraseñas ni códigos que recordar. Es la menor fricción posible para el cliente; a cambio, `lookup_bookings` exige de 10 a 15 dígitos y omite correo y notas privadas.
 
 **4. Sin build, sin dependencias.**
 HTML, CSS y JavaScript vanilla; fuentes autoalojadas y Supabase por REST. El sitio se despliega como archivos estáticos y no tiene `node_modules`. El trade-off es DOM manual y cero framework; la ventaja es control total del peso y del HTML servido.

@@ -20,7 +20,7 @@ Abre <http://127.0.0.1:4173/>. Sin Supabase configurado, la reserva funciona en 
 |---|---|
 | `index.html` | Web pública: servicios, estudio, trabajo, FAQ, JSON-LD |
 | `agendar.html` | Reserva en 3 pasos (servicio → día y hora → datos) |
-| `revisar.html` | Consultar, cambiar o cancelar con código + teléfono |
+| `revisar.html` | Consultar, cambiar o cancelar solo con teléfono |
 | `privacidad.html` | Política de tratamiento (Ley 1581 de 2012) |
 | `panel.html` | Panel privado con Supabase Auth (`noindex`) |
 | `panel-demo.html` | Copia del panel con datos ficticios, sin backend |
@@ -44,7 +44,7 @@ Abre <http://127.0.0.1:4173/>. Sin Supabase configurado, la reserva funciona en 
 4. **Antelación mínima de 1 hora** para citas del mismo día: `LEAD = 60` en `store.js` y la misma regla en `create_booking`/`reschedule_booking`. Las dos partes se cambian juntas.
 5. **Franjas de 30 minutos.** `STEP = 30`.
 6. **Estados:** `confirmed`, `completed`, `cancelled`. Las reservas nuevas entran como `confirmed`.
-7. **Código + teléfono** para gestionar una cita. No hay cuentas de cliente.
+7. **Solo teléfono** para gestionar una cita (`lookup_bookings(p_phone)` devuelve nombre completo y datos de la cita sin correo ni notas; `cancel_booking` y `reschedule_booking` usan el código interno + teléfono de la tarjeta elegida). No hay cuentas de cliente.
 8. **Disponibilidad sin datos personales:** el cliente solo lee `public_busy` (fecha, inicio y fin).
 
 ## Reglas técnicas que no se negocian

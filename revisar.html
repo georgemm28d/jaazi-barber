@@ -4,12 +4,12 @@
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <title>Revisar cita — Jaazi Barber · Chía</title>
-  <meta name="description" content="Consulta, cambia la fecha o cancela tu cita de Jaazi Barber con tu código y el teléfono con el que reservaste. Sin llamadas.">
+  <meta name="description" content="Consulta, cambia la fecha o cancela tu cita de Jaazi Barber solo con tu número de teléfono. Sin llamadas.">
   <link rel="canonical" href="https://jaazi-barber.pages.dev/revisar">
   <meta property="og:type" content="website">
   <meta property="og:site_name" content="Jaazi Barber">
   <meta property="og:title" content="Revisar cita — Jaazi Barber · Chía">
-  <meta property="og:description" content="Consulta, cambia la fecha o cancela tu cita con tu código y el teléfono con el que reservaste. Sin llamadas.">
+  <meta property="og:description" content="Consulta, cambia la fecha o cancela tu cita solo con tu número de teléfono. Sin llamadas.">
   <meta property="og:url" content="https://jaazi-barber.pages.dev/revisar">
   <meta property="og:image" content="https://jaazi-barber.pages.dev/assets/img/jaazi-og.jpg?v=2">
   <meta property="og:image:width" content="1200">
@@ -51,10 +51,10 @@
   <link rel="stylesheet" href="assets/fonts/fonts.css">
   <link rel="stylesheet" href="assets/css/site.css?v=2">
   <link rel="stylesheet" href="assets/css/booking.css?v=2">
-  <script src="assets/js/api.js" defer></script>
+  <script src="assets/js/api.js?v=2" defer></script>
   <script src="assets/js/store.js" defer></script>
   <script src="assets/js/site.js?v=2" defer></script>
-  <script src="assets/js/review.js" defer></script>
+  <script src="assets/js/review.js?v=2" defer></script>
 </head>
 <body data-page="revisar">
   <a class="skip-link" href="#main">Saltar al contenido</a>
@@ -110,18 +110,14 @@
       <header class="page-head">
         <p class="eyebrow">Tu cita</p>
         <h1>Revisa tu cita.</h1>
-        <p class="lede">Consulta, cambia la fecha o cancela con tu código y tu teléfono. Sin llamadas y sin esperas.</p>
+        <p class="lede">Consulta, cambia la fecha o cancela solo con tu número de teléfono. Sin llamadas y sin esperas.</p>
       </header>
 
       <div class="review-grid">
         <aside class="lookup">
           <h2>Buscar cita</h2>
-          <p>Introduce el código <strong>JZ-XXXXXX</strong> y el teléfono con el que reservaste. Los dos datos deben coincidir.</p>
+          <p>Introduce el número de teléfono con el que reservaste.</p>
           <form id="lookup-form" novalidate>
-            <div class="field">
-              <label for="lookup">Código de la cita</label>
-              <input class="input" id="lookup" name="lookup" type="text" autocomplete="off" placeholder="JZ-8K2M6Q" aria-describedby="lookup-error">
-            </div>
             <div class="field">
               <label for="lookup-phone">Teléfono</label>
               <input class="input" id="lookup-phone" name="phone" type="tel" inputmode="tel" autocomplete="tel" placeholder="313 538 1239" aria-describedby="lookup-error">
@@ -134,8 +130,8 @@
           </form>
           <p class="lookup__note">
             <svg viewBox="0 0 24 24" fill="none" aria-hidden="true"><rect x="5" y="10" width="14" height="10" rx="2" stroke="currentColor" stroke-width="1.5"/><path d="M8 10V7a4 4 0 0 1 8 0v3" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"/></svg>
-            <span data-when="api">Pedimos los dos datos para que nadie más pueda ver tus citas con solo tu teléfono.</span>
-            <span data-when="local">Las citas de este navegador aparecen aquí. Para las de otro dispositivo, usa el código y el teléfono.</span>
+            <span data-when="api">Usa el mismo celular con el que agendaste para ver, reprogramar o cancelar tus citas activas.</span>
+            <span data-when="local">Las citas de este navegador aparecen aquí. Para filtrarlas, escribe tu número de teléfono.</span>
           </p>
         </aside>
 

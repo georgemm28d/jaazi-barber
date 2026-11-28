@@ -7,8 +7,8 @@
 - [Servicios](https://jaazi-barber.pages.dev/#servicios): corte personalizado $ 27.000 (30 min), corte + barba $ 35.000 (30 min), barba $ 15.000 (30 min), colores fantasía $ 120.000 (2 h), mechas platinadas $ 250.000 (4 h, incluye corte), platinado global $ 250.000 (4 h, incluye corte), en COP
 - [Trabajo reciente](https://jaazi-barber.pages.dev/#trabajo): fotos reales del trabajo de Jaazi en Chía
 - [Preguntas frecuentes](https://jaazi-barber.pages.dev/#preguntas): duración, cambio de fecha y hora, cancelación en cualquier momento, pago, atención con cita y ubicación
-- [Agendar cita](https://jaazi-barber.pages.dev/agendar): reserva en línea en 3 pasos, confirmación con código JZ-XXXXXX
-- [Revisar, cambiar o cancelar cita](https://jaazi-barber.pages.dev/revisar): con el código JZ-XXXXXX y el teléfono con el que se reservó (los dos datos deben coincidir); permite cambiar la fecha y la hora o cancelar
+- [Agendar cita](https://jaazi-barber.pages.dev/agendar): reserva en línea en 3 pasos, con confirmación inmediata
+- [Revisar, cambiar o cancelar cita](https://jaazi-barber.pages.dev/revisar): solo con el número de teléfono con el que se reservó; permite cambiar la fecha y la hora o cancelar
 - [Privacidad](https://jaazi-barber.pages.dev/privacidad): política de tratamiento de datos personales (Ley 1581 de 2012), derechos del titular y contacto
 - La agenda es compartida: los horarios ocupados se actualizan para todos los dispositivos
 

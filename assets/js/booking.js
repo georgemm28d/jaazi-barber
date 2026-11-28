@@ -638,9 +638,11 @@
     document.getElementById("confirm-title").textContent = "Nos vemos el " + Jaazi.formatLong(booking.date) + ".";
     document.getElementById("confirm-copy").textContent =
       "Tu cita de " + booking.serviceName + (api ? " quedó confirmada." : " quedó guardada.") +
-      " Llega cinco minutos antes; si necesitas cambiarla o cancelarla, usa tu código y tu teléfono.";
-    document.getElementById("confirm-code").textContent = booking.code;
-    document.getElementById("confirm-code-inline").textContent = booking.code;
+      " Llega cinco minutos antes; si necesitas cambiarla o cancelarla, usa tu número de teléfono en Revisar cita.";
+    var codeEl = document.getElementById("confirm-code");
+    if (codeEl) codeEl.textContent = booking.code;
+    var codeInlineEl = document.getElementById("confirm-code-inline");
+    if (codeInlineEl) codeInlineEl.textContent = booking.code;
 
     var details = document.getElementById("confirm-details");
     details.innerHTML =

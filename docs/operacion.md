@@ -31,6 +31,7 @@ Si el proyecto se creó antes de las migraciones, ejecutar en orden desde el SQL
 4. `supabase/migrations/2026-11-04-remove-pending.sql` — elimina el estado `pending` y deja solo `confirmed`, `completed` y `cancelled`.
 5. `supabase/migrations/2026-11-04-booking-email.sql` — trigger de avisos por correo (requiere Resend).
 6. `supabase/migrations/2026-11-24-lead-time-1h.sql` — antelación mínima de 1 hora para citas del mismo día.
+7. `supabase/migrations/2026-11-28-phone-only-lookup.sql` — consulta, cambio y cancelación de citas solo con teléfono (sin código).
 
 Un proyecto nuevo creado con `schema.sql` ya incluye el estado sin `pending`. La migración de correo se aplica aparte porque necesita la API key.
 

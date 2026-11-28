@@ -7,17 +7,16 @@
   "use strict";
 
   var form = document.getElementById("lookup-form");
-  var input = document.getElementById("lookup");
   var phoneInput = document.getElementById("lookup-phone");
   var error = document.getElementById("lookup-error");
   var listEl = document.getElementById("appointments");
   var countEl = document.getElementById("appt-count");
   var statusEl = document.getElementById("lookup-status");
   var titleEl = document.getElementById("appts-title");
-  if (!form || !input || !phoneInput || !listEl || !window.Jaazi) return;
+  if (!form || !phoneInput || !listEl || !window.Jaazi) return;
 
   var api = window.JaaziApi && window.JaaziApi.enabled ? window.JaaziApi : null;
-  var state = { code: "", phone: "", results: [], searched: false, loading: false };
+  var state = { phone: "", results: [], searched: false, loading: false };
   var editor = null;
   var reduceMotion = window.matchMedia("(prefers-reduced-motion: reduce)");
   var mapsUrl = "https://maps.app.goo.gl/Vfn6iVXtHDe8CDcv8?g_st=iwb";
@@ -44,13 +43,10 @@
     return (parts[0] || 0) * 60 + (parts[1] || 0);
   }
 
-  function matches(booking, code, phone) {
-    var wantedCode = String(code || "").trim().toUpperCase();
+  function matches(booking, phone) {
     var digits = normalizePhone(phone);
-    var storedCode = String(booking.code || "").trim().toUpperCase();
     var storedPhone = normalizePhone(booking.phone);
-    if (!wantedCode || !digits || !storedCode || !storedPhone) return false;
-    if (storedCode !== wantedCode) return false;
+    if (digits.length < 10 || digits.length > 15 || !storedPhone) return false;
     return storedPhone === digits ||
       (storedPhone.length >= 10 && storedPhone.slice(-10) === digits.slice(-10));
   }
@@ -121,7 +117,6 @@
         '<p class="appt__meta"><strong>' + cap(esc(Jaazi.formatLong(b.date))) + "</strong> · " + esc(Jaazi.timeLabel(b.time)) + "</p>" +
         '<p class="appt__meta">' + esc(Jaazi.durationLabel(b.duration)) + " · " + esc(b.priceLabel || "Consultar") + " · A nombre de " + esc(b.name) + "</p>" +
         (b.notes ? '<p class="appt__meta">Nota: ' + esc(b.notes) + "</p>" : "") +
-        '<p class="appt__code">Código ' + esc(b.code) + "</p>" +
         '<div class="appt__actions">' + actions + "</div>" +
       "</div>" +
     "</article>";
@@ -132,21 +127,21 @@
       return '<div class="empty">' +
         '<svg viewBox="0 0 24 24" fill="none" aria-hidden="true"><circle cx="11" cy="11" r="7" stroke="currentColor" stroke-width="1.4"/><path d="m16.5 16.5 4 4" stroke="currentColor" stroke-width="1.4" stroke-linecap="round"/></svg>' +
         "<h3>Busca tu cita.</h3>" +
-        "<p>Escribe el código que te dimos al reservar y el teléfono con el que agendaste.</p>" +
+        "<p>Escribe el número de teléfono con el que agendaste.</p>" +
       "</div>";
     }
     if (kind === "search") {
       return '<div class="empty">' +
         '<svg viewBox="0 0 24 24" fill="none" aria-hidden="true"><circle cx="11" cy="11" r="7" stroke="currentColor" stroke-width="1.4"/><path d="m16.5 16.5 4 4" stroke="currentColor" stroke-width="1.4" stroke-linecap="round"/></svg>' +
         "<h3>No encontramos esa cita.</h3>" +
-        "<p>Revisa el código (JZ-XXXXXX) y el teléfono con el que reservaste. Los dos datos deben coincidir.</p>" +
+        "<p>Revisa que el número de teléfono sea el mismo con el que reservaste.</p>" +
         '<button class="btn btn--ghost" type="button" data-clear>Limpiar búsqueda</button>' +
       "</div>";
     }
     return '<div class="empty">' +
       '<svg viewBox="0 0 24 24" fill="none" aria-hidden="true"><rect x="4" y="6" width="16" height="14" rx="2" stroke="currentColor" stroke-width="1.4"/><path d="M8 3v5M16 3v5M4 11h16" stroke="currentColor" stroke-width="1.4" stroke-linecap="round"/></svg>' +
       "<h3>Todavía no hay citas.</h3>" +
-      "<p>Agenda tu primera cita y aquí tendrás el código, la hora y el calendario a mano.</p>" +
+      "<p>Agenda tu primera cita y aquí tendrás la hora, la ubicación y el calendario a mano.</p>" +
       '<a class="btn" href="agendar.html">Agendar cita' +
       '<svg viewBox="0 0 24 24" fill="none" aria-hidden="true"><path d="M5 12h14M13 6l6 6-6 6" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"/></svg></a>' +
     "</div>";
@@ -190,7 +185,7 @@
     if (!ordered.length) {
       listEl.innerHTML = emptyMarkup("search");
       countEl.textContent = "0 citas";
-      setStatus("Sin resultados para ese código y teléfono. ");
+      setStatus("Sin resultados para ese número de teléfono. ");
       addClearButton();
       return;
     }
@@ -210,8 +205,8 @@
 
   function renderLocal() {
     var all = Jaazi.read();
-    var hasQuery = Boolean(state.code.trim() || state.phone.trim());
-    var visible = hasQuery ? all.filter(function (b) { return matches(b, state.code, state.phone); }) : all;
+    var hasQuery = Boolean(state.phone.trim());
+    var visible = hasQuery ? all.filter(function (b) { return matches(b, state.phone); }) : all;
     var ordered = sortList(visible);
     var upcoming = ordered.filter(function (b) { return canCancel(b); }).length;
     var past = ordered.length - upcoming;
@@ -236,7 +231,7 @@
       var label = ordered.length === 1 ? " cita encontrada" : " citas encontradas";
       setStatus(ordered.length + label + ". ");
     } else {
-      setStatus("Sin resultados para ese código y teléfono. ");
+      setStatus("Sin resultados para ese número de teléfono. ");
     }
     addClearButton();
   }
@@ -248,17 +243,14 @@
   }
 
   function clearSearch() {
-    state.code = "";
     state.phone = "";
     state.results = [];
     state.searched = false;
-    input.value = "";
     phoneInput.value = "";
     error.hidden = true;
-    input.removeAttribute("aria-invalid");
     phoneInput.removeAttribute("aria-invalid");
     render();
-    input.focus();
+    phoneInput.focus();
   }
 
   function scrollToResults() {
@@ -372,9 +364,7 @@
         duration: 9000,
         onAction: function () {
           Jaazi.restoreBooking(removed);
-          state.code = "";
           state.phone = "";
-          input.value = "";
           phoneInput.value = "";
           render();
           UI.toast("Cita restaurada.");
@@ -754,25 +744,24 @@
 
   form.addEventListener("submit", function (event) {
     event.preventDefault();
-    var code = input.value.trim();
     var phone = phoneInput.value.trim();
+    var digits = normalizePhone(phone);
 
-    if (!code) {
-      showLookupError("Escribe el código de tu cita (JZ-XXXXXX).", input);
-      return;
-    }
     if (!phone) {
       showLookupError("Escribe el teléfono con el que reservaste.", phoneInput);
       return;
     }
+    if (digits.length < 10 || digits.length > 15) {
+      showLookupError("Escribe un número de teléfono válido (10 dígitos).", phoneInput);
+      return;
+    }
 
     error.hidden = true;
-    input.removeAttribute("aria-invalid");
     phoneInput.removeAttribute("aria-invalid");
-    state.code = code;
     state.phone = phone;
 
     if (!api) {
+      state.searched = true;
       render();
       scrollToResults();
       return;
@@ -781,7 +770,7 @@
     state.loading = true;
     state.searched = true;
     render();
-    api.lookup(code, phone).then(function (rows) {
+    api.lookup(phone).then(function (rows) {
       state.loading = false;
       state.results = rows;
       render();
@@ -792,13 +781,12 @@
       render();
       error.textContent = api.friendly(err);
       error.hidden = false;
-      input.setAttribute("aria-invalid", "true");
+      phoneInput.setAttribute("aria-invalid", "true");
     });
   });
 
   function resetLookupIfEmpty() {
-    if (!input.value.trim() && !phoneInput.value.trim() && state.searched) {
-      state.code = "";
+    if (!phoneInput.value.trim() && state.searched) {
       state.phone = "";
       state.results = [];
       state.searched = false;
@@ -806,14 +794,12 @@
     }
   }
 
-  [input, phoneInput].forEach(function (field) {
-    field.addEventListener("input", function () {
-      if (field.getAttribute("aria-invalid") === "true") {
-        error.hidden = true;
-        field.removeAttribute("aria-invalid");
-      }
-      resetLookupIfEmpty();
-    });
+  phoneInput.addEventListener("input", function () {
+    if (phoneInput.getAttribute("aria-invalid") === "true") {
+      error.hidden = true;
+      phoneInput.removeAttribute("aria-invalid");
+    }
+    resetLookupIfEmpty();
   });
 
   listEl.addEventListener("click", function (event) {

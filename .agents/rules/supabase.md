@@ -31,5 +31,5 @@ Estables, en inglés y snake_case: `service_not_found`, `invalid_name`, `invalid
 ## Seguridad
 
 - El rol anónimo **no** lee `bookings` ni `blocks`; solo `public_busy` (fecha, inicio y fin) y las funciones RPC.
-- Ninguna función devuelve datos personales si no exige código **y** teléfono.
+- `lookup_bookings(p_phone)` exige 10–15 dígitos y nunca devuelve correo ni notas privadas. `cancel_booking` y `reschedule_booking` exigen código interno y teléfono.
 - Secretos en Vault (`vault.create_secret`), nunca en tablas, en el repo ni en el cliente.
