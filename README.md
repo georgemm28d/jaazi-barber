@@ -1,6 +1,6 @@
 # Jaazi Barber
 
-Sitio de reservas y agenda para una barbería de una sola silla en **Chía, Colombia**. La web permite reservar, cambiar o cancelar una cita sin llamar; el panel privado le da al barbero una vista única de su día, sus bloqueos y sus ingresos estimados.
+Sitio de reservas y agenda para **Jaazi Barber** en **Barbería Monarch (Chía, Colombia)**. La web permite reservar, cambiar o cancelar una cita directa con Jaazi sin llamar; el panel privado le da al barbero una vista única de su día, sus bloqueos y sus ingresos estimados.
 
 [**Ver el sitio**](https://jaazi-barber.pages.dev/) · [**Probar la demo del panel**](https://jaazi-barber.pages.dev/panel-demo.html) · [**Evidencia de QA**](docs/qa.md) · [**Operación**](docs/operacion.md)
 
@@ -12,7 +12,7 @@ Sitio de reservas y agenda para una barbería de una sola silla en **Chía, Colo
 
 ## El problema
 
-Jaazi trabaja solo, en un estudio privado y siempre con cita previa. La agenda se gestionaba a mano: no había una vista compartida del día ni una forma de que el cliente reservara, cambiara o cancelara por su cuenta. Cada movimiento dependía de una conversación y de que alguien recordara el hueco.
+Jaazi atiende en Barbería Monarch y siempre con cita previa. La agenda se gestionaba a mano: no había una vista compartida del día ni una forma de que el cliente reservara, cambiara o cancelara por su cuenta. Cada movimiento dependía de una conversación y de que alguien recordara el hueco.
 
 El objetivo era doble: que el cliente complete una reserva en tres pasos, y que Jaazi pueda operar la agenda desde el móvil sin depender de recordatorios manuales.
 
